@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Products Frontend</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .category { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .product { margin: 10px 0; padding: 10px; background: #f9f9f9; border-radius: 4px; }
+        .loading { color: #666; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🍕 Pizzeria Products Frontend Test</h1>
+    <div id="status">Loading...</div>
+    <div id="results"></div>
+
+    <script>
+        const { createClient } = supabase;
+        
+        const supabaseClient = createClient(
+            'https://foymsziaullphulzhmxy.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY'
+        );
+
+        async function testProducts() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                statusDiv.innerHTML = '<span class="loading">🔄 Loading products...</span>';
+                
+                // Same query as the React frontend
+                const { data: productsData, error: productsError } = await supabaseClient
+                    .from('products')
+                    .select(`
+                        *,
+                        categories (
+                            name,
+                            slug
+                        )
+                    `)
+                    .eq('is_active', true)
+                    .order('name', { ascending: true });
+
+                if (productsError) {
+                    throw productsError;
+                }
+
+                statusDiv.innerHTML = `<span class="success">✅ Loaded ${productsData.length} products</span>`;
+
+                // Group products by category (same logic as React frontend)
+                const groupedProducts = {};
+                productsData.forEach((product) => {
+                    const categorySlug = product.categories?.slug || 'uncategorized';
+                    if (!groupedProducts[categorySlug]) {
+                        groupedProducts[categorySlug] = [];
+                    }
+
+                    // Transform database product to frontend format
+                    const transformedProduct = {
+                        ...product,
+                        category: product.categories?.name || 'Uncategorized',
+                        category_slug: categorySlug,
+                        is_available: product.is_active && (product.stock_quantity === null || product.stock_quantity > 0),
+                        images: product.gallery ? 
+                            (Array.isArray(product.gallery) ? product.gallery : [product.image_url].filter(Boolean)) : 
+                            [product.image_url].filter(Boolean)
+                    };
+
+                    groupedProducts[categorySlug].push(transformedProduct);
+                });
+
+                // Category ordering (same as React frontend)
+                const categoryOrder = ['semplici', 'speciali', 'extra'];
+                const allCategoriesWithProducts = Object.keys(groupedProducts).filter(slug => 
+                    groupedProducts[slug] && groupedProducts[slug].length > 0
+                );
+
+                const sortedCategories = [
+                    ...categoryOrder.filter(slug => allCategoriesWithProducts.includes(slug)),
+                    ...allCategoriesWithProducts.filter(slug => !categoryOrder.includes(slug)).sort()
+                ];
+
+                // Display names (same as React frontend)
+                function getCategoryDisplayName(categorySlug) {
+                    switch (categorySlug) {
+                        case 'semplici':
+                            return 'SEMPLICI - Classic Pizzas & Focacce';
+                        case 'speciali':
+                            return 'SPECIALI - Signature & Gourmet';
+                        case 'extra':
+                            return 'EXTRA - Toppings';
+                        default:
+                            return categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1).replace('-', ' ');
+                    }
+                }
+
+                // Render results
+                let html = '';
+                
+                if (sortedCategories.length === 0) {
+                    html = '<div class="error">❌ No products available</div>';
+                } else {
+                    sortedCategories.forEach(categorySlug => {
+                        const categoryProducts = groupedProducts[categorySlug] || [];
+                        const displayName = getCategoryDisplayName(categorySlug);
+                        
+                        html += `
+                            <div class="category">
+                                <h2>🍕 ${displayName} (${categoryProducts.length} products)</h2>
+                                <div class="products">
+                        `;
+                        
+                        categoryProducts.slice(0, 10).forEach(product => {
+                            html += `
+                                <div class="product">
+                                    <strong>${product.name}</strong> - €${product.price}<br>
+                                    <small>${product.description}</small><br>
+                                    <em>Category: ${product.category} | Available: ${product.is_available ? 'Yes' : 'No'}</em>
+                                </div>
+                            `;
+                        });
+                        
+                        if (categoryProducts.length > 10) {
+                            html += `<div class="product"><em>... and ${categoryProducts.length - 10} more products</em></div>`;
+                        }
+                        
+                        html += '</div></div>';
+                    });
+                }
+
+                resultsDiv.innerHTML = html;
+
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // Run test when page loads
+        testProducts();
+    </script>
+</body>
+</html>

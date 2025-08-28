@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Bucket Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Storage Bucket Test</h1>
+    <p>This page tests the storage bucket configuration for image uploads.</p>
+    
+    <button onclick="testStorageBuckets()">Test Storage Buckets</button>
+    <button onclick="testImageUpload()">Test Image Upload</button>
+    
+    <div id="results"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+
+        const SUPABASE_URL = 'https://foymsziaullphulzhmxy.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY';
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+
+        window.testStorageBuckets = async function() {
+            document.getElementById('results').innerHTML = '';
+            addResult('🔍 Testing storage buckets...', 'info');
+
+            try {
+                const { data: buckets, error } = await supabase.storage.listBuckets();
+                
+                if (error) {
+                    addResult(`❌ Error listing buckets: ${error.message}`, 'error');
+                    return;
+                }
+
+                addResult(`📋 Found ${buckets?.length || 0} buckets`, 'info');
+                
+                const requiredBuckets = ['uploads', 'admin-uploads', 'gallery', 'specialties'];
+                const availableBuckets = buckets?.map(b => b.name) || [];
+                
+                addResult(`Available buckets: ${availableBuckets.join(', ')}`, 'info');
+
+                for (const bucketName of requiredBuckets) {
+                    const bucket = buckets?.find(b => b.name === bucketName);
+                    if (bucket) {
+                        addResult(`✅ ${bucketName}: Found (Public: ${bucket.public})`, 'success');
+                    } else {
+                        addResult(`❌ ${bucketName}: Missing`, 'error');
+                    }
+                }
+
+            } catch (error) {
+                addResult(`❌ Unexpected error: ${error.message}`, 'error');
+            }
+        };
+
+        window.testImageUpload = async function() {
+            document.getElementById('results').innerHTML = '';
+            addResult('🧪 Testing image upload...', 'info');
+
+            try {
+                // Create a small test image
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Arial';
+                ctx.fillText('TEST', 30, 55);
+
+                const blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, 'image/png');
+                });
+
+                const testFile = new File([blob], 'test-image.png', { type: 'image/png' });
+                const filePath = `test/test-${Date.now()}.png`;
+
+                // Test upload to uploads bucket
+                const { error: uploadError } = await supabase.storage
+                    .from('uploads')
+                    .upload(filePath, testFile);
+
+                if (uploadError) {
+                    addResult(`❌ Upload failed: ${uploadError.message}`, 'error');
+                    
+                    // Check if it's a bucket not found error
+                    if (uploadError.message.includes('Bucket not found')) {
+                        addResult('💡 The "uploads" bucket does not exist. Please create it in your Supabase dashboard.', 'error');
+                    }
+                } else {
+                    addResult('✅ Upload successful!', 'success');
+                    
+                    // Clean up test file
+                    await supabase.storage
+                        .from('uploads')
+                        .remove([filePath]);
+                    
+                    addResult('🧹 Test file cleaned up', 'info');
+                }
+
+            } catch (error) {
+                addResult(`❌ Upload error: ${error.message}`, 'error');
+            }
+        };
+    </script>
+</body>
+</html>

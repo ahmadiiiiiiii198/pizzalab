@@ -1,0 +1,58 @@
+{
+  "name": "Pizzeria Regina 2000 - Torino",
+  "short_name": "Pizzeria Regina",
+  "description": "Ordina le migliori pizze di Torino - Pizzeria Regina 2000",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "it",
+  "categories": ["food", "business"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Menu Pizze",
+      "short_name": "Menu",
+      "description": "Visualizza il menu delle pizze",
+      "url": "/products",
+      "icons": [
+        {
+          "src": "/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Traccia Ordine",
+      "short_name": "Tracking",
+      "description": "Traccia il tuo ordine",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "permissions": [
+    "notifications"
+  ]
+}

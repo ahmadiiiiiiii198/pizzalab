@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Input Test - Pizzeria Regina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍕 Price Input Test - Admin Panel Simulation</h1>
+    
+    <div class="test-section">
+        <h2>Price Input Behavior Test</h2>
+        <p>This simulates the admin panel price input behavior. Test the following scenarios:</p>
+        
+        <div class="input-group">
+            <label for="price-input">Price (€) *</label>
+            <input 
+                type="number" 
+                id="price-input" 
+                step="0.01" 
+                min="0" 
+                placeholder="Enter price (e.g., 7.00)"
+            />
+            <div id="price-result" class="result">
+                <strong>Current State:</strong><br>
+                Display Value: <span id="display-value">""</span><br>
+                Parsed Value: <span id="parsed-value">0</span><br>
+                Formatted: <span id="formatted-value">€0.00</span>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <h3>Test Scenarios:</h3>
+            <button onclick="testScenario('')">Clear Field</button>
+            <button onclick="testScenario('7')">Enter "7"</button>
+            <button onclick="testScenario('7.00')">Enter "7.00"</button>
+            <button onclick="testScenario('0')">Enter "0"</button>
+            <button onclick="testScenario('12.50')">Enter "12.50"</button>
+            <button onclick="simulateBackspace()">Simulate Backspace</button>
+        </div>
+
+        <div class="input-group">
+            <h3>Expected Behavior:</h3>
+            <ul>
+                <li>✅ Should allow clearing the field completely</li>
+                <li>✅ Should not force "0" when field is empty</li>
+                <li>✅ Should parse and format correctly on blur</li>
+                <li>✅ Should handle decimal places properly</li>
+                <li>✅ Should allow typing without interference</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Price utility functions (same as in the React app)
+        const roundToTwoDecimals = (value) => {
+            return Math.round(value * 100) / 100;
+        };
+
+        const parsePrice = (value) => {
+            if (typeof value === 'string') {
+                if (value === '' || value === null || value === undefined) {
+                    return 0;
+                }
+                const parsed = parseFloat(value);
+                return isNaN(parsed) ? 0 : roundToTwoDecimals(parsed);
+            }
+            
+            if (typeof value === 'number') {
+                return isNaN(value) ? 0 : roundToTwoDecimals(value);
+            }
+            
+            return 0;
+        };
+
+        const formatPrice = (price, currency = '€') => {
+            const roundedPrice = roundToTwoDecimals(price);
+            return `${currency}${roundedPrice.toFixed(2)}`;
+        };
+
+        // Simulate the React component behavior
+        let priceInputValue = '';
+        let formDataPrice = 0;
+
+        const input = document.getElementById('price-input');
+        const displayValueSpan = document.getElementById('display-value');
+        const parsedValueSpan = document.getElementById('parsed-value');
+        const formattedValueSpan = document.getElementById('formatted-value');
+
+        function updateDisplay() {
+            displayValueSpan.textContent = `"${priceInputValue}"`;
+            parsedValueSpan.textContent = formDataPrice;
+            formattedValueSpan.textContent = formatPrice(formDataPrice);
+        }
+
+        // Event handlers that simulate the React component
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            priceInputValue = value;
+            
+            // Update the form data with parsed price
+            if (value === '') {
+                formDataPrice = 0;
+            } else {
+                formDataPrice = parsePrice(value);
+            }
+            
+            updateDisplay();
+        });
+
+        input.addEventListener('blur', (e) => {
+            // Clean up the display value when field loses focus
+            const value = e.target.value;
+            if (value === '' || parseFloat(value) <= 0) {
+                priceInputValue = '';
+                formDataPrice = 0;
+                input.value = '';
+            } else {
+                const numericValue = parsePrice(value);
+                priceInputValue = numericValue.toString();
+                formDataPrice = numericValue;
+                input.value = priceInputValue;
+            }
+            
+            updateDisplay();
+        });
+
+        function testScenario(value) {
+            input.value = value;
+            input.dispatchEvent(new Event('input'));
+            input.focus();
+        }
+
+        function simulateBackspace() {
+            const currentValue = input.value;
+            if (currentValue.length > 0) {
+                const newValue = currentValue.slice(0, -1);
+                input.value = newValue;
+                input.dispatchEvent(new Event('input'));
+            }
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>

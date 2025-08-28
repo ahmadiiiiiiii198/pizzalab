@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Refresh Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔄 Force Refresh Test</h1>
+    <button onclick="testProducts()">Test Products</button>
+    <button onclick="clearAndTest()">Clear Cache & Test</button>
+    <button onclick="window.location.reload()">Reload Page</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            document.getElementById('results').appendChild(div);
+        }
+
+        async function testProducts() {
+            document.getElementById('results').innerHTML = '';
+            log('🧪 Testing products...', 'info');
+            
+            try {
+                // Test direct database access
+                const response = await fetch('http://localhost:3000', {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
+                
+                log('✅ Server is responding', 'success');
+                
+                // Test if we can access the main page
+                if (response.ok) {
+                    log('✅ Main page accessible', 'success');
+                } else {
+                    log('❌ Main page not accessible', 'error');
+                }
+                
+                // Instructions for manual testing
+                log('📋 Manual Test Instructions:', 'info');
+                log('1. Open browser dev tools (F12)', 'info');
+                log('2. Go to Network tab', 'info');
+                log('3. Check "Disable cache"', 'info');
+                log('4. Navigate to http://localhost:3000', 'info');
+                log('5. Look for products in the page', 'info');
+                log('6. Check console for any errors', 'info');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAndTest() {
+            document.getElementById('results').innerHTML = '';
+            log('🧹 Clearing cache...', 'info');
+            
+            // Clear various caches
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                    log('✅ Service worker caches cleared', 'success');
+                } catch (error) {
+                    log(`⚠️ Could not clear service worker caches: ${error.message}`, 'error');
+                }
+            }
+            
+            // Clear localStorage
+            try {
+                localStorage.clear();
+                log('✅ localStorage cleared', 'success');
+            } catch (error) {
+                log(`⚠️ Could not clear localStorage: ${error.message}`, 'error');
+            }
+            
+            // Clear sessionStorage
+            try {
+                sessionStorage.clear();
+                log('✅ sessionStorage cleared', 'success');
+            } catch (error) {
+                log(`⚠️ Could not clear sessionStorage: ${error.message}`, 'error');
+            }
+            
+            log('🔄 Now testing products...', 'info');
+            await testProducts();
+        }
+
+        // Auto-run test on page load
+        window.onload = () => {
+            log('🚀 Page loaded, ready for testing', 'info');
+        };
+    </script>
+</body>
+</html>
