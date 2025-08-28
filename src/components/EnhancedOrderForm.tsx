@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ShoppingCart, Phone, Mail, User, MapPin, CheckCircle, AlertCircle, CreditCard } from 'lucide-react';
+import { Loader2, ShoppingCart, Phone, Mail, User, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import AddressValidator from './AddressValidator';
-import StripeCheckout from './StripeCheckout';
 import shippingZoneService from '@/services/shippingZoneService';
 import { useBusinessHoursContext } from '@/contexts/BusinessHoursContext';
 
@@ -202,6 +201,42 @@ const EnhancedOrderForm = () => {
 
     setCreatedOrderId(order.id);
     return order.id;
+  };
+
+  const handleSubmitOrder = async () => {
+    try {
+      setIsSubmitting(true);
+      const orderId = await createOrder();
+
+      toast({
+        title: "Order Submitted Successfully! 🎉",
+        description: `Your order has been received. Order ID: ${orderId}`,
+      });
+
+      // Reset form or redirect to success page
+      setCurrentStep(1);
+      setFormData({
+        customerName: '',
+        customerEmail: '',
+        customerPhone: '',
+        customerAddress: '',
+        category: '',
+        productDescription: '',
+        quantity: 1,
+        specialRequests: ''
+      });
+      setAddressValidation(null);
+
+    } catch (error) {
+      console.error('Order submission error:', error);
+      toast({
+        title: "Order Submission Failed",
+        description: error.message || "Please try again or contact support.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const proceedToAddressValidation = () => {
@@ -408,27 +443,24 @@ const EnhancedOrderForm = () => {
           </div>
         </div>
 
-        <StripeCheckout
-          items={[{
-            id: 'custom-order',
-            name: `${categories.find(c => c.value === formData.category)?.label} - ${formData.productDescription}`,
-            price: calculateEstimatedPrice() - addressValidation.deliveryFee,
-            quantity: formData.quantity,
-            description: formData.productDescription,
-          }, {
-            id: 'delivery-fee',
-            name: 'Delivery Fee',
-            price: addressValidation.deliveryFee,
-            quantity: 1,
-            description: `Delivery to ${addressValidation.formattedAddress}`,
-          }]}
-          customerInfo={{
-            name: formData.customerName,
-            email: formData.customerEmail,
-            phone: formData.customerPhone,
-          }}
-          onCreateOrder={createOrder}
-        />
+        <Button
+          onClick={handleSubmitOrder}
+          disabled={isSubmitting}
+          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          size="lg"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Submitting Order...
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Submit Order - €{(calculateEstimatedPrice() || 0).toFixed(2)}
+            </>
+          )}
+        </Button>
 
         <Button 
           variant="outline"
