@@ -71,7 +71,7 @@ const Header = () => {
 
                 {/* Fallback text logo */}
                 <div className="h-12 hidden items-center px-4 bg-gradient-to-r from-timeout-orange to-timeout-orange-hover text-white rounded-xl timeout-heading text-lg shadow-lg">
-                  🍕 PIZZA LAB
+                  🍕 PIZZALAB
                 </div>
               </div>
               <nav className="hidden md:flex space-x-8">

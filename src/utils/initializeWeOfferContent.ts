@@ -24,14 +24,14 @@ export const initializeWeOfferContent = async () => {
     // Create the default We Offer content
     const defaultWeOfferContent = {
       heading: "Offriamo",
-      subheading: "Scopri le nostre autentiche specialità italiane",
+      subheading: "Scopri le nostre innovative specialità italiane",
       offers: [
         {
           id: 1,
-          title: "Pizza Metro Finchi 5 Gusti",
-          description: "Prova la nostra pizza metro caratteristica con fino a 5 gusti diversi in un'unica creazione straordinaria. Perfetta da condividere con famiglia e amici.",
+          title: "Pizza Lab Signature",
+          description: "La nostra pizza signature creata nel laboratorio PizzaLab con ingredienti innovativi e tecniche moderne. Un'esperienza unica per il palato.",
           image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-          badge: "Specialità"
+          badge: "Innovazione"
         },
         {
           id: 2,

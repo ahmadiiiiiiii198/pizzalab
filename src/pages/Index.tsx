@@ -16,7 +16,7 @@ import ServicesSection from '../components/ServicesSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import BusinessHoursBanner from '../components/BusinessHoursBanner';
-// Pizzeria Regina 2000 Torino - Complete transformation
+// PizzaLab Pizzeria - Complete transformation
 
 
 const Index = () => {

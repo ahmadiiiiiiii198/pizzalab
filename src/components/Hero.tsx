@@ -291,7 +291,7 @@ const Hero = () => {
             <div className="mb-8">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold timeout-text-primary tracking-wide leading-none transform hover:scale-105 transition-all duration-500 timeout-heading uppercase">
                 <span className="relative inline-block">
-                  {heroContent.welcomeMessage || 'BENVENUTI DA PIZZA LAB'}
+                  {heroContent.welcomeMessage || 'BENVENUTI DA PIZZALAB'}
                   <div className="absolute -inset-2 bg-gradient-to-r from-timeout-orange/20 to-timeout-orange-hover/20 rounded-xl blur-lg opacity-50"></div>
                 </span>
               </h1>

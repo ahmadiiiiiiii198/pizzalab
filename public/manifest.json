@@ -1,7 +1,7 @@
 {
-  "name": "Pizzeria Regina 2000 - Torino",
-  "short_name": "Pizzeria Regina",
-  "description": "Ordina le migliori pizze di Torino - Pizzeria Regina 2000",
+  "name": "PizzaLab Pizzeria",
+  "short_name": "PizzaLab",
+  "description": "PizzaLab Pizzeria - Innovative Italian pizza experience",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -144,7 +144,7 @@ class SettingsService {
             key: 'logoSettings',
             value: {
               logoUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png",
-              altText: "Pizzeria Senza Cipolla Torino Logo"
+              altText: "PizzaLab Pizzeria Logo"
             }
           },
           {

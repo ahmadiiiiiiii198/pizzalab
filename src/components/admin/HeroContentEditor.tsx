@@ -26,16 +26,16 @@ const HeroContentEditor = () => {
     { value: 'crimson', label: 'Crimson Text (Classic)', preview: 'font-crimson' }
   ];
   const [localContent, setLocalContent] = useState({
-    welcomeMessage: 'BENVENUTI DA FLEGREA',
-    pizzaType: 'la Pizza Napoletana',
-    subtitle: 'ad Alta Digeribilità, anche Gluten Free!',
-    openingHours: 'APERTO 7 SU 7 DALLE 19',
-    buttonText: 'PRENOTA IL TUO TAVOLO',
+    welcomeMessage: 'BENVENUTI DA PIZZALAB',
+    pizzaType: 'la Pizza Innovativa',
+    subtitle: 'Ingredienti Freschi e Tecniche Moderne!',
+    openingHours: 'APERTO 7 SU 7 DALLE 18',
+    buttonText: 'ORDINA ORA',
     welcomeMessageFont: 'montserrat',
     pizzaTypeFont: 'pacifico',
     subtitleFont: 'inter',
-    heading: '🍕 PIZZERIA Senza Cipolla',
-    subheading: 'Autentica pizza italiana preparata con ingredienti freschi e forno a legna tradizionale nel cuore di Torino',
+    heading: '🍕 PIZZALAB PIZZERIA',
+    subheading: 'Laboratorio di pizza italiana innovativa con ingredienti freschi e tecniche moderne',
     backgroundImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
   });
   const { toast } = useToast();

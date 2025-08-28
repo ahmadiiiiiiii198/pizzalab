@@ -51,20 +51,20 @@ interface PizzeriaSettings {
 const SettingsManager = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState<PizzeriaSettings>({
-    restaurant_name: 'Pizzeria Senza Cipolla Torino',
-    address: 'C.so Giulio Cesare, 36, 10152 Torino TO',
+    restaurant_name: 'PizzaLab Pizzeria',
+    address: 'Via Innovation, 1, 10100 Torino TO',
     phone: '+393479190907',
-    email: 'info@pizzeriasenzacipolla.it',
-    website: 'https://pizzeriasenzacipolla.it',
+    email: 'info@pizzalab.it',
+    website: 'https://pizzalab.it',
     delivery_fee: 3.50,
     minimum_order: 15.00,
     delivery_radius: 5,
     stripe_enabled: true,
     cash_on_delivery: true,
     notification_sound: true,
-    notification_email: 'orders@pizzeriasenzacipolla.it',
-    meta_title: 'Pizzeria Senza Cipolla Torino - Autentica Pizza Italiana',
-    meta_description: 'Pizzeria Senza Cipolla a Torino offre autentica pizza italiana. Ordina online per consegna a domicilio o ritiro.',
+    notification_email: 'orders@pizzalab.it',
+    meta_title: 'PizzaLab Pizzeria - Innovative Italian Pizza',
+    meta_description: 'PizzaLab Pizzeria offers innovative Italian pizza with fresh ingredients and modern techniques. Order online for delivery or pickup.',
     meta_keywords: 'pizza, pizzeria, torino, consegna, italiana, regina 2000'
   });
   const [isLoading, setIsLoading] = useState(true);

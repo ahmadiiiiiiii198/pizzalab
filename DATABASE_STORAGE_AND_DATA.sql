@@ -206,11 +206,11 @@ CREATE TRIGGER update_category_sections_updated_at
 INSERT INTO settings (key, value) VALUES
   (
     'heroContent',
-    '{"heading": "Pizzeria Regina 2000", "subheading": "Autentica pizza italiana nel cuore di Torino", "backgroundImage": "/hero-pizza-bg.jpg"}'
+    '{"heading": "PizzaLab Pizzeria", "subheading": "Laboratorio di pizza italiana innovativa", "backgroundImage": "/hero-pizza-bg.jpg"}'
   ),
   (
     'logoSettings',
-    '{"logoUrl": "/pizzeria-regina-logo.png", "altText": "Pizzeria Regina 2000 Torino Logo"}'
+    '{"logoUrl": "/pizzalab-logo.png", "altText": "PizzaLab Pizzeria Logo"}'
   ),
   (
     'restaurantSettings',
@@ -218,7 +218,7 @@ INSERT INTO settings (key, value) VALUES
   ),
   (
     'contactContent',
-    '{"address": "C.so Giulio Cesare, 36, 10152 Torino TO", "phone": "+393479190907", "email": "anilamyzyri@gmail.com", "mapUrl": "https://maps.google.com", "hours": "Lun-Dom: 18:30 - 22:30"}'
+    '{"address": "Via Innovation, 1, 10100 Torino TO", "phone": "+393479190907", "email": "info@pizzalab.it", "mapUrl": "https://maps.google.com", "hours": "Lun-Dom: 18:00 - 23:00"}'
   ),
   (
     'businessHours',

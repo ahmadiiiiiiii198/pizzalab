@@ -1,6 +1,6 @@
-# Pizza Lab 🍕
+# PizzaLab Pizzeria 🍕
 
-A modern, full-featured pizza restaurant website built with React, TypeScript, and Supabase.
+A modern, innovative pizza restaurant website built with React, TypeScript, and Supabase.
 
 ## Features
 
@@ -96,7 +96,7 @@ See the database documentation files:
 ## Project Structure
 
 ```
-pizzalab/
+pizzalab-pizzeria/
 ├── src/
 │   ├── components/          # React components
 │   ├── pages/              # Page components

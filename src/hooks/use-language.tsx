@@ -126,10 +126,10 @@ const translations: Record<Language, Record<string, string>> = {
     "cancelled": "Annullato",
 
     // Hero section
-    "pizzeriaName": "Pizzeria Regina 2000",
-    "pizzeriaLocation": "Torino",
-    "heroSubtitle": "Autentica Pizza Italiana",
-    "heroDescription": "Autentica pizza italiana nel cuore di Torino dal 2000",
+    "pizzeriaName": "PizzaLab Pizzeria",
+    "pizzeriaLocation": "Innovation Lab",
+    "heroSubtitle": "Pizza Innovativa Italiana",
+    "heroDescription": "Laboratorio di pizza italiana innovativa con ingredienti freschi e tecniche moderne",
     "goToGallery": "Vai alla Galleria",
 
     // Footer services
@@ -276,10 +276,10 @@ const translations: Record<Language, Record<string, string>> = {
     "cancelled": "Cancelled",
 
     // Hero section
-    "pizzeriaName": "Pizzeria Regina 2000",
-    "pizzeriaLocation": "Turin",
-    "heroSubtitle": "Authentic Italian Pizza",
-    "heroDescription": "Authentic Italian pizza in the heart of Turin since 2000",
+    "pizzeriaName": "PizzaLab Pizzeria",
+    "pizzeriaLocation": "Innovation Lab",
+    "heroSubtitle": "Innovative Italian Pizza",
+    "heroDescription": "Italian pizza innovation lab with fresh ingredients and modern techniques",
     "goToGallery": "Go to Gallery",
 
     // Footer services
