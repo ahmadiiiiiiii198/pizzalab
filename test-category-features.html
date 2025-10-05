@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Category Features Toggle</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .loading { color: blue; }
+        button { margin: 5px; padding: 10px; }
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Category Features Toggle Test</h1>
+
+    <div class="test-section">
+        <h2>Database Schema Test</h2>
+        <button onclick="testDatabaseSchema()">Test Database Schema</button>
+        <div id="schema-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Category Settings Test</h2>
+        <button onclick="testCategorySettings()">Load Categories with Settings</button>
+        <div id="categories-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Update Category Settings</h2>
+        <button onclick="updateCategorySettings()">Update Test Category</button>
+        <div id="update-result"></div>
+    </div>
+
+    <script>
+        // Initialize Supabase client
+        const supabaseUrl = 'https://foymsziaullphulzhmxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function testDatabaseSchema() {
+            const resultDiv = document.getElementById('schema-result');
+            resultDiv.innerHTML = '<span class="loading">🔄 Testing database schema...</span>';
+
+            try {
+                // Test if the new columns exist
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .select('id, name, impasto_enabled, aggiunti_enabled, bevande_enabled')
+                    .limit(1);
+
+                if (error) {
+                    throw error;
+                }
+
+                resultDiv.innerHTML = `
+                    <span class="success">✅ Database schema test passed!</span>
+                    <p>New columns 'impasto_enabled', 'aggiunti_enabled' and 'bevande_enabled' are available.</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <span class="error">❌ Database schema test failed:</span>
+                    <p>${error.message}</p>
+                    <p><strong>Note:</strong> You may need to run the migration script manually in your Supabase dashboard.</p>
+                `;
+            }
+        }
+
+        async function testCategorySettings() {
+            const resultDiv = document.getElementById('categories-result');
+            resultDiv.innerHTML = '<span class="loading">🔄 Loading categories...</span>';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .select('id, name, slug, impasto_enabled, aggiunti_enabled, bevande_enabled, is_active')
+                    .order('name');
+
+                if (error) {
+                    throw error;
+                }
+
+                let tableHTML = `
+                    <span class="success">✅ Categories loaded successfully!</span>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>Impasto Enabled</th>
+                            <th>Aggiunti Enabled</th>
+                            <th>Bevande Enabled</th>
+                            <th>Active</th>
+                        </tr>
+                `;
+
+                data.forEach(category => {
+                    tableHTML += `
+                        <tr>
+                            <td>${category.name}</td>
+                            <td>${category.slug}</td>
+                            <td>${category.impasto_enabled ?? 'null'}</td>
+                            <td>${category.aggiunti_enabled ?? 'null'}</td>
+                            <td>${category.bevande_enabled ?? 'null'}</td>
+                            <td>${category.is_active}</td>
+                        </tr>
+                    `;
+                });
+
+                tableHTML += '</table>';
+                resultDiv.innerHTML = tableHTML;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <span class="error">❌ Failed to load categories:</span>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        async function updateCategorySettings() {
+            const resultDiv = document.getElementById('update-result');
+            resultDiv.innerHTML = '<span class="loading">🔄 Updating category settings...</span>';
+
+            try {
+                // First, get a category to update
+                const { data: categories, error: fetchError } = await supabaseClient
+                    .from('categories')
+                    .select('id, name')
+                    .limit(1);
+
+                if (fetchError) throw fetchError;
+                if (!categories || categories.length === 0) {
+                    throw new Error('No categories found to update');
+                }
+
+                const category = categories[0];
+
+                // Update the category with new settings
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .update({
+                        impasto_enabled: false,
+                        aggiunti_enabled: true,
+                        bevande_enabled: false,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', category.id)
+                    .select();
+
+                if (error) {
+                    throw error;
+                }
+
+                resultDiv.innerHTML = `
+                    <span class="success">✅ Category updated successfully!</span>
+                    <p>Updated category: ${category.name}</p>
+                    <p>Set impasto_enabled = false, aggiunti_enabled = true, bevande_enabled = false</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <span class="error">❌ Failed to update category:</span>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

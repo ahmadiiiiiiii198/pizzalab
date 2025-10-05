@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Frontend Categories</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .loading { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🍕 PizzaLab Frontend Categories Test</h1>
+    <p>Testing if the frontend can properly fetch all categories from the database.</p>
+    
+    <button onclick="testCategoryFetching()">🔄 Test Category Fetching</button>
+    <button onclick="testDirectDatabaseQuery()">🗄️ Test Direct Database Query</button>
+    <button onclick="testSpecificCategory()">🎯 Test Offerta Settembre Category</button>
+    <button onclick="clearCache()">🗑️ Clear Browser Cache</button>
+    
+    <div id="results"></div>
+
+    <script>
+        // Initialize Supabase client
+        const supabaseUrl = 'https://foymsziaullphulzhmxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        function addResult(title, content, type = 'result') {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = `<h3>${title}</h3><div>${content}</div>`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function testDirectDatabaseQuery() {
+            addResult('🗄️ Testing Direct Database Query', '🔄 Fetching categories directly from database...', 'loading');
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .select('id, name, slug, description, is_active, sort_order')
+                    .eq('is_active', true)
+                    .order('sort_order', { ascending: true });
+
+                if (error) {
+                    addResult('❌ Direct Database Query Failed', `Error: ${error.message}<br>Details: ${JSON.stringify(error)}`, 'error');
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    addResult('⚠️ No Categories Found', 'The database query returned no active categories.', 'error');
+                    return;
+                }
+
+                addResult('✅ Direct Database Query Success', 
+                    `Found ${data.length} active categories:<br><pre>${JSON.stringify(data, null, 2)}</pre>`, 'success');
+                
+            } catch (error) {
+                addResult('❌ Direct Database Query Exception', `Exception: ${error.message}`, 'error');
+            }
+        }
+
+        // Simulate the categoryService.fetchCategories method
+        async function simulateCategoryServiceFetch() {
+            console.log('[Test] Simulating categoryService.fetchCategories...');
+            
+            try {
+                let query = supabaseClient
+                    .from('categories')
+                    .select('*');
+
+                // Only active categories (like frontend does)
+                query = query.eq('is_active', true);
+
+                const { data, error } = await query.order('sort_order', { ascending: true });
+
+                if (error) {
+                    console.error('[Test] Error fetching categories:', error);
+                    return { success: false, error: error.message, data: null };
+                }
+
+                if (!data || data.length === 0) {
+                    console.log('[Test] No categories found in database');
+                    return { success: false, error: 'No categories found', data: null };
+                }
+
+                console.log('[Test] Successfully fetched categories:', data);
+                const mappedCategories = data.map(cat => ({
+                    ...cat,
+                    images: cat.image_url ? [cat.image_url] : [],
+                    features: []
+                }));
+                
+                return { success: true, error: null, data: mappedCategories };
+            } catch (error) {
+                console.error('[Test] Exception in fetchCategories:', error);
+                return { success: false, error: error.message, data: null };
+            }
+        }
+
+        // Simulate the categoryService.fetchContent method
+        async function simulateCategoryServiceContent() {
+            console.log('[Test] Simulating categoryService.fetchContent...');
+            
+            try {
+                // Fetch categories
+                const categoriesResult = await simulateCategoryServiceFetch();
+                
+                if (!categoriesResult.success) {
+                    return { success: false, error: categoriesResult.error, data: null };
+                }
+
+                // Fetch content settings
+                const { data: contentData, error: contentError } = await supabaseClient
+                    .from('site_content')
+                    .select('title, subtitle')
+                    .eq('section', 'categories')
+                    .single();
+
+                let heading = "Le Nostre Categorie";
+                let subheading = "Scopri la nostra selezione di prodotti";
+
+                if (!contentError && contentData) {
+                    heading = contentData.title || heading;
+                    subheading = contentData.subtitle || subheading;
+                }
+
+                const content = {
+                    categories: categoriesResult.data,
+                    heading,
+                    subheading
+                };
+
+                return { success: true, error: null, data: content };
+            } catch (error) {
+                console.error('[Test] Exception in fetchContent:', error);
+                return { success: false, error: error.message, data: null };
+            }
+        }
+
+        async function testCategoryFetching() {
+            addResult('🔄 Testing Category Service Simulation', '🔄 Simulating frontend category fetching...', 'loading');
+            
+            const result = await simulateCategoryServiceContent();
+            
+            if (!result.success) {
+                addResult('❌ Category Service Simulation Failed', 
+                    `Error: ${result.error}`, 'error');
+                return;
+            }
+
+            const content = result.data;
+            addResult('✅ Category Service Simulation Success', 
+                `<strong>Heading:</strong> ${content.heading}<br>
+                 <strong>Subheading:</strong> ${content.subheading}<br>
+                 <strong>Categories Found:</strong> ${content.categories.length}<br>
+                 <strong>Category Names:</strong> ${content.categories.map(c => c.name).join(', ')}<br>
+                 <details>
+                   <summary>Full Category Data</summary>
+                   <pre>${JSON.stringify(content.categories, null, 2)}</pre>
+                 </details>`, 'success');
+        }
+
+        async function testSpecificCategory() {
+            addResult('🎯 Testing Offerta Settembre Category', '🔄 Checking specific category...', 'loading');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .select('*')
+                    .eq('slug', 'offerta-settembre')
+                    .single();
+
+                if (error) {
+                    addResult('❌ Offerta Settembre Category Not Found', `Error: ${error.message}`, 'error');
+                    return;
+                }
+
+                if (!data) {
+                    addResult('⚠️ Offerta Settembre Category Missing', 'No data returned for offerta-settembre slug.', 'error');
+                    return;
+                }
+
+                addResult('✅ Offerta Settembre Category Found',
+                    `<strong>Name:</strong> ${data.name}<br>
+                     <strong>Slug:</strong> ${data.slug}<br>
+                     <strong>Active:</strong> ${data.is_active}<br>
+                     <strong>Sort Order:</strong> ${data.sort_order}<br>
+                     <strong>Description:</strong> ${data.description}<br>
+                     <details>
+                       <summary>Full Category Data</summary>
+                       <pre>${JSON.stringify(data, null, 2)}</pre>
+                     </details>`, 'success');
+
+            } catch (error) {
+                addResult('❌ Offerta Settembre Test Exception', `Exception: ${error.message}`, 'error');
+            }
+        }
+
+        function clearCache() {
+            // Clear localStorage
+            localStorage.clear();
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+
+            addResult('🗑️ Cache Cleared', 'Browser cache, localStorage, and sessionStorage have been cleared. Try refreshing your main website now.', 'success');
+        }
+
+        // Auto-run tests on page load
+        window.onload = function() {
+            addResult('🚀 Page Loaded', 'Ready to test category fetching. Click the buttons above to run tests.', 'loading');
+        };
+    </script>
+</body>
+</html>

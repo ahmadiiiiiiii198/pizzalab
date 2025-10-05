@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Feature Loading - PizzaLab</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+        .info { color: #17a2b8; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .feature-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+        .feature-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .feature-details {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍕 PizzaLab Feature Loading Debug Tool</h1>
+        <p>This tool helps debug why new features disappear after page refresh.</p>
+        
+        <div>
+            <button onclick="testDatabaseConnection()">🔗 Test Database Connection</button>
+            <button onclick="loadFeatureTypes()">📋 Load Feature Types</button>
+            <button onclick="createTestFeature()">➕ Create Test Feature</button>
+            <button onclick="clearLog()">🧹 Clear Log</button>
+        </div>
+
+        <div id="log" class="log"></div>
+        
+        <div id="features-container">
+            <h3>Current Features:</h3>
+            <div id="features-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase client
+        const supabaseUrl = 'https://foymsziaullphulzhmxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('log');
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            logElement.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        async function testDatabaseConnection() {
+            log('🔍 Testing database connection...');
+            
+            try {
+                // Test basic connection
+                const { data, error } = await supabase
+                    .from('feature_types')
+                    .select('count(*)', { count: 'exact', head: true });
+                
+                if (error) {
+                    log(`❌ Database connection failed: ${error.message}`, 'error');
+                    log(`❌ Error code: ${error.code}`, 'error');
+                    log(`❌ Error details: ${JSON.stringify(error)}`, 'error');
+                } else {
+                    log(`✅ Database connection successful! Found ${data} feature types.`, 'success');
+                }
+            } catch (err) {
+                log(`💥 Unexpected error: ${err.message}`, 'error');
+            }
+        }
+
+        async function loadFeatureTypes() {
+            log('📋 Loading feature types from database...');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('feature_types')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+                
+                if (error) {
+                    log(`❌ Error loading feature types: ${error.message}`, 'error');
+                    log(`❌ Error code: ${error.code}`, 'error');
+                    log(`❌ Full error: ${JSON.stringify(error)}`, 'error');
+                    
+                    // Check if it's a table not found error
+                    const isTableNotFound = error.code === 'PGRST116' || 
+                                           error.message.includes('relation "feature_types" does not exist') ||
+                                           error.message.includes('table "feature_types" does not exist');
+                    
+                    if (isTableNotFound) {
+                        log('📋 Table feature_types does not exist', 'warning');
+                    } else {
+                        log('🚨 This is NOT a table missing error - something else is wrong!', 'error');
+                    }
+                } else {
+                    log(`✅ Successfully loaded ${data.length} feature types`, 'success');
+                    displayFeatures(data);
+                }
+            } catch (err) {
+                log(`💥 Unexpected error loading features: ${err.message}`, 'error');
+            }
+        }
+
+        function displayFeatures(features) {
+            const container = document.getElementById('features-list');
+            container.innerHTML = '';
+            
+            if (!features || features.length === 0) {
+                container.innerHTML = '<p>No features found.</p>';
+                return;
+            }
+            
+            features.forEach(feature => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                card.innerHTML = `
+                    <div class="feature-name">${feature.name}</div>
+                    <div class="feature-details">
+                        <strong>ID:</strong> ${feature.id}<br>
+                        <strong>Slug:</strong> ${feature.slug}<br>
+                        <strong>Table:</strong> ${feature.table_name}<br>
+                        <strong>Created:</strong> ${new Date(feature.created_at).toLocaleString()}<br>
+                        <strong>Sort Order:</strong> ${feature.sort_order}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function createTestFeature() {
+            log('➕ Creating test feature...');
+            
+            const testFeature = {
+                name: `Test Feature ${Date.now()}`,
+                slug: `test-feature-${Date.now()}`,
+                description: 'Test feature created by debug tool',
+                table_name: `test_feature_${Date.now()}_types`,
+                is_active: true,
+                has_categories: false,
+                has_price: true,
+                has_size: false,
+                custom_fields: {},
+                sort_order: 999
+            };
+            
+            try {
+                const { data, error } = await supabase
+                    .from('feature_types')
+                    .insert([testFeature])
+                    .select();
+                
+                if (error) {
+                    log(`❌ Error creating test feature: ${error.message}`, 'error');
+                    log(`❌ Error details: ${JSON.stringify(error)}`, 'error');
+                } else {
+                    log(`✅ Test feature created successfully!`, 'success');
+                    log(`📊 Created feature: ${JSON.stringify(data[0])}`, 'success');
+                    
+                    // Reload features to show the new one
+                    setTimeout(() => {
+                        loadFeatureTypes();
+                    }, 500);
+                }
+            } catch (err) {
+                log(`💥 Unexpected error creating feature: ${err.message}`, 'error');
+            }
+        }
+
+        // Auto-load features on page load
+        window.addEventListener('load', () => {
+            log('🚀 Debug tool loaded. Testing connection...');
+            log('🔧 Fixed permission issue with add_feature_toggle_column function');
+            testDatabaseConnection();
+            setTimeout(() => {
+                loadFeatureTypes();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

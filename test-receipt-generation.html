@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Receipt Generation - PizzaLab</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #c0392b;
+        }
+        .receipt-preview {
+            border: 2px solid #ddd;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .receipt-preview iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        .test-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧾 Test Receipt Generation - PizzaLab</h1>
+        
+        <div class="test-info">
+            <h3>📋 Test della Ricevuta Cliente Dettagliata</h3>
+            <p>Questo test verifica che la ricevuta del cliente contenga tutti i dettagli come quella di stampa dell'admin:</p>
+            <ul>
+                <li>✅ Informazioni dettagliate del cliente (incluso citofono)</li>
+                <li>✅ Dettagli articoli con impasto, base del pizze, aggiunti con prezzi</li>
+                <li>✅ Sezione bevande separata</li>
+                <li>✅ Informazioni pagamento complete con stato</li>
+                <li>✅ Tipo di ordine (consegna/ritiro) e orari</li>
+                <li>✅ Note e istruzioni speciali</li>
+                <li>✅ Spese aggiuntive (consegna, POS)</li>
+            </ul>
+        </div>
+
+        <div>
+            <button class="test-button" onclick="testDeliveryReceipt()">
+                🚚 Test Ricevuta Consegna (Contanti)
+            </button>
+            <button class="test-button" onclick="testPosReceipt()">
+                💳 Test Ricevuta POS
+            </button>
+            <button class="test-button" onclick="testPickupReceipt()">
+                🏪 Test Ricevuta Ritiro
+            </button>
+            <button class="test-button" onclick="testSatisPayReceipt()">
+                📱 Test Ricevuta SatisPay
+            </button>
+        </div>
+
+        <div id="receiptPreview" class="receipt-preview" style="display: none;">
+            <iframe id="receiptFrame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Mock receipt generator function (simplified version)
+        function generateTestReceiptHTML(orderData, cartItems) {
+            const logoBase64 = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMzAiIGZpbGw9IiNlNzRjM2MiLz4KPHRleHQgeD0iMzAiIHk9IjM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyNCIgZm9udC1mYW1pbHk9IkFyaWFsIj7wn42VPC90ZXh0Pgo8L3N2Zz4K";
+            
+            // Generate food items HTML
+            const foodItemsHTML = cartItems.filter(item => !item.isDrink && !item.isDolci).map(item => {
+                let totalPrice = item.product.price * item.quantity;
+                let impastoHTML = '';
+                let baseDelPizzeHTML = '';
+                let extrasHTML = '';
+
+                // Add impasto pricing
+                if (item.impastaType) {
+                    const impastaPrice = item.impastaType.price * item.quantity;
+                    totalPrice += impastaPrice;
+                    impastoHTML = `<div class="impasto">Impasto: ${item.impastaType.name}${item.impastaType.price > 0 ? ` (+€${item.impastaType.price.toFixed(2)})` : ''}</div>`;
+                }
+
+                // Add base del pizze pricing
+                if (item.baseDelPizzeType) {
+                    const baseDelPizzePrice = item.baseDelPizzeType.price * item.quantity;
+                    totalPrice += baseDelPizzePrice;
+                    baseDelPizzeHTML = `<div class="base-del-pizze">Base del pizze: ${item.baseDelPizzeType.name}${item.baseDelPizzeType.price > 0 ? ` (+€${item.baseDelPizzeType.price.toFixed(2)})` : ''}</div>`;
+                }
+
+                // Add extras pricing (excluding drinks and dolci)
+                if (item.extras && item.extras.length > 0) {
+                    const allExtras = [];
+                    item.extras.forEach(extra => {
+                        const extraTotalPrice = extra.price * extra.quantity * item.quantity;
+                        totalPrice += extraTotalPrice;
+
+                        // Only show non-drink, non-dolci extras in the Aggiunti section
+                        const isDrink = ['coca', 'sprite', 'birra', 'acqua', 'bevanda'].some(keyword =>
+                            extra.name.toLowerCase().includes(keyword)
+                        );
+                        const isDolci = ['tiramisu', 'panna cotta', 'brownies', 'gelato', 'dolci', 'dolce'].some(keyword =>
+                            extra.name.toLowerCase().includes(keyword)
+                        );
+
+                        if (!isDrink && !isDolci) {
+                            allExtras.push(`${extra.name} x${extra.quantity} (+€${extra.price.toFixed(2)})`);
+                        }
+                    });
+                    if (allExtras.length > 0) {
+                        extrasHTML = `<div class="extras">Aggiunti: ${allExtras.join(', ')}</div>`;
+                    }
+                }
+
+                return `
+                    <div class="item">
+                        <div class="item-header">
+                            <span>${item.quantity}x ${item.product.name}</span>
+                            <span>€${totalPrice.toFixed(2)}</span>
+                        </div>
+                        ${impastoHTML}
+                        ${extrasHTML}
+                        ${baseDelPizzeHTML}
+                        ${item.specialRequests ? `<div class="special-requests">Richieste: ${item.specialRequests}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // Generate drinks HTML
+            const drinkItemsHTML = cartItems.filter(item => item.isDrink).map(item => `
+                <div class="item">
+                    <div class="item-header">
+                        <span>${item.quantity}x ${item.product.name}</span>
+                        <span>€${(item.product.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Generate dolci HTML (standalone dolci + dolci extras)
+            const standaloneDolci = cartItems.filter(item => item.isDolci);
+            const dolciExtras = [];
+
+            // Extract dolci extras from all items
+            cartItems.forEach(item => {
+                if (item.extras) {
+                    item.extras.forEach(extra => {
+                        const isDolci = ['tiramisu', 'panna cotta', 'brownies', 'gelato', 'dolci', 'dolce'].some(keyword =>
+                            extra.name.toLowerCase().includes(keyword)
+                        );
+                        if (isDolci) {
+                            dolciExtras.push({
+                                name: extra.name,
+                                quantity: extra.quantity,
+                                price: extra.price
+                            });
+                        }
+                    });
+                }
+            });
+
+            const dolciItemsHTML = [
+                ...standaloneDolci.map(item => `
+                    <div class="item">
+                        <div class="item-header">
+                            <span>${item.quantity}x ${item.product.name}</span>
+                            <span>€${(item.product.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                        ${item.specialRequests ? `<div class="special-requests">Richieste: ${item.specialRequests}</div>` : ''}
+                    </div>
+                `),
+                ...dolciExtras.map(extra => `
+                    <div class="item">
+                        <div class="item-header">
+                            <span>${extra.quantity}x ${extra.name}</span>
+                            <span>€${(extra.price * extra.quantity).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `)
+            ].join('');
+
+            return `
+                <!DOCTYPE html>
+                <html lang="it">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Ordine #${orderData.order_number} - PizzaLab</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body {
+                            font-family: 'Courier New', monospace;
+                            font-size: 12px;
+                            line-height: 1.4;
+                            color: #000;
+                            background: #fff;
+                            position: relative;
+                            padding: 20px;
+                            max-width: 80mm;
+                            margin: 0 auto;
+                        }
+                        body::before {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 200px;
+                            height: 200px;
+                            background-image: url('${logoBase64}');
+                            background-repeat: no-repeat;
+                            background-position: center center;
+                            background-size: contain;
+                            opacity: 0.08;
+                            z-index: 0;
+                            pointer-events: none;
+                        }
+                        .logo-container {
+                            text-align: center;
+                            margin-bottom: 10px;
+                            position: relative;
+                            z-index: 2;
+                        }
+                        .logo-img {
+                            max-width: 60px;
+                            max-height: 60px;
+                            opacity: 0.8;
+                        }
+                        .header {
+                            text-align: center;
+                            border-bottom: 2px solid #000;
+                            padding: 10px;
+                            margin-bottom: 15px;
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 3px;
+                        }
+                        .restaurant-name {
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 5px;
+                        }
+                        .order-info {
+                            margin-bottom: 15px;
+                            border-bottom: 1px dashed #000;
+                            padding: 10px;
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 3px;
+                        }
+                        .section-title {
+                            font-weight: bold;
+                            margin: 10px 0 5px 0;
+                            text-transform: uppercase;
+                            position: relative;
+                            z-index: 2;
+                        }
+                        .payment-section-title {
+                            font-weight: bold;
+                            margin: 10px 0 5px 0;
+                            text-transform: uppercase;
+                            position: relative;
+                            z-index: 2;
+                            color: #1e40af;
+                        }
+                        .items-container {
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            padding: 10px;
+                            border-radius: 3px;
+                            margin-bottom: 15px;
+                        }
+                        .item {
+                            margin-bottom: 8px;
+                            border-bottom: 1px dotted #ccc;
+                            padding-bottom: 5px;
+                        }
+                        .item-header {
+                            display: flex;
+                            justify-content: space-between;
+                            font-weight: bold;
+                        }
+                        .extras {
+                            font-size: 11px;
+                            color: #333;
+                            margin-top: 2px;
+                        }
+                        .impasto {
+                            font-size: 11px;
+                            color: #7c3aed;
+                            margin-top: 2px;
+                            font-weight: bold;
+                        }
+                        .base-del-pizze {
+                            font-size: 11px;
+                            color: #4f46e5;
+                            margin-top: 2px;
+                            font-weight: bold;
+                        }
+                        .special-requests {
+                            font-size: 11px;
+                            color: #000;
+                            font-weight: bold;
+                            margin-top: 2px;
+                        }
+                        .payment-info {
+                            margin-bottom: 15px;
+                            border-bottom: 1px dashed #000;
+                            padding: 10px;
+                            font-size: 12px;
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 3px;
+                        }
+                        .payment-info div {
+                            margin-bottom: 3px;
+                        }
+                        .total {
+                            border-top: 2px solid #000;
+                            padding: 15px 10px 10px 10px;
+                            margin-top: 15px;
+                            text-align: center;
+                            font-size: 14px;
+                            font-weight: bold;
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 3px;
+                        }
+                        .footer {
+                            text-align: center;
+                            margin-top: 20px;
+                            border-top: 1px dashed #000;
+                            padding: 15px 10px 10px 10px;
+                            font-size: 10px;
+                            position: relative;
+                            z-index: 2;
+                            background: rgba(255, 255, 255, 0.95);
+                            border-radius: 3px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="logo-container">
+                        <img src="${logoBase64}" alt="Logo" class="logo-img" />
+                    </div>
+                    <div class="header">
+                        <div class="restaurant-name">PIZZALAB</div>
+                        <div>Laboratorio di Pizza Italiana</div>
+                    </div>
+
+                    <div class="order-info">
+                        <div><strong>ORDINE #${orderData.order_number}</strong></div>
+                        <div>Data: ${new Date(orderData.created_at).toLocaleDateString('it-IT')}</div>
+                        <div>Ora: ${new Date(orderData.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</div>
+                        <div>Cliente: ${orderData.customer_name}</div>
+                        ${orderData.customer_phone ? `<div>Tel: ${orderData.customer_phone}</div>` : ''}
+                        ${orderData.customer_email ? `<div>Email: ${orderData.customer_email}</div>` : ''}
+                        ${orderData.customer_address ? `<div>Indirizzo: ${orderData.customer_address}</div>` : ''}
+                        ${orderData.citofono_nome ? `<div>Citofono: ${orderData.citofono_nome}</div>` : ''}
+                        ${orderData.delivery_type ? `<div><strong>Tipo:</strong> ${
+                            orderData.delivery_type === 'delivery' ? 'Consegna a Domicilio' :
+                            orderData.delivery_type === 'pickup' ? 'Ritiro in Negozio' :
+                            orderData.delivery_type
+                        }</div>` : ''}
+                        ${orderData.pickup_time && orderData.delivery_type === 'pickup' ? `<div><strong>Orario Ritiro:</strong> ${orderData.pickup_time}</div>` : ''}
+                    </div>
+
+                    ${foodItemsHTML ? `
+                    <div class="section-title">Articoli Ordinati</div>
+                    <div class="items-container">
+                        ${foodItemsHTML}
+                    </div>
+                    ` : ''}
+
+                    ${drinkItemsHTML ? `
+                    <div class="section-title">Bevande</div>
+                    <div class="items-container">
+                        ${drinkItemsHTML}
+                    </div>
+                    ` : ''}
+
+                    ${dolciItemsHTML ? `
+                    <div class="section-title">Dolci</div>
+                    <div class="items-container">
+                        ${dolciItemsHTML}
+                    </div>
+                    ` : ''}
+
+                    <div class="payment-section-title">INFORMAZIONI PAGAMENTO</div>
+                    <div class="payment-info">
+                        <div><strong>Metodo:</strong> ${
+                            orderData.payment_method === 'satispay' ? '💳 SatisPay' :
+                            orderData.payment_method === 'cash_on_delivery' ? '💵 Contanti alla Consegna' :
+                            orderData.payment_method === 'pos_on_delivery' ? '💳 POS alla Consegna' :
+                            orderData.payment_method === 'pickup' ? '🏪 Ritiro in Negozio' :
+                            orderData.payment_method
+                        }</div>
+                        <div><strong>Stato Pagamento:</strong> ${
+                            orderData.payment_status === 'paid' ? '✅ Pagato' :
+                            orderData.payment_status === 'pending' ? '⏳ In Attesa' :
+                            orderData.payment_status
+                        }</div>
+                        ${orderData.delivery_fee && orderData.delivery_fee > 0 ? `<div><strong>Spesa Consegna:</strong> €${orderData.delivery_fee.toFixed(2)}</div>` : ''}
+                        ${orderData.metadata?.posFee ? `<div><strong>Spesa POS:</strong> €${orderData.metadata.posFee.toFixed(2)}</div>` : ''}
+                    </div>
+
+                    ${orderData.special_instructions ? `
+                    <div class="section-title">Note Aggiuntive</div>
+                    <div class="payment-info">
+                        <div><strong>Istruzioni Speciali:</strong> ${orderData.special_instructions}</div>
+                    </div>
+                    ` : ''}
+
+                    <div class="total">
+                        TOTALE: €${orderData.total_amount.toFixed(2)}
+                    </div>
+
+                    <div class="footer">
+                        <div>Grazie per aver scelto PizzaLab!</div>
+                        <div>Stampato: ${new Date().toLocaleString('it-IT')}</div>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function showReceipt(html) {
+            const preview = document.getElementById('receiptPreview');
+            const frame = document.getElementById('receiptFrame');
+            frame.srcdoc = html;
+            preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function testDeliveryReceipt() {
+            const orderData = {
+                order_number: 'PL240912001',
+                customer_name: 'Mario Rossi',
+                customer_email: 'mario.rossi@email.com',
+                customer_phone: '+39 123 456 7890',
+                customer_address: 'Via Roma 123, 10100 Torino',
+                citofono_nome: 'Rossi',
+                delivery_type: 'delivery',
+                payment_method: 'cash_on_delivery',
+                payment_status: 'pending',
+                total_amount: 28.50,
+                delivery_fee: 3.00,
+                created_at: new Date().toISOString(),
+                special_instructions: 'Suonare al citofono, secondo piano'
+            };
+
+            const cartItems = [
+                {
+                    id: 'item1',
+                    product: { id: 'pizza1', name: 'Calzone Classico', price: 8.50 },
+                    quantity: 1,
+                    impastaType: { id: 'imp1', name: 'Impasta Normale', price: 0.00 },
+                    baseDelPizzeType: { id: 'base1', name: 'Pomodoro San Marzano', price: 0.50 },
+                    extras: [
+                        { id: 'ext1', name: 'Patatine fritte', price: 2.00, description: 'Crispy fries', quantity: 1 },
+                        { id: 'ext2', name: 'Tiramisu', price: 5.00, description: 'Classic tiramisu', quantity: 1 },
+                        { id: 'ext3', name: 'Panna Cotta', price: 4.50, description: 'Vanilla panna cotta', quantity: 1 },
+                        { id: 'ext4', name: 'Brownies', price: 3.00, description: 'Chocolate brownies', quantity: 1 }
+                    ],
+                    specialRequests: 'Poco cotta',
+                    isDrink: false
+                },
+                {
+                    id: 'item2',
+                    product: { id: 'drink1', name: 'Coca Cola 33cl', price: 2.50 },
+                    quantity: 2,
+                    isDrink: true
+                }
+            ];
+
+            const html = generateTestReceiptHTML(orderData, cartItems);
+            showReceipt(html);
+        }
+
+        function testPosReceipt() {
+            const orderData = {
+                order_number: 'PL240912002',
+                customer_name: 'Giulia Bianchi',
+                customer_email: 'giulia.bianchi@email.com',
+                customer_phone: '+39 987 654 3210',
+                customer_address: 'Corso Francia 456, 10100 Torino',
+                citofono_nome: 'Bianchi',
+                delivery_type: 'delivery',
+                payment_method: 'pos_on_delivery',
+                payment_status: 'pending',
+                total_amount: 35.80,
+                delivery_fee: 3.00,
+                metadata: { posFee: 0.30 },
+                created_at: new Date().toISOString(),
+                special_instructions: 'Chiamare prima della consegna'
+            };
+
+            const cartItems = [
+                {
+                    id: 'item3',
+                    product: { id: 'pizza2', name: 'Pizza Diavola', price: 12.00 },
+                    quantity: 1,
+                    impastaType: { id: 'imp2', name: 'Napoletano', price: 0.50 },
+                    extras: [
+                        { id: 'ext3', name: 'Salame Piccante Extra', price: 3.00, description: 'Extra spicy salami', quantity: 1 }
+                    ],
+                    isDrink: false
+                },
+                {
+                    id: 'item4',
+                    product: { id: 'pizza3', name: 'Pizza Quattro Stagioni', price: 14.00 },
+                    quantity: 1,
+                    impastaType: { id: 'imp3', name: 'Classico', price: 0.00 },
+                    baseDelPizzeType: { id: 'base2', name: 'Pomodoro', price: 0.00 },
+                    isDrink: false
+                },
+                {
+                    id: 'item5',
+                    product: { id: 'drink2', name: 'Birra Peroni 66cl', price: 3.50 },
+                    quantity: 2,
+                    isDrink: true
+                },
+                {
+                    id: 'item6',
+                    product: { id: 'dolci1', name: 'Tiramisu della Casa', price: 5.50 },
+                    quantity: 1,
+                    specialRequests: 'Senza caffè',
+                    isDolci: true
+                }
+            ];
+
+            const html = generateTestReceiptHTML(orderData, cartItems);
+            showReceipt(html);
+        }
+
+        function testPickupReceipt() {
+            const orderData = {
+                order_number: 'PL240912003',
+                customer_name: 'Luca Verdi',
+                customer_email: 'luca.verdi@email.com',
+                customer_phone: '+39 555 123 4567',
+                customer_address: 'Ritiro in negozio',
+                delivery_type: 'pickup',
+                pickup_time: '19:30',
+                payment_method: 'pickup',
+                payment_status: 'pending',
+                total_amount: 22.00,
+                delivery_fee: 0,
+                created_at: new Date().toISOString(),
+                metadata: { pickup_method: 'asap' }
+            };
+
+            const cartItems = [
+                {
+                    product: { name: 'Pizza Marinara', price: 7.00 },
+                    quantity: 1,
+                    selectedImpasto: 'Integrale',
+                    isDrink: false
+                },
+                {
+                    product: { name: 'Pizza Capricciosa', price: 13.00 },
+                    quantity: 1,
+                    selectedImpasto: 'Napoletano',
+                    selectedAggiunti: [
+                        { name: 'Olive Nere', price: 1.00 }
+                    ],
+                    isDrink: false
+                },
+                {
+                    product: { name: 'Acqua Naturale 50cl', price: 1.00 },
+                    quantity: 1,
+                    isDrink: true
+                }
+            ];
+
+            const html = generateTestReceiptHTML(orderData, cartItems);
+            showReceipt(html);
+        }
+
+        function testSatisPayReceipt() {
+            const orderData = {
+                order_number: 'PL240912004',
+                customer_name: 'Anna Neri',
+                customer_email: 'anna.neri@email.com',
+                customer_phone: '+39 333 999 8888',
+                customer_address: 'Via Garibaldi 789, 10100 Torino',
+                citofono_nome: 'Neri - Scala B',
+                delivery_type: 'delivery',
+                payment_method: 'satispay',
+                payment_status: 'paid',
+                total_amount: 41.50,
+                delivery_fee: 3.00,
+                created_at: new Date().toISOString(),
+                special_instructions: 'Senza cipolla su tutte le pizze'
+            };
+
+            const cartItems = [
+                {
+                    product: { name: 'Pizza Bufala e Pomodorini', price: 16.00 },
+                    quantity: 1,
+                    selectedImpasto: 'Integrale',
+                    selectedBase: 'Pomodoro San Marzano',
+                    selectedAggiunti: [
+                        { name: 'Rucola', price: 1.50 },
+                        { name: 'Pomodorini Pachino', price: 2.00 }
+                    ],
+                    specialRequests: 'Senza cipolla',
+                    isDrink: false
+                },
+                {
+                    product: { name: 'Pizza Prosciutto e Funghi', price: 11.00 },
+                    quantity: 1,
+                    selectedImpasto: 'Classico',
+                    selectedAggiunti: [
+                        { name: 'Funghi Porcini', price: 3.00 }
+                    ],
+                    specialRequests: 'Senza cipolla',
+                    isDrink: false
+                },
+                {
+                    product: { name: 'Coca Cola Zero 33cl', price: 2.50 },
+                    quantity: 2,
+                    isDrink: true
+                }
+            ];
+
+            const html = generateTestReceiptHTML(orderData, cartItems);
+            showReceipt(html);
+        }
+    </script>
+</body>
+</html>

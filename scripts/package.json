@@ -1,0 +1,35 @@
+{
+  "name": "pizzalab-database-scripts",
+  "version": "1.0.0",
+  "description": "Database management scripts for PizzaLab",
+  "main": "index.js",
+  "scripts": {
+    "db:study": "node run-database-study.js",
+    "db:study:export": "node run-database-study.js --export",
+    "db:migrate:init": "node run-migrations.js init",
+    "db:migrate:status": "node run-migrations.js status",
+    "db:migrate": "node run-migrations.js migrate",
+    "db:migrate:create": "node run-migrations.js create",
+    "db:setup": "npm run db:migrate:init && npm run db:study",
+    "db:backup": "node backup-database.js",
+    "db:validate": "node validate-database.js",
+    "help": "echo 'Available commands:\n  npm run db:study - Study database structure\n  npm run db:migrate:init - Initialize migration system\n  npm run db:migrate - Run pending migrations\n  npm run db:migrate:create <name> - Create new migration\n  npm run db:setup - Initialize and study database'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "keywords": [
+    "database",
+    "migrations",
+    "supabase",
+    "pizzalab"
+  ],
+  "author": "PizzaLab Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Toggle Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .category { border: 1px solid #ccc; margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .toggle { margin: 5px 0; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 3px; font-family: monospace; white-space: pre-wrap; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🍕 Feature Toggle Debug Tool</h1>
+    
+    <button onclick="loadCategories()">🔄 Load Categories</button>
+    <button onclick="testConnection()">🔍 Test Connection</button>
+    <button onclick="clearLog()">🗑️ Clear Log</button>
+    
+    <div id="log" class="log">Ready to test feature toggles...\n</div>
+    
+    <div id="categories"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2';
+        
+        const supabaseUrl = 'https://foymsziaullphulzhmxy.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZveW1zemlhdWxscGh1bHpobXh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMzA2NjgsImV4cCI6MjA3MTkwNjY2OH0.zEDE5JMXg4O5rRgNp8ZRNvLqz-BVwINb9aIZoAYijJY';
+        
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        window.supabase = supabase;
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            logDiv.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        window.log = log;
+        window.clearLog = () => document.getElementById('log').innerHTML = '';
+        
+        window.testConnection = async () => {
+            try {
+                log('🔍 Testing Supabase connection...');
+                const { data, error } = await supabase.from('categories').select('count').limit(1);
+                
+                if (error) {
+                    log(`❌ Connection failed: ${error.message}`, 'error');
+                } else {
+                    log('✅ Connection successful!', 'success');
+                }
+            } catch (err) {
+                log(`❌ Connection error: ${err.message}`, 'error');
+            }
+        };
+        
+        window.loadCategories = async () => {
+            try {
+                log('📋 Loading categories...');
+                
+                const { data: categories, error } = await supabase
+                    .from('categories')
+                    .select('id, name, slug, impasto_enabled, aggiunti_enabled, base_del_pizze_enabled, fritti_enabled')
+                    .order('name');
+                
+                if (error) {
+                    log(`❌ Failed to load categories: ${error.message}`, 'error');
+                    return;
+                }
+                
+                log(`✅ Loaded ${categories.length} categories`, 'success');
+                
+                const categoriesDiv = document.getElementById('categories');
+                categoriesDiv.innerHTML = '';
+                
+                categories.forEach(category => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'category';
+                    categoryDiv.innerHTML = `
+                        <h3>${category.name}</h3>
+                        <p><strong>ID:</strong> ${category.id}</p>
+                        <p><strong>Slug:</strong> ${category.slug}</p>
+                        
+                        <div class="toggle">
+                            <label>
+                                <input type="checkbox" ${category.impasto_enabled ? 'checked' : ''} 
+                                       onchange="toggleFeature('${category.id}', 'impasto_enabled', this.checked)">
+                                Impasto Enabled
+                            </label>
+                        </div>
+                        
+                        <div class="toggle">
+                            <label>
+                                <input type="checkbox" ${category.aggiunti_enabled ? 'checked' : ''} 
+                                       onchange="toggleFeature('${category.id}', 'aggiunti_enabled', this.checked)">
+                                Aggiunti Enabled
+                            </label>
+                        </div>
+                        
+                        <div class="toggle">
+                            <label>
+                                <input type="checkbox" ${category.base_del_pizze_enabled ? 'checked' : ''} 
+                                       onchange="toggleFeature('${category.id}', 'base_del_pizze_enabled', this.checked)">
+                                Base del Pizze Enabled
+                            </label>
+                        </div>
+                        
+                        <div class="toggle">
+                            <label>
+                                <input type="checkbox" ${category.fritti_enabled ? 'checked' : ''} 
+                                       onchange="toggleFeature('${category.id}', 'fritti_enabled', this.checked)">
+                                Fritti Enabled
+                            </label>
+                        </div>
+                        
+                        <button onclick="refreshCategory('${category.id}')">🔄 Refresh</button>
+                    `;
+                    categoriesDiv.appendChild(categoryDiv);
+                });
+                
+            } catch (err) {
+                log(`❌ Error loading categories: ${err.message}`, 'error');
+            }
+        };
+        
+        window.toggleFeature = async (categoryId, field, value) => {
+            try {
+                log(`🔄 Toggling ${field} to ${value} for category ${categoryId}...`);
+                
+                const updateData = {
+                    [field]: value,
+                    updated_at: new Date().toISOString()
+                };
+                
+                log(`📤 Update data: ${JSON.stringify(updateData)}`);
+                
+                const { data, error } = await supabase
+                    .from('categories')
+                    .update(updateData)
+                    .eq('id', categoryId)
+                    .select();
+                
+                log(`📥 Response: ${JSON.stringify({ data, error })}`);
+                
+                if (error) {
+                    log(`❌ Failed to update ${field}: ${error.message}`, 'error');
+                    log(`❌ Error details: ${JSON.stringify(error)}`, 'error');
+                } else {
+                    log(`✅ Successfully updated ${field} to ${value}`, 'success');
+                    log(`📊 Updated data: ${JSON.stringify(data)}`, 'success');
+                }
+                
+            } catch (err) {
+                log(`❌ Error toggling feature: ${err.message}`, 'error');
+            }
+        };
+        
+        window.refreshCategory = async (categoryId) => {
+            try {
+                log(`🔄 Refreshing category ${categoryId}...`);
+                
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('id, name, impasto_enabled, aggiunti_enabled, base_del_pizze_enabled, fritti_enabled, updated_at')
+                    .eq('id', categoryId)
+                    .single();
+                
+                if (error) {
+                    log(`❌ Failed to refresh category: ${error.message}`, 'error');
+                } else {
+                    log(`✅ Current state: ${JSON.stringify(data)}`, 'success');
+                }
+                
+            } catch (err) {
+                log(`❌ Error refreshing category: ${err.message}`, 'error');
+            }
+        };
+        
+        // Auto-load categories on page load
+        window.addEventListener('load', () => {
+            log('🚀 Debug tool loaded');
+            testConnection();
+        });
+    </script>
+</body>
+</html>

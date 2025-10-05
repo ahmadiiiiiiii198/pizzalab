@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Utils Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .input-test {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍕 Price Utils Test - Pizzeria Regina</h1>
+    
+    <div class="test-section">
+        <h2>Floating Point Precision Tests</h2>
+        <div id="precision-tests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Interactive Price Input Test</h2>
+        <div class="input-test">
+            <label>Enter a price: </label>
+            <input type="number" id="price-input" step="0.01" placeholder="7.00" />
+            <button onclick="testPriceInput()">Test Price</button>
+            <div id="price-result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Common Price Scenarios</h2>
+        <div id="scenario-tests"></div>
+    </div>
+
+    <script>
+        // Price utility functions (copied from the React utils)
+        const roundToTwoDecimals = (value) => {
+            return Math.round(value * 100) / 100;
+        };
+
+        const parsePrice = (value) => {
+            if (typeof value === 'string') {
+                if (value === '' || value === null || value === undefined) {
+                    return 0;
+                }
+                const parsed = parseFloat(value);
+                return isNaN(parsed) ? 0 : roundToTwoDecimals(parsed);
+            }
+            
+            if (typeof value === 'number') {
+                return isNaN(value) ? 0 : roundToTwoDecimals(value);
+            }
+            
+            return 0;
+        };
+
+        const formatPrice = (price, currency = '€') => {
+            const roundedPrice = roundToTwoDecimals(price);
+            return `${currency}${roundedPrice.toFixed(2)}`;
+        };
+
+        // Test functions
+        function runPrecisionTests() {
+            const tests = [
+                { input: 7, expected: 7.00, description: "Integer 7" },
+                { input: 7.0, expected: 7.00, description: "Float 7.0" },
+                { input: "7", expected: 7.00, description: "String '7'" },
+                { input: "7.00", expected: 7.00, description: "String '7.00'" },
+                { input: 6.999999999999999, expected: 7.00, description: "Floating point precision issue" },
+                { input: 0.1 + 0.2, expected: 0.30, description: "0.1 + 0.2 precision issue" },
+                { input: 7.005, expected: 7.01, description: "Rounding 7.005" },
+                { input: 7.004, expected: 7.00, description: "Rounding 7.004" },
+            ];
+
+            const container = document.getElementById('precision-tests');
+            container.innerHTML = '';
+
+            tests.forEach(test => {
+                const result = parsePrice(test.input);
+                const isCorrect = Math.abs(result - test.expected) < 0.001;
+                
+                const div = document.createElement('div');
+                div.className = `test-result ${isCorrect ? 'success' : 'error'}`;
+                div.innerHTML = `
+                    <strong>${test.description}</strong><br>
+                    Input: ${test.input}<br>
+                    Expected: ${test.expected}<br>
+                    Got: ${result}<br>
+                    Formatted: ${formatPrice(result)}<br>
+                    ${isCorrect ? '✅ PASS' : '❌ FAIL'}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function testPriceInput() {
+            const input = document.getElementById('price-input').value;
+            const result = parsePrice(input);
+            const formatted = formatPrice(result);
+            
+            document.getElementById('price-result').innerHTML = `
+                <div class="test-result success">
+                    <strong>Price Input Test</strong><br>
+                    Input: "${input}"<br>
+                    Parsed: ${result}<br>
+                    Formatted: ${formatted}<br>
+                    Type: ${typeof result}
+                </div>
+            `;
+        }
+
+        function runScenarioTests() {
+            const scenarios = [
+                { name: "Pizza Margherita", price: 6.00 },
+                { name: "Pizza Regina", price: 9.00 },
+                { name: "Coca Cola", price: 2.50 },
+                { name: "Birra 33cl", price: 3.00 },
+                { name: "Complex calculation", price: (7 * 1.22) }, // 7 euros + 22% tax
+            ];
+
+            const container = document.getElementById('scenario-tests');
+            container.innerHTML = '';
+
+            scenarios.forEach(scenario => {
+                const parsed = parsePrice(scenario.price);
+                const formatted = formatPrice(parsed);
+                
+                const div = document.createElement('div');
+                div.className = 'test-result success';
+                div.innerHTML = `
+                    <strong>${scenario.name}</strong><br>
+                    Original: ${scenario.price}<br>
+                    Parsed: ${parsed}<br>
+                    Formatted: ${formatted}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Run tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            runPrecisionTests();
+            runScenarioTests();
+        });
+    </script>
+</body>
+</html>
