@@ -198,58 +198,92 @@ const WebsitePopup: React.FC = () => {
   }
 
   return (
-    <div
-      className="fixed left-0 right-0 w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white shadow-lg overflow-hidden z-40"
-      style={{ top: `${headerHeight}px` }}
-    >
-      <div className="relative flex items-center">
-        {/* Scrolling text container */}
-        <div className="flex-1 overflow-hidden py-3">
-          <div className="animate-marquee whitespace-nowrap inline-block">
-            <span className="text-lg font-semibold mx-8">
-              🎉 {activePopup.title} - {activePopup.content}
-            </span>
-            <span className="text-lg font-semibold mx-8">
-              🎉 {activePopup.title} - {activePopup.content}
-            </span>
-            <span className="text-lg font-semibold mx-8">
-              🎉 {activePopup.title} - {activePopup.content}
-            </span>
+    <>
+      {/* Overlay background */}
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        {/* Panel container */}
+        <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 transform animate-in slide-in-from-bottom-4 duration-300">
+          {/* Header with gradient background */}
+          <div className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white p-6 rounded-t-xl relative">
+            <h2 className="text-xl font-bold mb-2 pr-8">
+              🎉 {activePopup.title}
+            </h2>
+            
+            {/* Close button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={closePopup}
+              className="absolute top-4 right-4 text-white hover:text-white hover:bg-white/20 rounded-full p-2"
+              aria-label="Chiudi popup"
+            >
+              <X size={20} />
+            </Button>
+          </div>
+
+          {/* Content area */}
+          <div className="p-6">
+            {/* Image if available */}
+            {activePopup.image && (
+              <div className="mb-4">
+                <img
+                  src={activePopup.image}
+                  alt={activePopup.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Content text */}
+            <div className="text-gray-700 leading-relaxed mb-6">
+              {activePopup.content}
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-3">
+              <Button
+                onClick={closePopup}
+                className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+              >
+                Capito!
+              </Button>
+              <Button
+                variant="outline"
+                onClick={closePopup}
+                className="px-6 border-gray-300 text-gray-600 hover:bg-gray-50"
+              >
+                Chiudi
+              </Button>
+            </div>
           </div>
         </div>
-
-        {/* Close button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={closePopup}
-          className="absolute right-2 text-white hover:text-white hover:bg-white/20 rounded-full p-2 z-10"
-          aria-label="Chiudi banner"
-        >
-          <X size={20} />
-        </Button>
       </div>
 
-      {/* CSS for marquee animation */}
+      {/* CSS for animations */}
       <style>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
+        @keyframes slide-in-from-bottom {
+          from {
+            transform: translateY(100px);
+            opacity: 0;
           }
-          100% {
-            transform: translateX(-33.333%);
+          to {
+            transform: translateY(0);
+            opacity: 1;
           }
         }
 
-        .animate-marquee {
-          animation: marquee 20s linear infinite;
+        .animate-in {
+          animation-fill-mode: both;
         }
 
-        .animate-marquee:hover {
-          animation-play-state: paused;
+        .slide-in-from-bottom-4 {
+          animation: slide-in-from-bottom 0.3s ease-out;
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
