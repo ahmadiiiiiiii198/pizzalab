@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Push Helper - PizzaLab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .info-box p {
+            color: #1e40af;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .info-box code {
+            background: #dbeafe;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .help-text {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .commands-box {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            display: none;
+        }
+
+        .commands-box.show {
+            display: block;
+        }
+
+        .command-line {
+            margin-bottom: 10px;
+            color: #10b981;
+        }
+
+        .command-comment {
+            color: #6b7280;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message h3 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            color: #047857;
+            font-size: 0.875rem;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .warning-box h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .warning-box p {
+            color: #92400e;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #059669;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 3px solid #e5e7eb;
+            color: #9ca3af;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .step.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .step.completed {
+            border-bottom-color: #10b981;
+            color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Git Push Helper</h1>
+        <p class="subtitle">Push your Compare Price feature to GitHub</p>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1. Credentials</div>
+            <div class="step" id="step2">2. Commands</div>
+            <div class="step" id="step3">3. Done</div>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 What We're Pushing</h3>
+            <p>
+                • Compare Price feature implementation<br>
+                • Admin panel updates<br>
+                • Frontend display changes<br>
+                • Documentation files
+            </p>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠️ Important: Use Personal Access Token</h3>
+            <p>
+                GitHub no longer accepts passwords for Git operations. You need to use a <strong>Personal Access Token (PAT)</strong> instead.<br><br>
+                <strong>How to create a token:</strong><br>
+                1. Go to GitHub.com → Settings → Developer settings → Personal access tokens → Tokens (classic)<br>
+                2. Click "Generate new token (classic)"<br>
+                3. Give it a name (e.g., "PizzaLab Push")<br>
+                4. Select scopes: <code>repo</code> (full control of private repositories)<br>
+                5. Click "Generate token"<br>
+                6. Copy the token immediately (you won't see it again!)
+            </p>
+        </div>
+
+        <form id="credentialsForm">
+            <div class="form-group">
+                <label for="username">GitHub Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="e.g., ahmadiiiiiiii198"
+                    required
+                >
+                <p class="help-text">Your GitHub username</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Git Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="e.g., your-email@example.com"
+                    required
+                >
+                <p class="help-text">Email associated with your GitHub account</p>
+            </div>
+
+            <div class="form-group">
+                <label for="token">Personal Access Token (PAT)</label>
+                <input 
+                    type="password" 
+                    id="token" 
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                    required
+                >
+                <p class="help-text">Your GitHub Personal Access Token (not your password!)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="commitMessage">Commit Message</label>
+                <input 
+                    type="text" 
+                    id="commitMessage" 
+                    value="Add compare price (strikethrough) feature for products"
+                    required
+                >
+                <p class="help-text">Describe what you're committing</p>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-primary">Generate Commands</button>
+                <button type="button" class="btn-secondary" onclick="window.close()">Cancel</button>
+            </div>
+        </form>
+
+        <div class="commands-box" id="commandsBox">
+            <div class="command-comment"># Step 1: Configure Git</div>
+            <div class="command-line" id="cmd1"></div>
+            <div class="command-line" id="cmd2"></div>
+            <br>
+            <div class="command-comment"># Step 2: Add all changes</div>
+            <div class="command-line">git add .</div>
+            <br>
+            <div class="command-comment"># Step 3: Commit changes</div>
+            <div class="command-line" id="cmd3"></div>
+            <br>
+            <div class="command-comment"># Step 4: Add remote (if not exists)</div>
+            <div class="command-line">git remote add origin https://github.com/ahmadiiiiiiii198/pizzalab.git</div>
+            <div class="command-comment"># Or update existing remote:</div>
+            <div class="command-line">git remote set-url origin https://github.com/ahmadiiiiiiii198/pizzalab.git</div>
+            <br>
+            <div class="command-comment"># Step 5: Push to main branch</div>
+            <div class="command-line" id="cmd4"></div>
+            <br>
+            <button class="copy-btn" onclick="copyCommands()">📋 Copy All Commands</button>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h3>✅ Commands Generated!</h3>
+            <p>Copy the commands above and run them in your terminal (PowerShell or Git Bash).</p>
+            <p style="margin-top: 10px;"><strong>Note:</strong> When prompted for password, paste your Personal Access Token.</p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('credentialsForm');
+        const commandsBox = document.getElementById('commandsBox');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const token = document.getElementById('token').value;
+            const commitMessage = document.getElementById('commitMessage').value;
+
+            // Generate commands
+            document.getElementById('cmd1').textContent = `git config --global user.name "${username}"`;
+            document.getElementById('cmd2').textContent = `git config --global user.email "${email}"`;
+            document.getElementById('cmd3').textContent = `git commit -m "${commitMessage}"`;
+            document.getElementById('cmd4').textContent = `git push -u origin main`;
+
+            // Show commands
+            commandsBox.classList.add('show');
+            successMessage.classList.add('show');
+
+            // Update steps
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+
+            // Scroll to commands
+            commandsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        function copyCommands() {
+            const commands = `git config --global user.name "${document.getElementById('username').value}"
+git config --global user.email "${document.getElementById('email').value}"
+git add .
+git commit -m "${document.getElementById('commitMessage').value}"
+git remote add origin https://github.com/ahmadiiiiiiii198/pizzalab.git
+git push -u origin main`;
+
+            navigator.clipboard.writeText(commands).then(() => {
+                const btn = event.target;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy All Commands';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
+

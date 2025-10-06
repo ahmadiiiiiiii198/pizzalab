@@ -175,9 +175,16 @@ const ProductSearch: React.FC<ProductSearchProps> = ({
                         <p className="text-sm font-medium text-gray-900 truncate">
                           {product.name}
                         </p>
-                        <p className="text-sm font-bold text-pizza-red">
-                          €{(typeof product.price === 'string' ? parseFloat(product.price) : (product.price || 0)).toFixed(2)}
-                        </p>
+                        <div className="flex flex-col items-end gap-0.5">
+                          {product.compare_price && product.compare_price > 0 && (
+                            <p className="text-xs text-gray-400 line-through">
+                              €{(typeof product.compare_price === 'string' ? parseFloat(product.compare_price) : (product.compare_price || 0)).toFixed(2)}
+                            </p>
+                          )}
+                          <p className="text-sm font-bold text-pizza-red">
+                            €{(typeof product.price === 'string' ? parseFloat(product.price) : (product.price || 0)).toFixed(2)}
+                          </p>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-500 truncate">
                         {product.description}

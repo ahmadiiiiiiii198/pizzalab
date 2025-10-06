@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Price Feature - Visual Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-box h2 {
+            color: #f97316;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .info-box code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #f97316;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .product-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .price-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .compare-price {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .current-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f97316;
+            white-space: nowrap;
+        }
+
+        .product-description {
+            color: #4b5563;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #d97706;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid #f59e0b;
+        }
+
+        .savings-badge {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #16a34a;
+            border: 1px solid #22c55e;
+            margin-left: 8px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .legend h3 {
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .legend-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .legend-icon.discount {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .legend-icon.regular {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .legend-text {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍕 Compare Price Feature - Visual Demo</h1>
+
+        <div class="info-box">
+            <h2>📋 How It Works</h2>
+            <p><strong>Compare Price (Prezzo Prima):</strong> The original price shown with a strikethrough</p>
+            <p><strong>Current Price (Prezzo Attuale):</strong> The sale/discounted price shown in bold orange</p>
+            <p><strong>Admin Panel:</strong> Simply enter both prices when creating/editing a product</p>
+            <p><strong>Display Logic:</strong> If <code>compare_price > 0</code>, it shows with strikethrough. Otherwise, only current price is shown.</p>
+        </div>
+
+        <div class="products-grid">
+            <!-- Product 1: With Discount -->
+            <div class="product-card">
+                <div class="product-image">🍕</div>
+                <div class="product-info">
+                    <div class="product-header">
+                        <h3 class="product-name">Pizza Margherita Speciale</h3>
+                        <div class="price-container">
+                            <span class="compare-price">€10.00</span>
+                            <span class="current-price">€7.00</span>
+                        </div>
+                    </div>
+                    <p class="product-description">
+                        Pomodoro San Marzano, mozzarella di bufala, basilico fresco
+                    </p>
+                    <div>
+                        <span class="badge">Offerta Ottobre</span>
+                        <span class="badge savings-badge">Risparmia €3.00</span>
+                    </div>
+                    <button class="add-to-cart">Aggiungi al Carrello</button>
+                </div>
+            </div>
+
+            <!-- Product 2: With Discount -->
+            <div class="product-card">
+                <div class="product-image">🍕</div>
+                <div class="product-info">
+                    <div class="product-header">
+                        <h3 class="product-name">Pizza Quattro Formaggi</h3>
+                        <div class="price-container">
+                            <span class="compare-price">€12.00</span>
+                            <span class="current-price">€9.50</span>
+                        </div>
+                    </div>
+                    <p class="product-description">
+                        Mozzarella, gorgonzola, parmigiano, fontina
+                    </p>
+                    <div>
+                        <span class="badge">Offerta Ottobre</span>
+                        <span class="badge savings-badge">Risparmia €2.50</span>
+                    </div>
+                    <button class="add-to-cart">Aggiungi al Carrello</button>
+                </div>
+            </div>
+
+            <!-- Product 3: No Discount (Regular Price) -->
+            <div class="product-card">
+                <div class="product-image">🍕</div>
+                <div class="product-info">
+                    <div class="product-header">
+                        <h3 class="product-name">Pizza Marinara</h3>
+                        <div class="price-container">
+                            <!-- No compare price shown -->
+                            <span class="current-price">€5.00</span>
+                        </div>
+                    </div>
+                    <p class="product-description">
+                        Pomodoro, aglio, origano, olio extravergine d'oliva
+                    </p>
+                    <div>
+                        <span class="badge" style="background: #dbeafe; color: #2563eb; border-color: #3b82f6;">Prezzo Regolare</span>
+                    </div>
+                    <button class="add-to-cart">Aggiungi al Carrello</button>
+                </div>
+            </div>
+
+            <!-- Product 4: Big Discount -->
+            <div class="product-card">
+                <div class="product-image">🥤</div>
+                <div class="product-info">
+                    <div class="product-header">
+                        <h3 class="product-name">Coca Cola 1.5L</h3>
+                        <div class="price-container">
+                            <span class="compare-price">€3.50</span>
+                            <span class="current-price">€2.00</span>
+                        </div>
+                    </div>
+                    <p class="product-description">
+                        Bevanda analcolica gasata, bottiglia da 1.5 litri
+                    </p>
+                    <div>
+                        <span class="badge">Offerta Ottobre</span>
+                        <span class="badge savings-badge">Risparmia €1.50</span>
+                    </div>
+                    <button class="add-to-cart">Aggiungi al Carrello</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>📖 Legenda</h3>
+            <div class="legend-item">
+                <div class="legend-icon discount">✓</div>
+                <div class="legend-text">
+                    <strong>Prodotti in Offerta:</strong> Mostrano il prezzo originale barrato (compare_price) e il prezzo scontato in arancione
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon regular">i</div>
+                <div class="legend-text">
+                    <strong>Prodotti a Prezzo Regolare:</strong> Mostrano solo il prezzo corrente senza strikethrough (compare_price = 0 o vuoto)
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 30px;">
+            <h2>🎯 Come Usare nel Pannello Admin</h2>
+            <p><strong>Passo 1:</strong> Vai su Admin Panel → Products</p>
+            <p><strong>Passo 2:</strong> Crea o modifica un prodotto</p>
+            <p><strong>Passo 3:</strong> Inserisci il prezzo corrente nel campo "Price (€)"</p>
+            <p><strong>Passo 4:</strong> Inserisci il prezzo originale nel campo "Compare Price (€)"</p>
+            <p><strong>Passo 5:</strong> Salva il prodotto</p>
+            <p style="margin-top: 15px; padding: 10px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                <strong>💡 Suggerimento:</strong> Lascia il campo "Compare Price" vuoto (o a 0) per i prodotti senza sconto. Il prezzo barrato apparirà solo quando compare_price > 0.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.closest('.product-card').querySelector('.product-name').textContent;
+                alert(`✅ "${productName}" aggiunto al carrello!`);
+            });
+        });
+
+        // Calculate and display savings
+        document.querySelectorAll('.product-card').forEach(card => {
+            const comparePrice = card.querySelector('.compare-price');
+            const currentPrice = card.querySelector('.current-price');
+            
+            if (comparePrice && currentPrice) {
+                const compare = parseFloat(comparePrice.textContent.replace('€', ''));
+                const current = parseFloat(currentPrice.textContent.replace('€', ''));
+                const savings = compare - current;
+                
+                console.log(`Product: ${card.querySelector('.product-name').textContent}`);
+                console.log(`Original: €${compare.toFixed(2)}, Current: €${current.toFixed(2)}, Savings: €${savings.toFixed(2)}`);
+            }
+        });
+    </script>
+</body>
+</html>
+

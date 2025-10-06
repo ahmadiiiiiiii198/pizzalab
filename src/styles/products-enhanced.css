@@ -299,6 +299,15 @@
   font-weight: 700;
 }
 
+/* Compare price (strikethrough) styling */
+.compare-price {
+  text-decoration: line-through;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 .category-badge {
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   color: #374151;

@@ -65,8 +65,8 @@ const HeroNew = () => {
       style={{
         margin: 0,
         padding: 0,
-        marginTop: '100px',
-        minHeight: 'calc(100vh - 100px)',
+        paddingTop: '130px',
+        minHeight: '100vh',
         backgroundImage: heroContent.backgroundImage ?
           `linear-gradient(rgba(255, 107, 53, 0.1), rgba(255, 138, 101, 0.1)), url('${heroContent.backgroundImage}')` :
           'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 50%, #FED7AA 100%)',

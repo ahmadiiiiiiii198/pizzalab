@@ -15,6 +15,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import BackgroundInitializer from "./components/BackgroundInitializer";
 import ThemeProvider from "./components/ThemeProvider";
 import ScrollToTopOnRouteChange from "./components/ScrollToTopOnRouteChange";
+import VersionChecker from "./components/VersionChecker";
 // import ButtonDebugger from "./components/ButtonDebugger"; // Removed debug component
 // OrderNotificationSystem moved to admin panel only to prevent conflicts
 import Index from "./pages/Index";
@@ -60,6 +61,7 @@ const App = () => (
               <BusinessHoursProvider>
                 <SimpleCartProvider>
                 <BackgroundInitializer />
+                <VersionChecker />
             {/* OrderNotificationSystem now only loads in admin panel */}
             {/* ButtonDebugger removed - no more debug overlays */}
             <Toaster />

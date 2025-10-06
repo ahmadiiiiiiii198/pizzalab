@@ -621,7 +621,40 @@ const ProductsAdmin = () => {
                     placeholder="Enter price (e.g., 7.00)"
                   />
                 </div>
-                {/* Compare Price field temporarily removed - missing from database schema */}
+                <div className="space-y-1 md:space-y-2">
+                  <Label htmlFor="compare_price" className="text-sm font-medium">
+                    Compare Price (€)
+                    <span className="text-xs text-gray-500 ml-1">(Original/Before Price)</span>
+                  </Label>
+                  <Input
+                    id="compare_price"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.compare_price || ''}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setFormData(prev => ({ ...prev, compare_price: 0 }));
+                      } else {
+                        const numericValue = parsePrice(value);
+                        setFormData(prev => ({ ...prev, compare_price: numericValue }));
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      if (value === '' || parseFloat(value) <= 0) {
+                        setFormData(prev => ({ ...prev, compare_price: 0 }));
+                      } else {
+                        const numericValue = parsePrice(value);
+                        setFormData(prev => ({ ...prev, compare_price: numericValue }));
+                      }
+                    }}
+                    className="text-sm md:text-base"
+                    placeholder="Enter original price (e.g., 10.00)"
+                  />
+                  <p className="text-xs text-gray-500">Leave empty if no discount</p>
+                </div>
                 <div className="space-y-1 md:space-y-2">
                   <Label htmlFor="stock_quantity" className="text-sm font-medium">Stock Quantity</Label>
                   <Input

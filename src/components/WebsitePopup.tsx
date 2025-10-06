@@ -19,6 +19,27 @@ const WebsitePopup: React.FC = () => {
   const [activePopup, setActivePopup] = useState<PopupData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(80);
+
+  // Calculate header height dynamically
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      const header = document.querySelector('header');
+      if (header) {
+        const height = header.offsetHeight;
+        setHeaderHeight(height);
+        console.log("📏 [WebsitePopup] Header height:", height);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
+  }, []);
 
   // Check if we're on admin page to prevent popup
   useEffect(() => {
@@ -33,20 +54,9 @@ const WebsitePopup: React.FC = () => {
       return;
     }
 
-    // Clear any existing session storage for testing
-    console.log("🧹 [WebsitePopup] Clearing session storage for testing...");
-    Object.keys(sessionStorage).forEach(key => {
-      if (key.includes('popup-')) {
-        console.log("🗑️ [WebsitePopup] Removing session key:", key);
-        sessionStorage.removeItem(key);
-      }
-    });
-
-    // Load popup after a short delay to prioritize main content rendering
-    const timer = setTimeout(() => {
-      console.log("⏰ [WebsitePopup] Timer triggered, loading popup...");
-      loadActivePopup();
-    }, 1000);
+    // Load popup immediately
+    console.log("⏰ [WebsitePopup] Loading popup...");
+    loadActivePopup();
 
     // Listen for storage events to reload popup when admin updates it
     const handleStorageChange = () => {
@@ -57,7 +67,6 @@ const WebsitePopup: React.FC = () => {
     window.addEventListener('localStorageUpdated', handleStorageChange);
 
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('localStorageUpdated', handleStorageChange);
     };
@@ -154,12 +163,10 @@ const WebsitePopup: React.FC = () => {
         if (!popupShown && !popupDismissed) {
           console.log("✅ [WebsitePopup] Setting active popup and showing...");
           setActivePopup(popupToShow);
-          // Show popup after a short delay for better UX
-          setTimeout(() => {
-            console.log("🎉 [WebsitePopup] Making popup visible!");
-            setIsVisible(true);
-            sessionStorage.setItem(`popup-shown-${popupToShow.id}`, 'true');
-          }, 1500); // Delay to let page load first
+          // Show popup immediately
+          console.log("🎉 [WebsitePopup] Making popup visible!");
+          setIsVisible(true);
+          sessionStorage.setItem(`popup-shown-${popupToShow.id}`, 'true');
         } else {
           console.log("❌ [WebsitePopup] Popup already shown or dismissed in this session");
         }
@@ -172,7 +179,7 @@ const WebsitePopup: React.FC = () => {
   };
   
   const closePopup = () => {
-    setIsVisible(false);
+    setIsDismissed(true);
     // Mark as dismissed for this session so it doesn't reappear
     if (activePopup) {
       sessionStorage.setItem(`popup-dismissed-${activePopup.id}`, 'true');
@@ -180,7 +187,7 @@ const WebsitePopup: React.FC = () => {
   };
 
   // Don't show if not active, not visible, on admin page, or if dismissed
-  if (!activePopup || !isVisible || isAdmin) {
+  if (!activePopup || !isVisible || isAdmin || isDismissed) {
     return null;
   }
 
@@ -191,60 +198,58 @@ const WebsitePopup: React.FC = () => {
   }
 
   return (
-    <>
-      {/* Backdrop overlay */}
-      <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-        onClick={closePopup}
-      />
-
-      {/* Popup modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div
-          className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto transform transition-all duration-300 scale-100 animate-in fade-in-0 zoom-in-95"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header with close button */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
-            <h2 className="text-xl font-bold text-gray-900">{activePopup.title}</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={closePopup}
-              className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2"
-              aria-label="Chiudi popup"
-            >
-              <X size={20} />
-            </Button>
-          </div>
-
-          {/* Content */}
-          <div className="p-6">
-            {activePopup.image && (
-              <div className="mb-4">
-                <img
-                  src={activePopup.image}
-                  alt={activePopup.title}
-                  className="w-full h-48 object-cover rounded-lg"
-                  loading="lazy"
-                />
-              </div>
-            )}
-            <p className="text-gray-700 leading-relaxed">{activePopup.content}</p>
-          </div>
-
-          {/* Footer */}
-          <div className="px-6 pb-6">
-            <Button
-              onClick={closePopup}
-              className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 transition-all duration-300"
-            >
-              Chiudi
-            </Button>
+    <div
+      className="fixed left-0 right-0 w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white shadow-lg overflow-hidden z-40"
+      style={{ top: `${headerHeight}px` }}
+    >
+      <div className="relative flex items-center">
+        {/* Scrolling text container */}
+        <div className="flex-1 overflow-hidden py-3">
+          <div className="animate-marquee whitespace-nowrap inline-block">
+            <span className="text-lg font-semibold mx-8">
+              🎉 {activePopup.title} - {activePopup.content}
+            </span>
+            <span className="text-lg font-semibold mx-8">
+              🎉 {activePopup.title} - {activePopup.content}
+            </span>
+            <span className="text-lg font-semibold mx-8">
+              🎉 {activePopup.title} - {activePopup.content}
+            </span>
           </div>
         </div>
+
+        {/* Close button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={closePopup}
+          className="absolute right-2 text-white hover:text-white hover:bg-white/20 rounded-full p-2 z-10"
+          aria-label="Chiudi banner"
+        >
+          <X size={20} />
+        </Button>
       </div>
-    </>
+
+      {/* CSS for marquee animation */}
+      <style>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-33.333%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 20s linear infinite;
+        }
+
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+    </div>
   );
 };
 

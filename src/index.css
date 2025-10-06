@@ -986,22 +986,9 @@ body.cart-open {
     padding-top: 0 !important;
   }
 
-  /* Hero section navbar clearance */
+  /* Hero section navbar clearance - removed fixed padding, now flows naturally */
   .hero-section {
-    padding-top: 8rem !important; /* 128px - ensures complete clearance of navbar */
-  }
-
-  /* Responsive navbar clearance */
-  @media (max-width: 768px) {
-    .hero-section {
-      padding-top: 6rem !important; /* 96px - smaller navbar on mobile */
-    }
-  }
-
-  @media (min-width: 769px) and (max-width: 1023px) {
-    .hero-section {
-      padding-top: 7rem !important; /* 112px - medium navbar on tablet */
-    }
+    margin-top: 0 !important;
   }
 
 

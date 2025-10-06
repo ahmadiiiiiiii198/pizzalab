@@ -57,6 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Use product data if available, otherwise fall back to legacy props
   const productName = product?.name || name || '';
   const productPrice = product ? formatPrice(product.price) : price || '';
+  const productComparePrice = product?.compare_price && product.compare_price > 0 ? formatPrice(product.compare_price) : null;
   const productImage = validateImageUrl(product?.image_url || image || '', '/placeholder.svg');
   const productDescription = product?.description || description || '';
   const stockQuantity = product?.stock_quantity || 0;
@@ -295,9 +296,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <h3 className="text-lg font-semibold text-gray-900 leading-tight flex-1 pr-2">
             {productName}
           </h3>
-          <span className="text-xl font-bold whitespace-nowrap text-orange-600">
-            {productPrice}
-          </span>
+          <div className="flex flex-col items-end gap-1">
+            {productComparePrice && (
+              <span className="text-sm text-gray-500 line-through whitespace-nowrap">
+                {productComparePrice}
+              </span>
+            )}
+            <span className="text-xl font-bold whitespace-nowrap text-orange-600">
+              {productPrice}
+            </span>
+          </div>
         </div>
 
         {productDescription && (

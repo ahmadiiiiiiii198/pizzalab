@@ -1,7 +1,8 @@
 // Service Worker for Order Dashboard
 // Handles background notifications and keeps the app running even when screen is off
 
-const CACHE_NAME = 'pizzalab-v2';
+const APP_VERSION = '2025.10.5.1759701447557';
+const CACHE_NAME = 'pizzalab-v2025.10.5.1759701447557';
 const urlsToCache = [
   '/',
   '/orders',
@@ -27,7 +28,7 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('🔄 Service Worker activating...');
+  console.log('🔄 Service Worker activating... Version:', APP_VERSION);
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -39,36 +40,41 @@ self.addEventListener('activate', (event) => {
         })
       );
     }).then(() => {
-      console.log('🔄 Service Worker activated');
+      console.log('🔄 Service Worker activated - Version:', APP_VERSION);
       return self.clients.claim();
     })
   );
 });
 
-// Fetch event - network first strategy for development
+// Fetch event - NETWORK FIRST strategy (cache-busting enabled)
 self.addEventListener('fetch', (event) => {
   // Skip non-GET requests and chrome-extension requests
   if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
     return;
   }
 
-  // Skip caching for JS modules and assets during development
-  if (event.request.url.includes('.js') || event.request.url.includes('.css') || event.request.url.includes('main-')) {
-    return;
-  }
-
+  // Network-first strategy: Always try network first, fallback to cache
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Return network response
+        // Clone the response before caching
+        const responseToCache = response.clone();
+
+        // Cache the fresh response for offline use
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+
+        // Return the network response
         return response;
       })
       .catch((error) => {
         console.log('🌐 Network fetch failed for:', event.request.url, error.message);
 
-        // Try cache as fallback
+        // Try cache as fallback (offline mode)
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
+            console.log('📦 Serving from cache:', event.request.url);
             return cachedResponse;
           }
 

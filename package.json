@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/update-version.js",
     "build": "vite build",
+    "postbuild": "node -e \"const fs=require('fs');const path=require('path');['version.json','cache-buster.js'].forEach(f=>{const src=path.join('public',f);const dest=path.join('dist',f);if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('✅ Copied',f,'to dist/')}})\"",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "preview": "vite preview",

@@ -25,12 +25,13 @@ const Index = () => {
     <div className="min-h-screen font-inter bg-gradient-to-br from-orange-50 via-white to-amber-50 text-gray-900">
       <Header />
       <BusinessHoursBanner />
+
+      {/* Popup banner - appears between navbar and hero */}
+      <WebsitePopup />
+
       <ErrorBoundary componentName="Hero">
         <HeroNew />
       </ErrorBoundary>
-
-      {/* Popup modal - appears over content */}
-      <WebsitePopup />
 
       <div className="overflow-x-hidden" style={{ marginTop: 0, paddingTop: 0 }}>
         {/* OrderTrackingSection removed - customer authentication no longer available */}
