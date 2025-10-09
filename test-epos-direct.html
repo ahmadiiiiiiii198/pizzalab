@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Epson TM-T70II Direct Print</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>🖨️ Test Epson TM-T70II Network Printing</h1>
+    <p>Printer IP: <strong>192.168.1.32</strong></p>
+    
+    <button onclick="testPrint()" style="padding: 10px 20px; font-size: 16px;">
+        Send Test Print
+    </button>
+    
+    <div id="status" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+    
+    <script>
+        async function testPrint() {
+            const status = document.getElementById('status');
+            status.innerHTML = '⏳ Sending print job...';
+            
+            try {
+                // Create ePOS-Print XML request
+                const xmlRequest = `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+      <text align="center" dw="true" dh="true">RURAL PIZZA&#10;</text>
+      <text align="center">Laboratorio di Pizza&#10;</text>
+      <text>================================&#10;</text>
+      <text>&#10;</text>
+      <text>ORDINE TEST #${Date.now()}&#10;</text>
+      <text>Data: ${new Date().toLocaleString('it-IT')}&#10;</text>
+      <text>&#10;</text>
+      <text>1x Pizza Margherita     EUR 8.00&#10;</text>
+      <text>1x Coca Cola            EUR 3.00&#10;</text>
+      <text>--------------------------------&#10;</text>
+      <text dw="true" dh="true">TOTALE:            EUR 11.00&#10;</text>
+      <text>&#10;</text>
+      <text align="center">Grazie!&#10;</text>
+      <text align="center">www.ruralpizza.it&#10;</text>
+      <text>================================&#10;</text>
+      <cut type="feed"/>
+    </epos-print>
+  </s:Body>
+</s:Envelope>`;
+                
+                const response = await fetch('http://192.168.1.32/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/xml; charset=utf-8',
+                        'If-Modified-Since': 'Thu, 01 Jan 1970 00:00:00 GMT'
+                    },
+                    body: xmlRequest,
+                    mode: 'no-cors' // Required for cross-origin
+                });
+                
+                status.innerHTML = '✅ Print command sent!<br>Check your printer for output.<br><br>If nothing printed, the printer might need ePOS-Print enabled in settings.';
+                
+            } catch (error) {
+                status.innerHTML = '❌ Error: ' + error.message + '<br><br>Possible issues:<br>1. Printer not reachable at 192.168.1.32<br>2. ePOS-Print not enabled on printer<br>3. CORS blocking the request';
+                console.error('Print error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

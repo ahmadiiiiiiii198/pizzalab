@@ -42,7 +42,7 @@
       // Service worker with versioned URL for cache-busting
       if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js?v=2025.10.5.1759701447557')
+          navigator.serviceWorker.register('/sw.js?v=2025.10.7.1759840224827')
             .then((registration) => {
               console.log('✅ SW registered: ', registration);
               console.log('📦 SW version:', '1.0.0');

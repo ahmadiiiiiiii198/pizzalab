@@ -13,7 +13,7 @@ export class PleasantNotificationSound {
 
   constructor() {
     this.initializeAudioContext();
-    this.loadAudioFile();
+    // Don't load audio file immediately - wait until it's actually needed
   }
 
   private initializeAudioContext() {
@@ -87,6 +87,11 @@ export class PleasantNotificationSound {
     console.log('🔔 [PleasantNotification] Starting glovo_app notification sound...');
 
     try {
+      // Load audio file if not already loaded
+      if (!this.audioBuffer && !this.audioElement && !this.isLoadingAudio) {
+        await this.loadAudioFile();
+      }
+
       // Try to use the loaded audio file first
       if (this.audioBuffer && this.audioContext) {
         return await this.playAudioBufferLoop();

@@ -1,0 +1,234 @@
+{
+  "categories": [
+    {
+      "name": "Da Stuzzicare",
+      "slug": "da-stuzzicare",
+      "description": "Antipasti e stuzzichini per iniziare",
+      "sort_order": 1
+    },
+    {
+      "name": "Pizze Rosse",
+      "slug": "pizze-rosse", 
+      "description": "Pizze classiche con pomodoro",
+      "sort_order": 2
+    },
+    {
+      "name": "Pizze Bianche",
+      "slug": "pizze-bianche",
+      "description": "Pizze bianche senza pomodoro", 
+      "sort_order": 3
+    },
+    {
+      "name": "Pizze Al Tegamino",
+      "slug": "pizze-al-tegamino",
+      "description": "Pizze cotte al tegamino",
+      "sort_order": 4
+    },
+    {
+      "name": "Primi Piatti",
+      "slug": "primi-piatti",
+      "description": "Primi piatti della tradizione",
+      "sort_order": 5
+    },
+    {
+      "name": "Secondi Piatti",
+      "slug": "secondi-piatti", 
+      "description": "Secondi piatti di carne e pesce",
+      "sort_order": 6
+    },
+    {
+      "name": "Contorni",
+      "slug": "contorni",
+      "description": "Contorni e verdure",
+      "sort_order": 7
+    },
+    {
+      "name": "Bevande",
+      "slug": "bevande",
+      "description": "Bevande analcoliche e vini",
+      "sort_order": 8
+    },
+    {
+      "name": "Birre",
+      "slug": "birre",
+      "description": "Birre alla spina e in bottiglia", 
+      "sort_order": 9
+    },
+    {
+      "name": "Caffetteria",
+      "slug": "caffetteria",
+      "description": "Caffè e bevande calde",
+      "sort_order": 10
+    }
+  ],
+  "products": [
+    {
+      "name": "Panissa",
+      "description": "Specialità ligure con ceci",
+      "price": 7.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Sarde Acciughe Panissa", 
+      "description": "Panissa con sarde e acciughe",
+      "price": 10.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Fior di Zucca",
+      "description": "Fiori di zucca fritti",
+      "price": 9.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Fish and Chips",
+      "description": "Pesce fritto con patatine",
+      "price": 9.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Arancini (3 pezzi)",
+      "description": "Arancini siciliani, 3 pezzi",
+      "price": 9.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Nugget (12 pezzi)",
+      "description": "Nugget di pollo, 12 pezzi",
+      "price": 10.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Platto Misto",
+      "description": "Selezione di antipasti misti",
+      "price": 12.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": true
+    },
+    {
+      "name": "Focaccia al Rosmarino",
+      "description": "Focaccia fresca con rosmarino",
+      "price": 4.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Sardinara",
+      "description": "Sarde, pomodoro, olive, origano",
+      "price": 5.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Padellino & Mortadella",
+      "description": "Mortadella, pistacchio, fiordilatte, olio extravergine d'oliva",
+      "price": 7.00,
+      "category_slug": "da-stuzzicare",
+      "is_featured": false
+    },
+    {
+      "name": "Acqua Naturale Microfiltrata",
+      "description": "Acqua naturale microfiltrata Tecpur",
+      "price": 1.50,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Acqua Gasata Microfiltrata",
+      "description": "Acqua gasata microfiltrata Tecpur", 
+      "price": 1.50,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Coca-Cola",
+      "description": "Coca-Cola classica",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Coca-Cola Zero",
+      "description": "Coca-Cola senza zuccheri",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Aranciata",
+      "description": "Aranciata fresca",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Sprite",
+      "description": "Sprite limone e lime",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Chinotto",
+      "description": "Chinotto tradizionale",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Gazzosa",
+      "description": "Gazzosa frizzante",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Estathe Pesca/Limone",
+      "description": "Tè freddo alla pesca o limone",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Tonica",
+      "description": "Acqua tonica",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Limonata",
+      "description": "Limonata fresca",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Vino Sfuso Rosso/Bianco - Calice",
+      "description": "Vino della casa al calice",
+      "price": 5.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Vino Sfuso Rosso/Bianco - 1/5 Litro",
+      "description": "Vino della casa 1/5 litro",
+      "price": 8.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Vino Sfuso Rosso/Bianco - 1 Litro", 
+      "description": "Vino della casa 1 litro",
+      "price": 14.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    }
+  ]
+}

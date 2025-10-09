@@ -3,6 +3,7 @@ import { Pizza, Search, X, ChevronDown, ChevronUp, Filter, Cake, Zap, Coffee, Be
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import ProductCard from './ProductCard';
+import '../styles/products-background.css';
 
 
 import { Product, ProductsByCategory } from '@/types/category';
@@ -122,29 +123,58 @@ const ProductsEnhanced = () => {
     backgroundImage: ""
   });
 
+
   // Load products content settings
   useEffect(() => {
+    console.log('🚀 [ProductsEnhanced] useEffect triggered - Loading products content...');
+    
     const loadProductsContent = async () => {
       try {
+        console.log('📡 [ProductsEnhanced] Fetching from Supabase...');
+        console.log('📡 [ProductsEnhanced] Query: settings table, key=productsContent');
+        
         const { data, error } = await supabase
           .from('settings')
           .select('value')
           .eq('key', 'productsContent')
           .single();
 
+        console.log('📡 [ProductsEnhanced] Supabase response received');
+        console.log('📡 [ProductsEnhanced] Error:', error);
+        console.log('📡 [ProductsEnhanced] Data:', data);
+
         if (error && error.code !== 'PGRST116') {
-          console.error('Error loading products content:', error);
+          console.error('❌ [ProductsEnhanced] Error loading products content:', error);
+          console.error('❌ [ProductsEnhanced] Error code:', error.code);
+          console.error('❌ [ProductsEnhanced] Error message:', error.message);
           return;
         }
 
         if (data?.value) {
-          setProductsContent(prev => ({
-            ...prev,
+          console.log('✅ [ProductsEnhanced] Data received successfully');
+          console.log('📦 [ProductsEnhanced] Full value object:', JSON.stringify(data.value, null, 2));
+          console.log('🖼️ [ProductsEnhanced] Background image field:', data.value.backgroundImage);
+          console.log('🖼️ [ProductsEnhanced] Background image type:', typeof data.value.backgroundImage);
+          console.log('🖼️ [ProductsEnhanced] Background image length:', data.value.backgroundImage?.length || 0);
+          
+          const newContent = {
+            ...productsContent,
             ...data.value
-          }));
+          };
+          
+          console.log('🔄 [ProductsEnhanced] Updating state with:', newContent);
+          console.log('🔄 [ProductsEnhanced] New background:', newContent.backgroundImage);
+          
+          setProductsContent(newContent);
+          
+          console.log('✅ [ProductsEnhanced] State updated successfully');
+        } else {
+          console.log('⚠️ [ProductsEnhanced] No data received from database');
         }
       } catch (error) {
-        console.error('Error loading products content:', error);
+        console.error('💥 [ProductsEnhanced] Exception caught:', error);
+        console.error('💥 [ProductsEnhanced] Exception details:', error.message);
+        console.error('💥 [ProductsEnhanced] Stack trace:', error.stack);
       }
     };
 
@@ -325,6 +355,8 @@ const ProductsEnhanced = () => {
       });
   }, [filteredProducts]);
 
+  // Remove background image logic - using wheat theme instead
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64 flex-col">
@@ -334,9 +366,17 @@ const ProductsEnhanced = () => {
     );
   }
 
+  // Build section classes - always use wheat theme now
+  const sectionClasses = "py-16 min-h-screen wheat-theme";
+
   return (
-    <section id="products" className="py-16 section-light-warm min-h-screen">
-      <div className="container mx-auto px-4">
+    <section 
+      id="products" 
+      className={sectionClasses}
+    >
+      <div className="container mx-auto px-4 relative z-10">
+        
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-gradient-orange text-4xl md:text-5xl font-bold mb-4">
@@ -382,7 +422,7 @@ const ProductsEnhanced = () => {
                 placeholder="Cerca nel menu..."
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="w-full pl-12 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 shadow-sm"
+                className="products-search-bar w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 shadow-sm"
               />
               {searchTerm && (
                 <button
@@ -405,11 +445,15 @@ const ProductsEnhanced = () => {
               const isExpanded = expandedCategories.has(categorySlug);
 
               return (
-                <div key={categorySlug} className="card-light-elevated rounded-lg border border-orange-200 overflow-hidden">
+                <div key={categorySlug} className="products-category-card rounded-lg border border-orange-200 overflow-hidden shadow-xl">
                   {/* Category Header */}
                   <button
                     onClick={() => toggleCategoryExpansion(categorySlug)}
-                    className="w-full p-6 flex items-center justify-between hover:bg-orange-50 transition-colors"
+                    className={`w-full p-6 flex items-center justify-between transition-colors ${
+                      productsContent.backgroundImage 
+                        ? 'hover:bg-white/90' 
+                        : 'hover:bg-orange-50'
+                    }`}
                   >
                     <div className="flex items-center space-x-4">
                       <div className="text-orange-500">
@@ -436,7 +480,11 @@ const ProductsEnhanced = () => {
 
                   {/* Products Grid (Expanded) */}
                   {isExpanded && (
-                    <div className="border-t border-orange-200 bg-orange-50/30">
+                    <div className={`border-t border-orange-200 ${
+                      productsContent.backgroundImage 
+                        ? 'bg-white/50' 
+                        : 'bg-orange-50/30'
+                    }`}>
                       <div className="p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                           {categoryProducts.map((product) => (
@@ -446,6 +494,7 @@ const ProductsEnhanced = () => {
                               businessIsOpen={businessIsOpen}
                               businessMessage={businessMessage}
                               validateOrderTime={validateOrderTime}
+                              hasParentBackground={!!productsContent.backgroundImage}
                             />
                           ))}
                         </div>

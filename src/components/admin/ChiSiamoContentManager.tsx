@@ -83,7 +83,7 @@ const DEFAULT_CONTENT: ChiSiamoContent = {
   en: {
     title: 'The pizzeria you never expected!',
     storyTitle: '🍕 Our Story',
-    paragraph1: 'PIZZALAB was born from a passion for authentic Italian pizza and culinary innovation.',
+    paragraph1: 'Ruràl Pizza was born from a passion for authentic Italian pizza and culinary innovation.',
     paragraph2: 'Our mission is to offer the highest quality pizzas with fresh and genuine ingredients, in a unique environment that celebrates Italian culinary tradition.',
     quote: 'Every pizza on our menu is crafted with carefully selected ingredients that reflect authentic Italian flavors and modern culinary techniques.',
     quoteAuthor: 'A journey through flavors, tradition and innovation',
@@ -99,7 +99,7 @@ const DEFAULT_CONTENT: ChiSiamoContent = {
       customers: '6 days a week',
       varieties: 'Pizza Varieties'
     },
-    closingMessage: 'Come visit us at PIZZALAB and discover where tradition meets innovation!',
+    closingMessage: 'Come visit us at Ruràl Pizza and discover where tradition meets innovation!',
     tagline: 'Where tradition meets innovation'
   }
 };
@@ -176,7 +176,7 @@ const ChiSiamoContentManager = () => {
       [activeLanguage]: {
         ...prev[activeLanguage],
         stats: {
-          ...prev[activeLanguage].stats,
+          ...(prev[activeLanguage].stats || {}),
           [field]: value
         }
       }
@@ -185,18 +185,18 @@ const ChiSiamoContentManager = () => {
   };
 
   const handleServiceChange = (index: number, value: string) => {
-    const newServices = [...content[activeLanguage].services];
+    const newServices = [...(content[activeLanguage].services || [])];
     newServices[index] = value;
     handleInputChange('services', newServices);
   };
 
   const addService = () => {
-    const newServices = [...content[activeLanguage].services, ''];
+    const newServices = [...(content[activeLanguage].services || []), ''];
     handleInputChange('services', newServices);
   };
 
   const removeService = (index: number) => {
-    const newServices = content[activeLanguage].services.filter((_, i) => i !== index);
+    const newServices = (content[activeLanguage].services || []).filter((_, i) => i !== index);
     handleInputChange('services', newServices);
   };
 
@@ -384,7 +384,7 @@ const ChiSiamoContentManager = () => {
                 Aggiungi
               </Button>
             </div>
-            {currentContent.services.map((service, index) => (
+            {(currentContent.services || []).map((service, index) => (
               <div key={index} className="flex items-center gap-2">
                 <Input
                   value={service}
@@ -411,7 +411,7 @@ const ChiSiamoContentManager = () => {
             <div className="space-y-2">
               <Label className="text-xs text-gray-600">Anni</Label>
               <Input
-                value={currentContent.stats.years}
+                value={currentContent.stats?.years || ''}
                 onChange={(e) => handleStatsChange('years', e.target.value)}
                 placeholder="Anni di Esperienza"
               />
@@ -419,7 +419,7 @@ const ChiSiamoContentManager = () => {
             <div className="space-y-2">
               <Label className="text-xs text-gray-600">Clienti</Label>
               <Input
-                value={currentContent.stats.customers}
+                value={currentContent.stats?.customers || ''}
                 onChange={(e) => handleStatsChange('customers', e.target.value)}
                 placeholder="Clienti Soddisfatti"
               />
@@ -427,7 +427,7 @@ const ChiSiamoContentManager = () => {
             <div className="space-y-2">
               <Label className="text-xs text-gray-600">Varietà</Label>
               <Input
-                value={currentContent.stats.varieties}
+                value={currentContent.stats?.varieties || ''}
                 onChange={(e) => handleStatsChange('varieties', e.target.value)}
                 placeholder="Varietà di Pizze"
               />

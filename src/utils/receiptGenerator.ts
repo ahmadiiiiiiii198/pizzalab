@@ -222,7 +222,7 @@ export const generateReceiptHTML = async (data: ReceiptData): Promise<string> =>
                  "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png";
 
   // Get receipt settings
-  const footerMessage = receiptSettings?.footerMessage || "Grazie per aver scelto PizzaLab!";
+  const footerMessage = receiptSettings?.footerMessage || "Grazie per aver scelto Ruràl Pizza!";
   const customMessage = receiptSettings?.customMessage || "";
   const showTimestamp = receiptSettings?.showTimestamp ?? true;
 
@@ -422,7 +422,7 @@ export const generateReceiptHTML = async (data: ReceiptData): Promise<string> =>
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ordine #${order.order_number} - PizzaLab</title>
+        <title>Ordine #${order.order_number} - Ruràl Pizza</title>
         <style>
           * {
             margin: 0;
@@ -616,7 +616,7 @@ export const generateReceiptHTML = async (data: ReceiptData): Promise<string> =>
           ${logoBase64 ? `<img src="${logoBase64}" alt="Logo" class="logo-img" />` : ''}
         </div>
         <div class="header">
-          <div class="restaurant-name">PIZZALAB</div>
+          <div class="restaurant-name">RURÀL PIZZA</div>
           <div>Laboratorio di Pizza Italiana</div>
         </div>
 

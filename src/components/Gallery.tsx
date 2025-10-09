@@ -67,25 +67,25 @@ const Gallery = () => {
       <section id="gallery" className="relative">
         {/* Pizza-themed background decorations */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-pizza-red rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-pizza-orange rounded-full blur-xl animate-pulse animation-delay-2000"></div>
-          <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-pizza-green rounded-full blur-xl animate-pulse animation-delay-4000"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-amber-300 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300 rounded-full blur-xl animate-pulse animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-amber-200 rounded-full blur-xl animate-pulse animation-delay-4000"></div>
         </div>
 
         {/* Floating pizza icons */}
-        <div className="absolute top-20 right-20 text-pizza-orange/20 animate-float">
+        <div className="absolute top-20 right-20 text-amber-400/30 animate-float">
           <Images size={40} />
         </div>
-        <div className="absolute bottom-20 left-20 text-pizza-red/20 animate-float animation-delay-2000">
+        <div className="absolute bottom-20 left-20 text-yellow-400/30 animate-float animation-delay-2000">
           <Images size={30} />
         </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <h2 className="text-4xl md:text-5xl text-center font-fredoka font-bold mb-4 text-pizza-dark animate-on-scroll" data-animation-id="gallery-heading">
-          📸 <span className="text-pizza-orange">{galleryContent.heading || "La Nostra Galleria"}</span>
+        <h2 className="text-4xl md:text-5xl text-center font-bold mb-4 italian-heading animate-on-scroll" data-animation-id="gallery-heading">
+          📸 <span style={{color: "var(--wheat-harvest)", textShadow: "2px 2px 4px rgba(0,0,0,0.4)"}}>{galleryContent.heading || "La Nostra Galleria"}</span>
         </h2>
         {galleryContent.subheading && (
-          <p className="text-center text-pizza-brown mb-8 max-w-3xl mx-auto font-roboto text-lg animate-on-scroll" data-animation-id="gallery-subheading">
+          <p className="text-center mb-8 max-w-3xl mx-auto text-lg italian-body animate-on-scroll" data-animation-id="gallery-subheading">
             {galleryContent.subheading}
           </p>
         )}
@@ -93,21 +93,21 @@ const Gallery = () => {
         <PatternDivider />
 
         <div className="flex items-center justify-center mb-10">
-          <div className="bg-gradient-to-r from-pizza-red to-pizza-orange text-white px-6 py-4 rounded-full flex items-center shadow-lg animate-on-scroll" data-animation-id="gallery-label">
-            <Images className="text-pizza-cream mr-3" size={24} />
-            <span className="font-pacifico text-lg">Vivi l'Esperienza Regina 2000</span>
+          <div className="bg-gradient-to-r from-amber-600 to-yellow-600 text-white px-6 py-4 rounded-full flex items-center shadow-xl animate-on-scroll" data-animation-id="gallery-label">
+            <Images className="text-white mr-3" size={24} />
+            <span className="italian-heading text-lg font-bold">Vivi l'Esperienza Regina 2000</span>
           </div>
         </div>
 
         {isLoading && (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-persian-gold"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-600"></div>
           </div>
         )}
         
         {error && (
-          <div className="text-center py-8 px-4 bg-red-50 rounded-lg mb-8">
-            <p className="text-red-500">{error}</p>
+          <div className="text-center py-8 px-4 rounded-lg mb-8" style={{backgroundColor: "rgba(255,255,255,0.9)", border: "2px solid var(--wheat-amber)"}}>
+            <p className="italian-body font-semibold" style={{color: "var(--country-dark)"}}>{error}</p>
             <Button 
               onClick={refreshGalleryData}
               variant="outline" 
@@ -140,7 +140,7 @@ const Gallery = () => {
                   <Button
                     onClick={refreshGalleryData}
                     variant="outline"
-                    className="bg-transparent hover:bg-persian-gold/5 text-persian-navy hover:text-persian-gold border-persian-gold/20 hover:border-persian-gold/40 transition-all animate-on-scroll flex items-center gap-2"
+                    className="bg-white/90 hover:bg-white text-amber-800 hover:text-amber-900 border-amber-600 hover:border-amber-700 backdrop-blur-sm transition-all animate-on-scroll flex items-center gap-2"
                     data-animation-id="gallery-refresh"
                   >
                     <RefreshCw className="h-4 w-4" />
@@ -150,10 +150,10 @@ const Gallery = () => {
               </>
             ) : (
               <div className="text-center py-12">
-                <div className="text-gray-500 mb-4">
+                <div className="mb-4" style={{color: "var(--country-brown)"}}>
                   <Images size={48} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-lg">No gallery images available</p>
-                  <p className="text-sm">Images will appear here once they are uploaded.</p>
+                  <p className="text-lg italian-heading font-bold" style={{color: "var(--country-dark)", textShadow: "1px 1px 2px rgba(0,0,0,0.3)"}}>No gallery images available</p>
+                  <p className="text-sm italian-body" style={{color: "var(--country-brown)", textShadow: "1px 1px 2px rgba(0,0,0,0.2)"}}>Images will appear here once they are uploaded.</p>
                 </div>
                 <Button
                   onClick={refreshGalleryData}

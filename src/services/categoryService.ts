@@ -15,7 +15,7 @@ const defaultCategories: Category[] = [
       "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     ],
-    explanation: "Da PizzaLab, troverai le nostre pizze classiche preparate con ingredienti freschi e ricette tradizionali.",
+    explanation: "Da Ruràl Pizza, troverai le nostre pizze classiche preparate con ingredienti freschi e ricette tradizionali.",
     features: [
       "Ingredienti freschi di qualità",
       "Impasto fatto in casa",
@@ -64,7 +64,7 @@ const defaultCategories: Category[] = [
       "https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
     ],
-    explanation: "Completa la tua esperienza PizzaLab con la nostra selezione di bevande fresche e dissetanti.",
+    explanation: "Completa la tua esperienza Ruràl Pizza con la nostra selezione di bevande fresche e dissetanti.",
     features: [
       "Bibite fresche",
       "Succhi di frutta naturali",
@@ -107,7 +107,7 @@ const defaultCategories: Category[] = [
 const defaultContent: CategoryContent = {
   categories: defaultCategories,
   heading: "Le Nostre Categorie",
-  subheading: "Scopri il gusto autentico di PizzaLab: dalle pizze classiche alle specialità gourmet"
+  subheading: "Scopri il gusto autentico di Ruràl Pizza: dalle pizze classiche alle specialità gourmet"
 };
 
 class CategoryService {

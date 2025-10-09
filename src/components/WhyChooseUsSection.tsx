@@ -17,7 +17,7 @@ interface WhyChooseUsData {
 
 const WhyChooseUsSection = () => {
   const [data, setData] = useState<WhyChooseUsData>({
-    title: "Perché scegliere PIZZALAB?",
+    title: "Perché scegliere Ruràl Pizza?",
     subtitle: "Laboratorio di pizza italiana innovativa dal 2020",
     centralImage: "/placeholder-pizza-lab.jpg",
     backgroundImage: "",
@@ -115,18 +115,18 @@ const WhyChooseUsSection = () => {
     >
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-orange-300 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-red-300 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-yellow-300 rounded-full blur-2xl"></div>
+        <div className="absolute top-10 left-10 w-32 h-32 bg-amber-200 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-200 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-amber-100 rounded-full blur-2xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-playfair" style={{ color: '#8B4513' }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-playfair" style={{ color: "var(--country-dark)" }} className="italian-heading">
             {data.title}
           </h2>
-          <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto font-inter font-medium">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto italian-body font-medium" style={{color: "var(--country-brown)"}}>
             {data.subtitle}
           </p>
         </div>
@@ -138,14 +138,14 @@ const WhyChooseUsSection = () => {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
             <div className="relative">
               {/* Glow effect behind central image - made bigger */}
-              <div className="absolute inset-0 w-64 h-64 bg-gradient-to-r from-orange-400 to-red-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+              <div className="absolute inset-0 w-64 h-64 bg-gradient-to-r from-amber-300 to-yellow-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
 
               {/* Central image container - increased from w-44 h-44 to w-60 h-60 */}
-              <div className="relative w-60 h-60 rounded-full overflow-hidden shadow-2xl border-6 border-white bg-white">
+              <div className="relative w-60 h-60 rounded-full overflow-hidden shadow-2xl border-6 bg-white" style={{borderColor: "var(--wheat-golden)"}}>
                 {centralImageUrl ? (
                   <img
                     src={centralImageUrl}
-                    alt="PIZZALAB Specialità"
+                    alt="Ruràl Pizza Specialità"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -153,7 +153,7 @@ const WhyChooseUsSection = () => {
                     <div className="text-center text-white">
                       <div className="text-4xl mb-2 drop-shadow-lg">🧪</div>
                       <div className="text-3xl drop-shadow-lg">🍕</div>
-                      <div className="text-xs font-bold mt-2 tracking-wider">PIZZALAB</div>
+                      <div className="text-xs font-bold mt-2 tracking-wider">RURÀL PIZZA</div>
                     </div>
                   </div>
                 )}
@@ -176,23 +176,23 @@ const WhyChooseUsSection = () => {
                 style={positions[index]}
               >
                 {/* Connecting line to center with gradient - extended for larger central image */}
-                <div className="absolute top-1/2 right-0 w-32 h-0.5 bg-gradient-to-r from-orange-300 to-transparent transform translate-x-full -translate-y-1/2 z-0"></div>
+                <div className="absolute top-1/2 right-0 w-32 h-0.5 bg-gradient-to-r from-amber-300 to-transparent transform translate-x-full -translate-y-1/2 z-0"></div>
 
                 {/* Feature card - enhanced pill shape */}
-                <div className="group bg-gradient-to-r from-orange-50 to-orange-100 rounded-full px-4 py-3 shadow-lg border-2 border-orange-200 w-64 h-12 flex items-center relative z-10 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+                <div className="group bg-gradient-to-r from-amber-50 to-yellow-50 rounded-full px-4 py-3 shadow-lg border-2 w-64 h-12 flex items-center relative z-10 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" style={{borderColor: "var(--wheat-amber)"}}>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300">
                       <span className="text-white text-sm font-bold drop-shadow-sm">{feature.icon}</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-sm font-inter leading-tight group-hover:text-red-700 transition-colors duration-300">
+                      <h3 className="font-semibold text-sm font-inter leading-tight group-hover:text-amber-700 italian-body transition-colors duration-300">
                         {feature.title}
                       </h3>
                     </div>
                   </div>
 
                   {/* Subtle glow effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-200 to-red-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-200 to-yellow-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 </div>
               </div>
             );
@@ -213,23 +213,23 @@ const WhyChooseUsSection = () => {
                 style={positions[index]}
               >
                 {/* Connecting line to center with gradient - extended for larger central image */}
-                <div className="absolute top-1/2 left-0 w-32 h-0.5 bg-gradient-to-l from-orange-300 to-transparent transform -translate-x-full -translate-y-1/2 z-0"></div>
+                <div className="absolute top-1/2 left-0 w-32 h-0.5 bg-gradient-to-l from-amber-300 to-transparent transform -translate-x-full -translate-y-1/2 z-0"></div>
 
                 {/* Feature card - enhanced pill shape */}
-                <div className="group bg-gradient-to-l from-orange-50 to-orange-100 rounded-full px-4 py-3 shadow-lg border-2 border-orange-200 w-64 h-12 flex items-center relative z-10 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+                <div className="group bg-gradient-to-l from-yellow-50 to-amber-50 rounded-full px-4 py-3 shadow-lg border-2 w-64 h-12 flex items-center relative z-10 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" style={{borderColor: "var(--wheat-amber)"}}>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300">
                       <span className="text-white text-sm font-bold drop-shadow-sm">{feature.icon}</span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-sm font-inter leading-tight group-hover:text-red-700 transition-colors duration-300">
+                      <h3 className="font-semibold text-sm font-inter leading-tight group-hover:text-amber-700 italian-body transition-colors duration-300">
                         {feature.title}
                       </h3>
                     </div>
                   </div>
 
                   {/* Subtle glow effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-l from-orange-200 to-red-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-l from-yellow-200 to-amber-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 </div>
               </div>
             );
@@ -242,14 +242,14 @@ const WhyChooseUsSection = () => {
           <div className="flex justify-center mb-8">
             <div className="relative">
               {/* Glow effect behind central image */}
-              <div className="absolute inset-0 w-48 h-48 bg-gradient-to-r from-orange-400 to-red-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+              <div className="absolute inset-0 w-48 h-48 bg-gradient-to-r from-amber-300 to-yellow-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
 
               {/* Central image container */}
-              <div className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl border-4 border-white bg-white">
+              <div className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl border-4 bg-white" style={{borderColor: "var(--wheat-golden)"}}>
                 {centralImageUrl ? (
                   <img
                     src={centralImageUrl}
-                    alt="PIZZALAB Specialità"
+                    alt="Ruràl Pizza Specialità"
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -257,7 +257,7 @@ const WhyChooseUsSection = () => {
                     <div className="text-center text-white">
                       <div className="text-3xl mb-2 drop-shadow-lg">🧪</div>
                       <div className="text-2xl drop-shadow-lg">🍕</div>
-                      <div className="text-xs font-bold mt-2 tracking-wider">PIZZALAB</div>
+                      <div className="text-xs font-bold mt-2 tracking-wider">RURÀL PIZZA</div>
                     </div>
                   </div>
                 )}
@@ -272,27 +272,27 @@ const WhyChooseUsSection = () => {
                 key={feature.id}
                 className="group cursor-pointer"
               >
-                <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-100 hover:border-orange-200">
+                <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border hover:border-amber-200" style={{borderColor: "var(--wheat-light)"}}>
                   {/* Feature content */}
                   <div className="flex items-center space-x-4">
                     {/* Icon */}
-                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
                       {feature.icon}
                     </div>
 
                     {/* Text content */}
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-lg font-inter leading-tight group-hover:text-red-700 transition-colors duration-300 mb-1">
+                      <h3 className="font-semibold text-lg font-inter leading-tight group-hover:text-amber-700 italian-heading transition-colors duration-300 mb-1">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 text-sm font-inter leading-relaxed">
+                      <p className="text-sm font-inter leading-relaxed italian-body" style={{color: "var(--country-brown)"}}>
                         {feature.description}
                       </p>
                     </div>
                   </div>
 
                   {/* Subtle glow effect */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-200 to-red-200 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-200 to-yellow-200 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 </div>
               </div>
             ))}
@@ -303,12 +303,12 @@ const WhyChooseUsSection = () => {
         <div className="text-center mt-12 md:mt-20">
           <div className="relative inline-block">
             {/* Glow effect behind CTA */}
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full blur-xl opacity-30 animate-pulse"></div>
 
             {/* Main CTA button */}
-            <div className="relative inline-flex items-center space-x-2 md:space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-4 md:px-8 py-3 md:py-4 rounded-full shadow-2xl hover:from-red-700 hover:to-red-800 hover:scale-105 transition-all duration-300 cursor-pointer group">
+            <div className="relative inline-flex items-center space-x-2 md:space-x-3 bg-gradient-to-r from-amber-600 to-yellow-700 text-white px-4 md:px-8 py-3 md:py-4 rounded-full shadow-2xl hover:from-amber-700 hover:to-yellow-800 hover:scale-105 transition-all duration-300 cursor-pointer group">
               <span className="text-xl md:text-2xl group-hover:animate-bounce">🧪</span>
-              <span className="font-bold text-sm md:text-lg font-inter tracking-wide text-center">
+              <span className="font-bold text-sm md:text-lg italian-heading tracking-wide text-center">
                 Il laboratorio della pizza italiana innovativa a Torino
               </span>
               <span className="text-xl md:text-2xl group-hover:animate-bounce">🍕</span>

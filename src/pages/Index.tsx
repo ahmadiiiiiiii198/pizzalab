@@ -9,6 +9,7 @@ import HeroNew from '../components/HeroNew';
 import WhyChooseUsSection from '../components/WhyChooseUsSection';
 import FlegreaPizzaSection from '../components/FlegreaPizzaSection';
 import ProductsEnhanced from '../components/ProductsEnhanced';
+import Gallery from '../components/Gallery';
 
 
 import About from '../components/About';
@@ -62,20 +63,26 @@ const Index = () => {
           </div>
         </ErrorBoundary>
 
-        <ErrorBoundary componentName="ServicesSection">
+        <ErrorBoundary componentName="Gallery">
           <div className="animate-fade-in-up animate-stagger-6">
+            <Gallery />
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary componentName="ServicesSection">
+          <div className="animate-fade-in-up animate-stagger-7">
             <ServicesSection />
           </div>
         </ErrorBoundary>
 
         <ErrorBoundary componentName="ContactSection">
-          <div className="animate-fade-in-up animate-stagger-7">
+          <div className="animate-fade-in-up animate-stagger-8">
             <ContactSection />
           </div>
         </ErrorBoundary>
 
         <ErrorBoundary componentName="Footer">
-          <div className="animate-fade-in-up animate-stagger-8">
+          <div className="animate-fade-in-up animate-stagger-9">
             <Footer />
           </div>
         </ErrorBoundary>

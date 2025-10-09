@@ -17,6 +17,7 @@ interface ContentSection {
 const FlegreaPizzaSection = () => {
   const [contentSections, setContentSections] = useState<ContentSection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [backgroundImage, setBackgroundImage] = useState<string>('');
 
   useEffect(() => {
     const loadContent = async () => {
@@ -25,8 +26,7 @@ const FlegreaPizzaSection = () => {
         const { data, error } = await supabase
           .from('content_sections')
           .select('*')
-          .eq('is_active', true)
-          .order('sort_order');
+          .eq('is_active', true);
 
         if (error) {
           console.error('Error loading content sections:', error);
@@ -41,7 +41,24 @@ const FlegreaPizzaSection = () => {
       }
     };
 
+    const loadBackgroundImage = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('settings')
+          .select('value')
+          .eq('key', 'flegreaPizzaContent')
+          .single();
+
+        if (!error && data?.value?.backgroundImage) {
+          setBackgroundImage(data.value.backgroundImage);
+        }
+      } catch (error) {
+        console.error('Error loading Flegrea section background:', error);
+      }
+    };
+
     loadContent();
+    loadBackgroundImage();
 
     // Set up real-time subscription for content_sections changes
     const subscription = supabase
@@ -94,8 +111,18 @@ const FlegreaPizzaSection = () => {
 
   const metadata = mainSection.metadata || {};
 
+  // Create section style with background image if available
+  const sectionStyle = backgroundImage
+    ? {
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
   return (
-    <section className="py-20 section-light-warm relative overflow-hidden">
+    <section className="py-20 section-light-warm relative overflow-hidden" style={sectionStyle}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-32 h-32 bg-orange-400 rounded-full blur-xl animate-pulse"></div>

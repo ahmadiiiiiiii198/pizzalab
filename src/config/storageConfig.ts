@@ -54,7 +54,10 @@ export const STORAGE_FOLDERS = {
   
   // Specialty folders
   SPECIALTIES: 'specialties',
-  SPECIALTY_IMAGES: 'specialty-images'
+  SPECIALTY_IMAGES: 'specialty-images',
+  
+  // General folder
+  GENERAL: 'general'
 } as const;
 
 /**
@@ -179,7 +182,7 @@ export const isValidBucket = (bucketName: string): boolean => {
 export const getPublicUrlPattern = (bucketName: string): string => {
   // This would be the Supabase project URL pattern
   // Replace with your actual Supabase project URL
-  return `https://foymsziaullphulzhmxy.supabase.co/storage/v1/object/public/${bucketName}/`;
+  return `https://jncuwwavffepnajxvjxq.supabase.co/storage/v1/object/public/${bucketName}/`;
 };
 
 /**

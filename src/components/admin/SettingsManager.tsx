@@ -53,20 +53,20 @@ interface PizzeriaSettings {
 const SettingsManager = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState<PizzeriaSettings>({
-    restaurant_name: 'PizzaLab Pizzeria',
+    restaurant_name: 'Ruràl Pizza',
     address: 'Via Innovation, 1, 10100 Torino TO',
     phone: '+393479190907',
-    email: 'info@pizzalab.it',
-    website: 'https://pizzalab.it',
+    email: 'info@ruralpizza.it',
+    website: 'https://ruralpizza.it',
     delivery_fee: 3.50,
     minimum_order: 15.00,
     delivery_radius: 5,
     stripe_enabled: true,
     cash_on_delivery: true,
     notification_sound: true,
-    notification_email: 'orders@pizzalab.it',
-    meta_title: 'PizzaLab Pizzeria - Innovative Italian Pizza',
-    meta_description: 'PizzaLab Pizzeria offers innovative Italian pizza with fresh ingredients and modern techniques. Order online for delivery or pickup.',
+    notification_email: 'orders@ruralpizza.it',
+    meta_title: 'Ruràl Pizza - Innovative Italian Pizza',
+    meta_description: 'Ruràl Pizza offers innovative Italian pizza with fresh ingredients and modern techniques. Order online for delivery or pickup.',
     meta_keywords: 'pizza, pizzeria, torino, consegna, italiana, regina 2000'
   });
   const [isLoading, setIsLoading] = useState(true);

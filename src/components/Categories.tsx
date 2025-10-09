@@ -192,7 +192,7 @@ const Categories = () => {
             Le Nostre Categorie
           </h2>
           <p className="text-xl text-gray-600 font-inter animate-fade-in-up animate-stagger-1">
-            Scopri il gusto autentico di PizzaLab: dalle pizze classiche alle specialità gourmet. 🍕✨
+            Scopri il gusto autentico di Ruràl Pizza: dalle pizze classiche alle specialità gourmet. 🍕✨
           </p>
         </div>
 

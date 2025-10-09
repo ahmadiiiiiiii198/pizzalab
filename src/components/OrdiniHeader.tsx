@@ -21,7 +21,7 @@ const OrdiniHeader: React.FC<OrdiniHeaderProps> = ({ onBackToAdmin, onBackToHome
               <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent">
                 Gestione Ordini
               </h1>
-              <p className="text-xl text-gray-600 font-semibold">PizzaLab</p>
+              <p className="text-xl text-gray-600 font-semibold">Ruràl Pizza</p>
               <p className="text-sm text-gray-500 flex items-center mt-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                 Sistema ordini attivo e funzionante

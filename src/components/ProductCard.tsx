@@ -26,6 +26,8 @@ interface ProductCardProps {
   businessIsOpen?: boolean;
   businessMessage?: string;
   validateOrderTime?: () => Promise<{ valid: boolean; message: string }>;
+  // Background transparency prop
+  hasParentBackground?: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -38,7 +40,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onViewDetails,
   businessIsOpen,
   businessMessage,
-  validateOrderTime
+  validateOrderTime,
+  hasParentBackground = false
 }) => {
   const { toast } = useToast();
   const { addItem } = useSimpleCart();
@@ -212,7 +215,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden group product-card-hover hover:shadow-lg transition-all duration-300 border border-gray-200 w-full max-w-full">
+    <div className={`product-card rounded-2xl shadow-sm overflow-hidden group product-card-hover hover:shadow-lg transition-all duration-300 border border-gray-200 w-full max-w-full ${
+      hasParentBackground ? '' : 'bg-white'
+    }`}>
       {/* Product Image */}
       <div className="relative overflow-hidden aspect-[4/3] sm:aspect-[4/3] product-image-container">
         <img

@@ -27,6 +27,8 @@ import OrderDashboardPro from "./pages/OrderDashboardPro";
 
 import MenuPage from "./pages/MenuPage";
 import NotFound from "./pages/NotFound";
+import ReservationPage from "./pages/ReservationPage";
+import ReservationAdminPage from "./pages/ReservationAdminPage";
 // Payment pages removed - no Stripe integration needed
 // DatabaseSetup component removed to prevent accidental initialization
 import AuthTest from "./components/AuthTest";
@@ -42,7 +44,7 @@ const queryClient = new QueryClient({
       retry: 1, // Only retry once instead of 3 times
       retryDelay: 1000, // Wait 1 second before retry
       staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
-      cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+      gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
       refetchOnWindowFocus: false, // Don't refetch on window focus
       refetchOnMount: false, // Don't refetch on component mount if data exists
     },
@@ -104,6 +106,24 @@ const App = () => (
                   <MenuPage />
                 </ErrorBoundary>
               } />
+              
+              <Route path="/prenota" element={
+                <ErrorBoundary componentName="ReservationPage">
+                  <ReservationPage />
+                </ErrorBoundary>
+              } />
+              <Route path="/reservations" element={
+                <ErrorBoundary componentName="ReservationPage">
+                  <ReservationPage />
+                </ErrorBoundary>
+              } />
+              
+              <Route path="/admin/reservations" element={
+                <ErrorBoundary componentName="ReservationAdminPage">
+                  <ReservationAdminPage />
+                </ErrorBoundary>
+              } />
+              
               {/* Payment and Stripe routes removed - no Stripe integration needed */}
               {/* Database setup route removed to prevent accidental initialization */}
 

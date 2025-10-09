@@ -26,7 +26,7 @@ const HeroContentEditor = () => {
     { value: 'crimson', label: 'Crimson Text (Classic)', preview: 'font-crimson' }
   ];
   const [localContent, setLocalContent] = useState({
-    welcomeMessage: 'BENVENUTI DA PIZZALAB',
+    welcomeMessage: 'BENVENUTI DA RURÀL PIZZA',
     pizzaType: 'la Pizza Innovativa',
     subtitle: 'Ingredienti Freschi e Tecniche Moderne!',
     openingHours: 'APERTO 7 SU 7 DALLE 18',
@@ -34,7 +34,7 @@ const HeroContentEditor = () => {
     welcomeMessageFont: 'montserrat',
     pizzaTypeFont: 'pacifico',
     subtitleFont: 'inter',
-    heading: '🍕 PIZZALAB PIZZERIA',
+    heading: '🍕 RURÀL PIZZA',
     subheading: 'Laboratorio di pizza italiana innovativa con ingredienti freschi e tecniche moderne',
     backgroundImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
   });
@@ -119,7 +119,7 @@ const HeroContentEditor = () => {
         welcomeMessageFont: heroContent.welcomeMessageFont || 'montserrat',
         pizzaTypeFont: heroContent.pizzaTypeFont || 'pacifico',
         subtitleFont: heroContent.subtitleFont || 'inter',
-        heading: heroContent.heading || 'PIZZALAB - Laboratorio di Pizza Italiana',
+        heading: heroContent.heading || 'Ruràl Pizza - Laboratorio di Pizza Italiana',
         subheading: heroContent.subheading || 'Autentica pizza italiana preparata con ingredienti freschi e forno a legna tradizionale nel cuore di Torino',
         backgroundImage: heroContent.backgroundImage || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
         heroImage: heroContent.heroImage || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'

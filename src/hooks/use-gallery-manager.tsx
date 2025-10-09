@@ -32,19 +32,22 @@ export const useGalleryManager = () => {
       }
 
       if (galleryData && galleryData.length > 0) {
-        const validImages: GalleryImage[] = galleryData.map(item => ({
-          id: String(item.id || uuidv4()),
-          url: String(item.image_url || ''),
-          title: String(item.title || 'Gallery Image'),
-          description: String(item.description || ''),
-          order: Number(item.sort_order || 0),
-          is_featured: Boolean(item.is_featured || false),
-          created_at: String(item.created_at || new Date().toISOString()),
-          updated_at: String(item.created_at || new Date().toISOString())
-        }));
+        const validImages: GalleryImage[] = galleryData
+          .filter(item => item.image_url && item.image_url.trim() !== '')
+          .map(item => ({
+            id: String(item.id || uuidv4()),
+            url: String(item.image_url || ''),
+            title: String(item.title || 'Gallery Image'),
+            description: String(item.description || ''),
+            order: Number(item.sort_order || 0),
+            is_featured: Boolean(item.is_featured || false),
+            created_at: String(item.created_at || new Date().toISOString()),
+            updated_at: String(item.created_at || new Date().toISOString())
+          }));
 
         setImages(validImages);
         console.log(`[GalleryManager] Loaded ${validImages.length} images from gallery_images table`);
+        console.log('[GalleryManager] Image details:', validImages);
       } else {
         console.log('[GalleryManager] No images found in gallery_images table, trying settings table...');
         await loadImagesFromSettings();
@@ -284,6 +287,20 @@ export const useGalleryManager = () => {
   // Initialize by loading images
   useEffect(() => {
     loadImages();
+    
+    // Listen for gallery updates
+    const handleGalleryUpdate = () => {
+      console.log('[GalleryManager] Gallery updated, reloading...');
+      loadImages();
+    };
+    
+    window.addEventListener('galleryImagesUpdated', handleGalleryUpdate);
+    window.addEventListener('localStorageUpdated', handleGalleryUpdate);
+    
+    return () => {
+      window.removeEventListener('galleryImagesUpdated', handleGalleryUpdate);
+      window.removeEventListener('localStorageUpdated', handleGalleryUpdate);
+    };
   }, [loadImages]);
 
   // Update image order and expose it to consumers

@@ -1,0 +1,191 @@
+{
+  "timestamp": "2025-10-07T11:54:31.904Z",
+  "database_url": "https://foymsziaullphulzhmxy.supabase.co",
+  "analysis_results": {
+    "basicInfo": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "tableOverview": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "columnDetails": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "foreignKeys": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "constraints": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "functions": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "triggers": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "customTypes": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "rlsStatus": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "settingsData": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "categoriesData": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "featureTypes": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "aggiuntiTypes": {
+      "status": "success",
+      "row_count": 103,
+      "data": "Error: Only CREATE TABLE, CREATE INDEX, CREATE TRIGGER, DROP TRIGGER, and INSERT statements are allowed"
+    },
+    "storageBuckets": {
+      "status": "success",
+      "row_count": 6,
+      "data": [
+        {
+          "id": "gallery",
+          "name": "gallery",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": null,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml"
+          ],
+          "created_at": "2025-08-27T22:11:26.870Z",
+          "updated_at": "2025-08-27T22:11:26.870Z"
+        },
+        {
+          "id": "specialties",
+          "name": "specialties",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": null,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml"
+          ],
+          "created_at": "2025-08-27T22:11:26.870Z",
+          "updated_at": "2025-08-27T22:11:26.870Z"
+        },
+        {
+          "id": "products",
+          "name": "products",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": 52428800,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml"
+          ],
+          "created_at": "2025-08-28T05:49:07.113Z",
+          "updated_at": "2025-08-28T05:49:07.113Z"
+        },
+        {
+          "id": "backgrounds",
+          "name": "backgrounds",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": 52428800,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml"
+          ],
+          "created_at": "2025-08-28T05:49:07.731Z",
+          "updated_at": "2025-08-28T05:49:07.731Z"
+        },
+        {
+          "id": "uploads",
+          "name": "uploads",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": null,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml",
+            "application/octet-stream",
+            "application/json",
+            "text/plain"
+          ],
+          "created_at": "2025-08-27T22:11:26.870Z",
+          "updated_at": "2025-08-27T22:11:26.870Z"
+        },
+        {
+          "id": "admin-uploads",
+          "name": "admin-uploads",
+          "owner": "",
+          "public": true,
+          "type": "STANDARD",
+          "file_size_limit": null,
+          "allowed_mime_types": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/svg+xml",
+            "application/octet-stream",
+            "application/json",
+            "text/plain"
+          ],
+          "created_at": "2025-08-27T22:11:26.870Z",
+          "updated_at": "2025-08-27T22:11:26.870Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "rural-pizza-print-server",
+  "version": "1.0.0",
+  "description": "Local print server for Epson TM-T70II thermal printer",
+  "main": "print-server.js",
+  "scripts": {
+    "start": "node print-server.js",
+    "dev": "nodemon print-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

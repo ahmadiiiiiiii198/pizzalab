@@ -11,7 +11,7 @@ const About = () => {
   const [chiSiamoContent, setChiSiamoContent] = useState(null);
   const [chiSiamoImage, setChiSiamoImage] = useState({
     image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-    alt: 'PIZZALAB - La nostra storia'
+    alt: 'Ruràl Pizza - La nostra storia'
   });
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
 
@@ -126,9 +126,9 @@ const About = () => {
   // Multilingual content
   const content = {
     it: {
-      title: '👨‍🍳 Chi Siamo - PIZZALAB',
+      title: '👨‍🍳 Chi Siamo - Ruràl Pizza',
       storyTitle: '🍕 La Nostra Storia',
-      paragraph1: 'PIZZALAB nasce dalla passione per l\'innovazione nella tradizione italiana, unendo l\'esperienza culinaria classica con tecniche moderne. Da anni, offriamo pizza preparata con amore, ingredienti freschi selezionati e un approccio innovativo alla tradizione.',
+      paragraph1: 'Ruràl Pizza nasce dalla passione per l\'innovazione nella tradizione italiana, unendo l\'esperienza culinaria classica con tecniche moderne. Da anni, offriamo pizza preparata con amore, ingredienti freschi selezionati e un approccio innovativo alla tradizione.',
       paragraph2: 'Le nostre pizze nascono da una profonda passione per la tradizione culinaria italiana reinventata. Solo ingredienti selezionati, solo autenticità made in Torino con un tocco di innovazione. 🍕 Situati nel cuore di Torino, offriamo esperienza artigianale e passione per la vera pizza italiana innovativa.',
       quote: '🏪 Nel nostro laboratorio puoi trovare:',
       quoteAuthor: 'Un viaggio tra sapori, tradizione e innovazione',
@@ -144,13 +144,13 @@ const About = () => {
         customers: 'Clienti Soddisfatti',
         varieties: 'Varietà di Pizze'
       },
-      closingMessage: 'Vieni a trovarci da PIZZALAB e scopri il futuro della tradizione italiana.',
+      closingMessage: 'Vieni a trovarci da Ruràl Pizza e scopri il futuro della tradizione italiana.',
       tagline: 'Creiamo sapori innovativi, una pizza alla volta'
     },
     en: {
-      title: '👨‍🍳 About Us - PIZZALAB',
+      title: '👨‍🍳 About Us - Ruràl Pizza',
       storyTitle: '🍕 Our Story',
-      paragraph1: 'PIZZALAB was born from a passion for innovation in Italian tradition, combining classic culinary experience with modern techniques. For years, we offer pizza prepared with love, selected fresh ingredients and an innovative approach to tradition.',
+      paragraph1: 'Ruràl Pizza was born from a passion for innovation in Italian tradition, combining classic culinary experience with modern techniques. For years, we offer pizza prepared with love, selected fresh ingredients and an innovative approach to tradition.',
       paragraph2: 'Our pizzas are born from a deep passion for reinvented Italian culinary tradition. Only selected ingredients, only authenticity made in Turin with a touch of innovation. 🍕 Located in the heart of Turin, we offer artisanal experience and passion for innovative Italian pizza.',
       quote: '🏪 In our laboratory you can find:',
       quoteAuthor: 'A journey through flavors, tradition and innovation',
@@ -166,13 +166,13 @@ const About = () => {
         customers: 'Satisfied Customers',
         varieties: 'Pizza Varieties'
       },
-      closingMessage: 'Come visit us at PIZZALAB and discover the future of Italian tradition.',
+      closingMessage: 'Come visit us at Ruràl Pizza and discover the future of Italian tradition.',
       tagline: 'Creating innovative flavors, one pizza at a time'
     },
     fr: {
-      title: '👨‍🍳 À Propos - PIZZALAB',
+      title: '👨‍🍳 À Propos - Ruràl Pizza',
       storyTitle: '🍕 Notre Histoire',
-      paragraph1: 'PIZZALAB est né d\'une passion pour l\'innovation dans la tradition italienne, combinant l\'expérience culinaire classique avec des techniques modernes. Depuis des années, nous offrons de la pizza préparée avec amour, des ingrédients frais sélectionnés et une approche innovante de la tradition.',
+      paragraph1: 'Ruràl Pizza est née d\'une passion pour l\'innovation dans la tradition italienne, combinant l\'expérience culinaire classique avec des techniques modernes. Depuis des années, nous offrons de la pizza préparée avec amour, des ingrédients frais sélectionnés et une approche innovante de la tradition.',
       paragraph2: 'Nos pizzas naissent d\'une passion profonde pour la tradition culinaire italienne réinventée. Seulement des ingrédients sélectionnés, seulement l\'authenticité made in Turin avec une touche d\'innovation. 🍕 Situés au cœur de Turin, nous offrons une expérience artisanale et une passion pour la pizza italienne innovante.',
       quote: '🏪 Dans notre laboratoire vous pouvez trouver:',
       quoteAuthor: 'Un voyage à travers les saveurs, la tradition et l\'innovation',
@@ -188,13 +188,13 @@ const About = () => {
         customers: 'Clients Satisfaits',
         varieties: 'Variétés de Pizzas'
       },
-      closingMessage: 'Venez nous rendre visite chez PIZZALAB et découvrez l\'avenir de la tradition italienne.',
+      closingMessage: 'Venez nous rendre visite chez Ruràl Pizza et découvrez l\'avenir de la tradition italienne.',
       tagline: 'Créer des saveurs innovantes, une pizza à la fois'
     },
     ar: {
-      title: 'حول بيتزالاب',
+      title: 'حول Ruràl Pizza',
       storyTitle: 'قصتنا',
-      paragraph1: 'ولد بيتزالاب من شغف بالابتكار في التقاليد الإيطالية، يجمع بين الخبرة الطهوية الكلاسيكية والتقنيات الحديثة. منذ سنوات، نقدم البيتزا المحضرة بحب، مع مكونات طازجة مختارة ونهج مبتكر للتقاليد.',
+      paragraph1: 'ولد Ruràl Pizza من شغف بالابتكار في التقاليد الإيطالية، يجمع بين الخبرة الطهوية الكلاسيكية والتقنيات الحديثة. منذ سنوات، نقدم البيتزا المحضرة بحب، مع مكونات طازجة مختارة ونهج مبتكر للتقاليد.',
       paragraph2: 'بيتزاتنا تولد من شغف عميق بالتقاليد الطهوية الإيطالية المعاد اختراعها. فقط مكونات مختارة، فقط أصالة صنع في تورين مع لمسة من الابتكار. 🍕 تقع في قلب تورين، نقدم خبرة حرفية وشغف بالبيتزا الإيطالية المبتكرة.',
       quote: '📍 اعثر علينا في وسط تورين – حيث تلتقي التقاليد الإيطالية بالابتكار.',
       quoteAuthor: 'رحلة عبر النكهات والتقاليد والابتكار',
@@ -210,13 +210,13 @@ const About = () => {
         customers: 'عملاء راضون',
         varieties: 'أنواع البيتزا'
       },
-      closingMessage: 'تعال لزيارتنا في بيتزالاب واكتشف مستقبل التقاليد الإيطالية.',
+      closingMessage: 'تعال لزيارتنا في Ruràl Pizza واكتشف مستقبل التقاليد الإيطالية.',
       tagline: 'نخلق نكهات مبتكرة، بيتزا واحدة في كل مرة'
     },
     fa: {
-      title: 'درباره پیتزالاب',
+      title: 'درباره Ruràl Pizza',
       storyTitle: 'داستان ما',
-      paragraph1: 'پیتزالاب از عشق به نوآوری در سنت‌های ایتالیایی، ترکیب تجربه آشپزی کلاسیک با تکنیک‌های مدرن متولد شد. سال‌هاست که ما پیتزای تهیه شده با عشق، مواد تازه انتخابی و رویکرد نوآورانه به سنت ارائه می‌دهیم.',
+      paragraph1: 'Ruràl Pizza از عشق به نوآوری در سنت‌های ایتالیایی، ترکیب تجربه آشپزی کلاسیک با تکنیک‌های مدرن متولد شد. سال‌هاست که ما پیتزای تهیه شده با عشق، مواد تازه انتخابی و رویکرد نوآورانه به سنت ارائه می‌دهیم.',
       paragraph2: 'پیتزاهای ما از عشق عمیق به سنت‌های آشپزی ایتالیایی بازآفرینی شده متولد می‌شوند. فقط مواد انتخابی، فقط اصالت ساخت تورین با لمسه‌ای از نوآوری. 🍕 واقع در قلب تورین، ما تجربه صنعتگری و عشق به پیتزای نوآورانه ایتالیایی ارائه می‌دهیم.',
       quote: '📍 ما را در مرکز تورین پیدا کنید – جایی که سنت ایتالیایی با نوآوری ملاقات می‌کند.',
       quoteAuthor: 'سفری در میان طعم‌ها، سنت و نوآوری',
@@ -232,7 +232,7 @@ const About = () => {
         customers: 'مشتریان راضی',
         varieties: 'انواع پیتزا'
       },
-      closingMessage: 'برای دیدن ما به پیتزالاب بیایید و آینده سنت ایتالیایی را کشف کنید.',
+      closingMessage: 'برای دیدن ما به Ruràl Pizza بیایید و آینده سنت ایتالیایی را کشف کنید.',
       tagline: 'خلق طعم‌های نوآورانه، یک پیتزا در هر زمان'
     }
   };
@@ -316,7 +316,7 @@ const About = () => {
               </h3>
               <div className="space-y-4 timeout-text-secondary text-lg leading-relaxed">
                 <p>
-                  {currentContent?.paragraph1 || "PIZZALAB nasce dalla passione per l'innovazione nella tradizione italiana, unendo l'esperienza culinaria classica con tecniche moderne e creative."}
+                  {currentContent?.paragraph1 || "Ruràl Pizza nasce dalla passione per l'innovazione nella tradizione italiana, unendo l'esperienza culinaria classica con tecniche moderne e creative."}
                 </p>
                 <p>
                   {currentContent?.paragraph2 || "La nostra missione è offrire pizze di altissima qualità con ingredienti freschi e genuini, in un ambiente unico che celebra l'innovazione e la creatività culinaria italiana."}
@@ -411,18 +411,18 @@ const About = () => {
               </div>
 
               {/* Navigation Arrows */}
-              <button className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+              <button className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors wheat-cart-btn">
                 <span className="text-lg">‹</span>
               </button>
-              <button className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+              <button className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors wheat-cart-btn">
                 <span className="text-lg">›</span>
               </button>
             </div>
 
             {/* Bottom Info Panel */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-2xl">
-              <h4 className="text-white font-bold text-lg mb-2">Il Nostro Ristorante</h4>
-              <p className="text-white/90 text-sm">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-4 rounded-b-2xl">
+              <h4 className="text-white font-bold text-lg mb-1" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>Il Nostro Ristorante</h4>
+              <p className="text-white text-sm" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
                 Dove accogliamo i nostri clienti con la passione per la pizza autentica
               </p>
             </div>

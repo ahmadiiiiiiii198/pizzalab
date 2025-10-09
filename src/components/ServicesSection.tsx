@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Truck,
   ShoppingBag
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const ServicesSection = () => {
+  const [backgroundImage, setBackgroundImage] = useState<string>('');
+
+  useEffect(() => {
+    const loadBackgroundImage = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('settings')
+          .select('value')
+          .eq('key', 'servicesContent')
+          .single();
+
+        if (!error && data?.value?.backgroundImage) {
+          setBackgroundImage(data.value.backgroundImage);
+        }
+      } catch (error) {
+        console.error('Error loading Services section background:', error);
+      }
+    };
+
+    loadBackgroundImage();
+  }, []);
+
   const services = [
     {
       icon: <Truck className="w-12 h-12 timeout-text-accent" />,
@@ -18,8 +41,18 @@ const ServicesSection = () => {
     }
   ];
 
+  // Create section style with background image if available
+  const sectionStyle = backgroundImage
+    ? {
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
   return (
-    <section className="py-16 section-light-warm relative overflow-hidden">
+    <section className="py-16 section-light-warm relative overflow-hidden" style={sectionStyle}>
       {/* Pizza-themed decorative background */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-1/2 left-0 right-0 h-px bg-timeout-orange"></div>

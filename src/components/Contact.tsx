@@ -250,7 +250,7 @@ const Contact = () => {
 
               <Button
                 onClick={() => setIsOrderModalOpen(true)}
-                className="timeout-btn-primary w-full py-3 text-lg font-semibold hover:scale-105 transition-transform"
+                className="wheat-btn-primary w-full py-3 text-lg font-semibold"
               >
                 🍕 Inizia il Tuo Ordine
               </Button>
@@ -311,7 +311,7 @@ const Contact = () => {
                   className="bg-white border-orange-300 text-gray-800 placeholder:text-gray-500"
                 />
                 <Button
-                  className="btn-light-primary hover:scale-105 transition-transform"
+                  className="wheat-btn-secondary"
                   onClick={() => toast({ title: "Iscritto!", description: "Grazie per esserti iscritto alla nostra newsletter da campioni." })}
                 >
                   Iscriviti

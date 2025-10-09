@@ -22,6 +22,8 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAdminAuth } from '@/utils/adminDatabaseUtils';
 import { useLogoSettings, useNavbarLogoSettings, useReceiptSettings } from '@/hooks/use-settings';
+import { useAutoPrint } from '@/hooks/use-auto-print';
+import { printerService, OrderPrintData } from '@/services/printerService';
 
 interface OrderItem {
   id: string;
@@ -79,6 +81,9 @@ const OrdersAdmin = () => {
   const [logoSettings] = useLogoSettings();
   const [navbarLogoSettings] = useNavbarLogoSettings();
   const [receiptSettings] = useReceiptSettings();
+  
+  // Enable auto-print for new orders
+  useAutoPrint();
 
   const orderStatuses = [
     { value: 'confirmed', label: 'In Lavorazione', color: 'bg-blue-100 text-blue-800', icon: Clock },
@@ -430,7 +435,7 @@ const OrdersAdmin = () => {
                    "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png";
 
     // Get receipt settings
-    const footerMessage = receiptSettings?.footerMessage || "Grazie per aver scelto PizzaLab!";
+    const footerMessage = receiptSettings?.footerMessage || "Grazie per aver scelto Ruràl Pizza!";
     const customMessage = receiptSettings?.customMessage || "";
     const showTimestamp = receiptSettings?.showTimestamp ?? true;
 
@@ -473,7 +478,7 @@ const OrdersAdmin = () => {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Ordine #${order.id.slice(-8)} - PizzaLab</title>
+          <title>Ordine #${order.id.slice(-8)} - Ruràl Pizza</title>
           <style>
             * {
               margin: 0;
@@ -671,7 +676,7 @@ const OrdersAdmin = () => {
             ${logoBase64 ? `<img src="${logoBase64}" alt="Logo" class="logo-img" />` : ''}
           </div>
           <div class="header">
-            <div class="restaurant-name">PIZZALAB</div>
+            <div class="restaurant-name">RURÀL PIZZA</div>
             <div>Laboratorio di Pizza Italiana</div>
           </div>
 

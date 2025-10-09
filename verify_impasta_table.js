@@ -29,7 +29,7 @@ async function verifyImpastaTable() {
       console.log('❌ Table verification failed:', error.message);
       console.log('\n💡 This means the table was not created yet.');
       console.log('📝 Please run the SQL manually in Supabase Dashboard:');
-      console.log('   https://supabase.com/dashboard/project/foymsziaullphulzhmxy/sql');
+      console.log('   https://supabase.com/dashboard/project/jncuwwavffepnajxvjxq/sql');
       return false;
     }
 

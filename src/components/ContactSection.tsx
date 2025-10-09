@@ -75,10 +75,21 @@ const ContactSection = () => {
     };
   }, []);
 
+  // Create section style with background image if available
+  const sectionStyle = contactInfo.backgroundImage
+    ? {
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(${contactInfo.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
   return (
     <section
       id="contact"
       className="py-20 section-light-warm relative overflow-hidden"
+      style={sectionStyle}
     >
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -107,13 +118,13 @@ const ContactSection = () => {
                   e.preventDefault();
                   document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="block btn-light-primary px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="block wheat-btn-primary px-6 py-3 font-semibold"
               >
                 Ordina Ora
               </a>
               <a
                 href={`tel:${contactInfo.phone}`}
-                className="block bg-transparent border-2 border-orange-500 text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-orange-500 hover:text-white transition-colors"
+                className="block wheat-btn-secondary px-6 py-3 font-semibold"
               >
                 Chiama Ora
               </a>
@@ -129,7 +140,7 @@ const ContactSection = () => {
             <p className="text-gray-600 mb-4 text-sm break-all">{contactInfo.email}</p>
             <a
               href={`mailto:${contactInfo.email}`}
-              className="block btn-light-primary px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="block wheat-btn-primary px-6 py-3 font-semibold"
             >
               Invia Email
             </a>
@@ -166,7 +177,7 @@ const ContactSection = () => {
               href={`https://maps.google.com/?q=${encodeURIComponent(contactInfo.address)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block btn-light-primary px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="block wheat-btn-primary px-6 py-3 font-semibold"
             >
               Visualizza Mappa
             </a>

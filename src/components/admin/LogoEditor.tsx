@@ -79,7 +79,7 @@ const LogoEditor = () => {
 
   const defaultSettings = {
     logoUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png",
-    altText: "PIZZALAB - Laboratorio di Pizza Italiana Logo",
+    altText: "Ruràl Pizza - Laboratorio di Pizza Italiana Logo",
   };
 
   const resetToDefault = async () => {
@@ -153,7 +153,7 @@ const LogoEditor = () => {
         <CardHeader>
           <CardTitle>Logo della Pizzeria</CardTitle>
           <CardDescription>
-            Carica e personalizza il logo di PIZZALAB
+            Carica e personalizza il logo di Ruràl Pizza
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

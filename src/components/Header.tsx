@@ -37,10 +37,10 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 w-full shadow-lg border-b border-gray-200 z-50" style={{backgroundColor: '#ffffff'}}>
+      <header className="fixed top-0 w-full shadow-sm border-b z-50" style={{backgroundColor: 'var(--wheat-cream)', borderColor: 'var(--wheat-golden)', boxShadow: '0 2px 8px rgba(193, 154, 107, 0.15)'}}>
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8 animate-fade-in-left">
+            <div className="flex items-center space-x-8">
               <div className="flex items-center space-x-3 logo-container hover-scale">
                 {/* Database-driven logo display */}
                 {navbarLogoSettings.showLogo && !isNavbarLogoLoading && (
@@ -56,7 +56,10 @@ const Header = () => {
                     onError={(e) => {
                       console.error('❌ Header logo failed to load:', e);
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling.style.display = 'flex';
+                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (nextElement) {
+                        nextElement.style.display = 'flex';
+                      }
                     }}
                   />
                 )}
@@ -71,30 +74,34 @@ const Header = () => {
                 )}
 
                 {/* Fallback text logo */}
-                <div className="h-12 hidden items-center px-4 bg-gradient-to-r from-timeout-orange to-timeout-orange-hover text-white rounded-xl timeout-heading text-lg shadow-lg">
-                  🍕 PIZZALAB
+                <div className="h-12 hidden items-center px-4 italian-heading text-2xl" style={{color: 'var(--country-dark)'}}>
+                  RURÀL PIZZA
                 </div>
               </div>
               <nav className="hidden md:flex space-x-8">
-                <a href="/" className="timeout-text-primary hover:timeout-text-accent transition-colors font-medium relative group">
+                <a href="/" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--country-dark)'}}>
                   {t('home')}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-timeout-orange transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
                 </a>
-                <a href="/#products" className="timeout-text-primary hover:timeout-text-accent transition-colors font-medium relative group">
+                <a href="/#products" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--country-dark)'}}>
                   {t('menu')}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-timeout-orange transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
                 </a>
-                <a href="/#gallery" className="text-gray-700 hover:text-efes-gold transition-colors font-medium relative group">
+                <a href="/#gallery" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--country-dark)'}}>
                   {t('gallery')}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-efes-gold transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
                 </a>
-                <a href="/#about" className="text-gray-700 hover:text-efes-gold transition-colors font-medium relative group">
+                <a href="/#about" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--country-dark)'}}>
                   {t('about')}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-efes-gold transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
                 </a>
-                <a href="/#contact" className="text-gray-700 hover:text-efes-gold transition-colors font-medium relative group">
+                <a href="/#contact" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--country-dark)'}}>
                   {t('contact')}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-efes-gold transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
+                </a>
+                <a href="/prenota" className="italian-body font-medium relative group transition-colors" style={{color: 'var(--wheat-harvest)'}}>
+                  🌾 Prenota Tavolo
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{backgroundColor: 'var(--wheat-harvest)'}}></span>
                 </a>
               </nav>
             </div>
@@ -115,12 +122,12 @@ const Header = () => {
               />
             </div>
 
-            <div className="flex items-center space-x-4 animate-fade-in-right">
+            <div className="flex items-center space-x-4">
               {/* Mobile Search Button */}
               <button
                 type="button"
                 onClick={() => setIsMobileSearchOpen(true)}
-                className="lg:hidden p-2 text-white hover:text-amber-100 transition-colors bg-white/20 hover:bg-white/30 rounded-full animate-scale-in animate-stagger-1"
+                className="lg:hidden p-2 transition-colors rounded-full" style={{backgroundColor: 'var(--wheat-light)', color: 'var(--country-dark)'}}
                 aria-label="Cerca prodotti"
                 title="Cerca prodotti"
               >
@@ -142,12 +149,12 @@ const Header = () => {
                     console.error('❌ Error opening order modal:', error);
                   }
                 }}
-                className="hidden sm:flex items-center gap-2 px-6 py-3 timeout-btn-primary rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300 font-bold font-montserrat border border-timeout-orange-light/30 cursor-pointer focus:outline-none focus:ring-2 focus:ring-timeout-orange focus:ring-offset-2"
+                className="hidden sm:flex items-center gap-2 wheat-btn-primary cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2"
                 aria-label="Ordina ora"
                 title="Ordina ora"
               >
                 <Pizza size={18} className="animate-wiggle" />
-                🍕 {t('makeReservation')}
+                {t('makeReservation')}
               </button>
               <button
                 type="button"
@@ -160,15 +167,15 @@ const Header = () => {
                     console.error('❌ Error opening cart:', error);
                   }
                 }}
-                className="relative p-3 text-orange-600 hover:text-orange-700 transition-colors bg-orange-50 hover:bg-orange-100 rounded-full group shadow-md hover:shadow-lg hover-lift animate-bounce-gentle cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                className="wheat-cart-btn group cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                 aria-label={`Apri carrello (${getTotalItems()} articoli)`}
                 title={`Carrello (${getTotalItems()} articoli)`}
               >
-                <CartIcon size={20} className="group-hover:animate-wiggle text-orange-600" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-amber-600 to-amber-500 text-white text-xs rounded-full flex items-center justify-center font-inter font-semibold shadow-md animate-heartbeat">
+                <CartIcon size={20} className="group-hover:animate-wiggle text-wheat-dark" />
+                <span className="absolute -top-1 -right-1 w-5 h-5 text-white text-xs rounded-full flex items-center justify-center font-inter font-semibold shadow-md animate-heartbeat" style={{background: 'linear-gradient(135deg, var(--wheat-harvest), var(--wheat-amber))'}}>
                   {getTotalItems()}
                 </span>
-                <Pizza className="absolute -bottom-1 -right-1 text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-bounce animate-float" size={12} />
+                <Pizza className="absolute -bottom-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-bounce animate-float" style={{color: 'var(--wheat-harvest)'}} size={12} />
               </button>
             </div>
           </div>

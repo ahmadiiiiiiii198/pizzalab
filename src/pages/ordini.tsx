@@ -19,7 +19,7 @@ const Ordini = () => {
   };
 
   return (
-    <AuthenticatedAdminWrapper title="Gestione Ordini - PizzaLab" showLogout={false}>
+    <AuthenticatedAdminWrapper title="Gestione Ordini - Ruràl Pizza" showLogout={false}>
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50">
       {/* Mobile-Optimized Header */}
       <div className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
@@ -32,7 +32,7 @@ const Ordini = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-800">Gestione Ordini</h1>
-                <p className="text-xs text-gray-500">PizzaLab</p>
+                <p className="text-xs text-gray-500">Ruràl Pizza</p>
               </div>
             </div>
             <div className="flex items-center space-x-1">
@@ -77,7 +77,7 @@ const Ordini = () => {
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                   Gestione Ordini
                 </h1>
-                <p className="text-lg text-gray-600 font-medium">PizzaLab</p>
+                <p className="text-lg text-gray-600 font-medium">Ruràl Pizza</p>
                 <p className="text-sm text-gray-500">Visualizza e gestisci tutti gli ordini ricevuti</p>
               </div>
             </div>
@@ -130,7 +130,7 @@ const Ordini = () => {
           <div className="flex flex-col space-y-2 text-xs text-gray-600 md:hidden">
             <div className="flex items-center justify-center space-x-2">
               <Pizza className="h-3 w-3 text-red-500" />
-              <span>PIZZALAB</span>
+              <span>RURÀL PIZZA</span>
             </div>
             <div className="flex items-center justify-center space-x-3">
               <span>🔄 Auto</span>
@@ -142,7 +142,7 @@ const Ordini = () => {
           <div className="hidden md:flex items-center justify-between text-sm text-gray-600">
             <div className="flex items-center space-x-2">
               <Pizza className="h-4 w-4 text-red-500" />
-              <span>PizzaLab - Sistema di Gestione Ordini</span>
+              <span>Ruràl Pizza - Sistema di Gestione Ordini</span>
             </div>
             <div className="flex items-center space-x-4">
               <span>🔄 Aggiornamento automatico attivo</span>

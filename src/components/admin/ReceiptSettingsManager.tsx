@@ -16,7 +16,7 @@ export default function ReceiptSettingsManager() {
   
   // Local state for form
   const [formData, setFormData] = useState({
-    footerMessage: receiptSettings?.footerMessage || "Grazie per aver scelto PizzaLab!",
+    footerMessage: receiptSettings?.footerMessage || "Grazie per aver scelto Ruràl Pizza!",
     showTimestamp: receiptSettings?.showTimestamp ?? true,
     customMessage: receiptSettings?.customMessage || ""
   });
@@ -51,7 +51,7 @@ export default function ReceiptSettingsManager() {
 
   const resetToDefault = () => {
     const defaultData = {
-      footerMessage: "Grazie per aver scelto PizzaLab!",
+      footerMessage: "Grazie per aver scelto Ruràl Pizza!",
       showTimestamp: true,
       customMessage: ""
     };
@@ -80,7 +80,7 @@ export default function ReceiptSettingsManager() {
             id="footerMessage"
             value={formData.footerMessage}
             onChange={(e) => setFormData(prev => ({ ...prev, footerMessage: e.target.value }))}
-            placeholder="Grazie per aver scelto PizzaLab!"
+            placeholder="Grazie per aver scelto Ruràl Pizza!"
             className="w-full"
           />
           <p className="text-sm text-muted-foreground">

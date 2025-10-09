@@ -1,0 +1,407 @@
+{
+  "categories": [
+    {
+      "name": "Antipasti",
+      "slug": "antipasti",
+      "description": "Antipasti tradizionali e specialità della casa",
+      "sort_order": 1
+    },
+    {
+      "name": "Pizze Rosse",
+      "slug": "pizze-rosse",
+      "description": "Pizze classiche con pomodoro",
+      "sort_order": 2
+    },
+    {
+      "name": "Pizze Bianche",
+      "slug": "pizze-bianche",
+      "description": "Pizze bianche senza pomodoro",
+      "sort_order": 3
+    },
+    {
+      "name": "Pizze Speciali",
+      "slug": "pizze-speciali",
+      "description": "Pizze gourmet e specialità dello chef",
+      "sort_order": 4
+    },
+    {
+      "name": "Pizze al Taglio",
+      "slug": "pizze-al-taglio",
+      "description": "Pizze al taglio per una pausa veloce",
+      "sort_order": 5
+    },
+    {
+      "name": "Primi Piatti",
+      "slug": "primi-piatti",
+      "description": "Pasta e primi piatti della tradizione",
+      "sort_order": 6
+    },
+    {
+      "name": "Secondi Piatti",
+      "slug": "secondi-piatti",
+      "description": "Secondi di carne e pesce",
+      "sort_order": 7
+    },
+    {
+      "name": "Contorni",
+      "slug": "contorni",
+      "description": "Verdure e contorni freschi",
+      "sort_order": 8
+    },
+    {
+      "name": "Dolci",
+      "slug": "dolci",
+      "description": "Dolci della casa e gelati",
+      "sort_order": 9
+    },
+    {
+      "name": "Bevande",
+      "slug": "bevande",
+      "description": "Bevande analcoliche, vini e liquori",
+      "sort_order": 10
+    },
+    {
+      "name": "Birre",
+      "slug": "birre",
+      "description": "Birre artigianali e alla spina",
+      "sort_order": 11
+    },
+    {
+      "name": "Caffetteria",
+      "slug": "caffetteria",
+      "description": "Caffè, cappuccini e bevande calde",
+      "sort_order": 12
+    }
+  ],
+  "products": [
+    {
+      "name": "Bruschette Miste",
+      "description": "Selezione di bruschette con pomodoro, aglio e basilico",
+      "price": 8.00,
+      "category_slug": "antipasti",
+      "is_featured": true
+    },
+    {
+      "name": "Antipasto della Casa",
+      "description": "Selezione di salumi, formaggi e verdure",
+      "price": 12.00,
+      "category_slug": "antipasti",
+      "is_featured": true
+    },
+    {
+      "name": "Caprese",
+      "description": "Mozzarella di bufala, pomodori freschi e basilico",
+      "price": 9.00,
+      "category_slug": "antipasti",
+      "is_featured": false
+    },
+    {
+      "name": "Arancini Siciliani",
+      "description": "Arancini ripieni di ragù, piselli e mozzarella (3 pezzi)",
+      "price": 7.00,
+      "category_slug": "antipasti",
+      "is_featured": false
+    },
+    {
+      "name": "Focaccia Pugliese",
+      "description": "Focaccia con pomodorini, olive e origano",
+      "price": 6.00,
+      "category_slug": "antipasti",
+      "is_featured": false
+    },
+    {
+      "name": "Margherita",
+      "description": "Pomodoro, mozzarella e basilico fresco",
+      "price": 7.00,
+      "category_slug": "pizze-rosse",
+      "is_featured": true
+    },
+    {
+      "name": "Marinara",
+      "description": "Pomodoro, aglio, origano e olio extravergine",
+      "price": 6.00,
+      "category_slug": "pizze-rosse",
+      "is_featured": false
+    },
+    {
+      "name": "Napoletana",
+      "description": "Pomodoro, mozzarella, acciughe e capperi",
+      "price": 8.50,
+      "category_slug": "pizze-rosse",
+      "is_featured": false
+    },
+    {
+      "name": "Diavola",
+      "description": "Pomodoro, mozzarella e salame piccante",
+      "price": 9.00,
+      "category_slug": "pizze-rosse",
+      "is_featured": true
+    },
+    {
+      "name": "Quattro Stagioni",
+      "description": "Pomodoro, mozzarella, prosciutto, funghi, carciofi e olive",
+      "price": 11.00,
+      "category_slug": "pizze-rosse",
+      "is_featured": true
+    },
+    {
+      "name": "Capricciosa",
+      "description": "Pomodoro, mozzarella, prosciutto, funghi e carciofi",
+      "price": 10.50,
+      "category_slug": "pizze-rosse",
+      "is_featured": false
+    },
+    {
+      "name": "Romana",
+      "description": "Pomodoro, mozzarella, acciughe e origano",
+      "price": 8.00,
+      "category_slug": "pizze-rosse",
+      "is_featured": false
+    },
+    {
+      "name": "Bianca",
+      "description": "Mozzarella, olio extravergine e rosmarino",
+      "price": 6.50,
+      "category_slug": "pizze-bianche",
+      "is_featured": false
+    },
+    {
+      "name": "Quattro Formaggi",
+      "description": "Mozzarella, gorgonzola, parmigiano e fontina",
+      "price": 10.00,
+      "category_slug": "pizze-bianche",
+      "is_featured": true
+    },
+    {
+      "name": "Prosciutto e Funghi",
+      "description": "Mozzarella, prosciutto cotto e funghi porcini",
+      "price": 9.50,
+      "category_slug": "pizze-bianche",
+      "is_featured": false
+    },
+    {
+      "name": "Bresaola e Rucola",
+      "description": "Mozzarella, bresaola, rucola e grana padano",
+      "price": 12.00,
+      "category_slug": "pizze-bianche",
+      "is_featured": true
+    },
+    {
+      "name": "Salmone e Philadelphia",
+      "description": "Mozzarella, salmone affumicato e formaggio philadelphia",
+      "price": 13.00,
+      "category_slug": "pizze-bianche",
+      "is_featured": false
+    },
+    {
+      "name": "Pizza dello Chef",
+      "description": "Mozzarella di bufala, crudo di Parma, rucola e pomodorini",
+      "price": 15.00,
+      "category_slug": "pizze-speciali",
+      "is_featured": true
+    },
+    {
+      "name": "Tartufata",
+      "description": "Mozzarella, funghi porcini, tartufo nero e salsiccia",
+      "price": 16.00,
+      "category_slug": "pizze-speciali",
+      "is_featured": true
+    },
+    {
+      "name": "Frutti di Mare",
+      "description": "Pomodoro, mozzarella e frutti di mare misti",
+      "price": 14.00,
+      "category_slug": "pizze-speciali",
+      "is_featured": false
+    },
+    {
+      "name": "Vegetariana",
+      "description": "Pomodoro, mozzarella, melanzane, zucchine, peperoni e funghi",
+      "price": 11.00,
+      "category_slug": "pizze-speciali",
+      "is_featured": false
+    },
+    {
+      "name": "Pizza al Taglio Margherita",
+      "description": "Margherita al taglio (al pezzo)",
+      "price": 3.00,
+      "category_slug": "pizze-al-taglio",
+      "is_featured": false
+    },
+    {
+      "name": "Pizza al Taglio Bianca",
+      "description": "Pizza bianca al taglio (al pezzo)",
+      "price": 2.50,
+      "category_slug": "pizze-al-taglio",
+      "is_featured": false
+    },
+    {
+      "name": "Spaghetti Carbonara",
+      "description": "Spaghetti con uova, guanciale, pecorino e pepe nero",
+      "price": 9.00,
+      "category_slug": "primi-piatti",
+      "is_featured": true
+    },
+    {
+      "name": "Penne all'Arrabbiata",
+      "description": "Penne con pomodoro, aglio, peperoncino e prezzemolo",
+      "price": 8.00,
+      "category_slug": "primi-piatti",
+      "is_featured": false
+    },
+    {
+      "name": "Risotto ai Funghi Porcini",
+      "description": "Risotto cremoso con funghi porcini freschi",
+      "price": 12.00,
+      "category_slug": "primi-piatti",
+      "is_featured": true
+    },
+    {
+      "name": "Lasagne della Casa",
+      "description": "Lasagne con ragù di carne, besciamella e parmigiano",
+      "price": 10.00,
+      "category_slug": "primi-piatti",
+      "is_featured": false
+    },
+    {
+      "name": "Scaloppine al Limone",
+      "description": "Scaloppine di vitello al limone con contorno",
+      "price": 16.00,
+      "category_slug": "secondi-piatti",
+      "is_featured": true
+    },
+    {
+      "name": "Branzino in Crosta di Sale",
+      "description": "Branzino fresco cotto in crosta di sale",
+      "price": 18.00,
+      "category_slug": "secondi-piatti",
+      "is_featured": true
+    },
+    {
+      "name": "Tagliata di Manzo",
+      "description": "Tagliata di manzo con rucola e pomodorini",
+      "price": 20.00,
+      "category_slug": "secondi-piatti",
+      "is_featured": false
+    },
+    {
+      "name": "Insalata Mista",
+      "description": "Insalata verde con pomodori, carote e olive",
+      "price": 5.00,
+      "category_slug": "contorni",
+      "is_featured": false
+    },
+    {
+      "name": "Patate al Forno",
+      "description": "Patate al forno con rosmarino e olio extravergine",
+      "price": 4.50,
+      "category_slug": "contorni",
+      "is_featured": false
+    },
+    {
+      "name": "Verdure Grigliate",
+      "description": "Selezione di verdure grigliate di stagione",
+      "price": 6.00,
+      "category_slug": "contorni",
+      "is_featured": false
+    },
+    {
+      "name": "Tiramisù",
+      "description": "Tiramisù della casa con mascarpone e caffè",
+      "price": 6.00,
+      "category_slug": "dolci",
+      "is_featured": true
+    },
+    {
+      "name": "Panna Cotta",
+      "description": "Panna cotta ai frutti di bosco",
+      "price": 5.50,
+      "category_slug": "dolci",
+      "is_featured": false
+    },
+    {
+      "name": "Gelato Artigianale",
+      "description": "Gelato artigianale (2 gusti a scelta)",
+      "price": 4.50,
+      "category_slug": "dolci",
+      "is_featured": false
+    },
+    {
+      "name": "Acqua Naturale",
+      "description": "Acqua naturale 0.5L",
+      "price": 2.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Acqua Frizzante",
+      "description": "Acqua frizzante 0.5L",
+      "price": 2.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Coca Cola",
+      "description": "Coca Cola 0.33L",
+      "price": 3.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Vino della Casa Rosso",
+      "description": "Vino rosso della casa (calice)",
+      "price": 4.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Vino della Casa Bianco",
+      "description": "Vino bianco della casa (calice)",
+      "price": 4.00,
+      "category_slug": "bevande",
+      "is_featured": false
+    },
+    {
+      "name": "Birra alla Spina Media",
+      "description": "Birra alla spina 0.4L",
+      "price": 4.50,
+      "category_slug": "birre",
+      "is_featured": true
+    },
+    {
+      "name": "Birra alla Spina Grande",
+      "description": "Birra alla spina 0.5L",
+      "price": 5.50,
+      "category_slug": "birre",
+      "is_featured": false
+    },
+    {
+      "name": "Birra in Bottiglia",
+      "description": "Selezione di birre in bottiglia",
+      "price": 4.00,
+      "category_slug": "birre",
+      "is_featured": false
+    },
+    {
+      "name": "Caffè Espresso",
+      "description": "Caffè espresso italiano",
+      "price": 1.50,
+      "category_slug": "caffetteria",
+      "is_featured": false
+    },
+    {
+      "name": "Cappuccino",
+      "description": "Cappuccino cremoso con latte montato",
+      "price": 2.50,
+      "category_slug": "caffetteria",
+      "is_featured": true
+    },
+    {
+      "name": "Caffè Corretto",
+      "description": "Espresso corretto con grappa o sambuca",
+      "price": 3.00,
+      "category_slug": "caffetteria",
+      "is_featured": false
+    }
+  ]
+}

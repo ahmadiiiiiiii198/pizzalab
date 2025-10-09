@@ -66,16 +66,18 @@ export function useGalleryData() {
       }
 
       if (galleryData && galleryData.length > 0) {
-        const validImages = galleryData.map(item => {
-          const image = {
-            id: String(item.id || ''),
-            src: String(item.image_url || ''),
-            alt: String(item.title || 'Gallery Image'),
-            featured: Boolean(item.is_active || false)
-          };
-          console.log('🖼️ [useGalleryData] Processed image:', image);
-          return image;
-        });
+        const validImages = galleryData
+          .filter(item => item.image_url && item.image_url.trim() !== '')
+          .map(item => {
+            const image = {
+              id: String(item.id || ''),
+              src: String(item.image_url || ''),
+              alt: String(item.title || 'Gallery Image'),
+              featured: Boolean(item.is_featured || false)
+            };
+            console.log('🖼️ [useGalleryData] Processed image:', image);
+            return image;
+          });
 
         console.log('✅ [useGalleryData] Setting images:', validImages);
         setImages(validImages);
@@ -122,14 +124,22 @@ export function useGalleryData() {
         loadGalleryData();
       }
     };
+    
+    // Listen for gallery image uploads
+    const handleGalleryUpdate = () => {
+      console.log('🖼️ [useGalleryData] Gallery images updated, reloading...');
+      loadGalleryData();
+    };
 
     // Listen for both storage events and custom events
     window.addEventListener('storage', handleStorageUpdate as EventListener);
     window.addEventListener('localStorageUpdated', handleStorageUpdate as EventListener);
+    window.addEventListener('galleryImagesUpdated', handleGalleryUpdate);
     
     return () => {
       window.removeEventListener('storage', handleStorageUpdate as EventListener);
       window.removeEventListener('localStorageUpdated', handleStorageUpdate as EventListener);
+      window.removeEventListener('galleryImagesUpdated', handleGalleryUpdate);
     };
   }, [loadGalleryData]);
 

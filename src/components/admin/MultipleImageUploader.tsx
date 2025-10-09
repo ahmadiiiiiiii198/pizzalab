@@ -1,361 +1,360 @@
-import React, { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Upload, Image as ImageIcon, Loader2, X, Plus, Tag } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-
-interface ImageWithLabel {
-  url: string;
-  label: string;
-}
+import React, { useState, useCallback, useRef } from 'react';
+import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface MultipleImageUploaderProps {
-  onImagesSelected?: (imageUrls: string[]) => void;
-  onImagesWithLabelsSelected?: (images: ImageWithLabel[]) => void;
-  buttonLabel?: string;
-  className?: string;
-  bucketName?: string;
-  folderPath?: string;
-  acceptedFileTypes?: string;
+  onImagesUploaded?: (images: Array<{ id: string; url: string; filename: string }>) => void;
+  maxImages?: number;
+  acceptedTypes?: string[];
   maxFileSize?: number;
-  maxFiles?: number;
-  currentImages?: string[];
-  currentImagesWithLabels?: ImageWithLabel[];
-  enableLabels?: boolean;
 }
 
 const MultipleImageUploader: React.FC<MultipleImageUploaderProps> = ({
-  onImagesSelected,
-  onImagesWithLabelsSelected,
-  buttonLabel = "Carica Immagini",
-  className,
-  bucketName = "gallery",
-  folderPath,
-  acceptedFileTypes = "image/*",
-  maxFileSize = Infinity, // No size limit by default
-  maxFiles = 10,
-  currentImages = [],
-  currentImagesWithLabels = [],
-  enableLabels = false
+  onImagesUploaded,
+  maxImages = 10,
+  acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
+  maxFileSize = 5
 }) => {
-  const [isUploading, setIsUploading] = useState(false);
-  const [previewImages, setPreviewImages] = useState<string[]>(currentImages);
-  const [previewImagesWithLabels, setPreviewImagesWithLabels] = useState<ImageWithLabel[]>(currentImagesWithLabels);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const [images, setImages] = useState<Array<{ id: string; url: string; filename: string; file?: File }>>([]);
+  const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Update preview when props change
-  React.useEffect(() => {
-    if (enableLabels) {
-      setPreviewImagesWithLabels(currentImagesWithLabels);
-    } else {
-      setPreviewImages(currentImages);
-    }
-  }, [currentImages, currentImagesWithLabels, enableLabels]);
+  // NO useEffect - this was causing the infinite loop
+  // All functionality is handled through user interactions only
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    const filesArray = Array.from(files);
-    
-    // Check max files limit
-    const currentCount = enableLabels ? previewImagesWithLabels.length : previewImages.length;
-    if (currentCount + filesArray.length > maxFiles) {
+  const validateFile = useCallback((file: File): boolean => {
+    if (!acceptedTypes.includes(file.type)) {
       toast({
-        title: "Troppi file",
-        description: `Massimo ${maxFiles} immagini consentite. Attualmente hai ${currentCount} immagini.`,
-        variant: "destructive",
+        title: '❌ Tipo file non supportato',
+        description: `Il file ${file.name} non è un'immagine supportata.`,
+        variant: 'destructive'
       });
-      return;
+      return false;
     }
+    
+    if (file.size > maxFileSize * 1024 * 1024) {
+      toast({
+        title: '❌ File troppo grande',
+        description: `Il file ${file.name} supera i ${maxFileSize}MB.`,
+        variant: 'destructive'
+      });
+      return false;
+    }
+    
+    return true;
+  }, [acceptedTypes, maxFileSize, toast]);
 
-    // Validate each file
-    for (const file of filesArray) {
-      if (file.size > maxFileSize) {
-        const maxSizeMB = Math.round(maxFileSize / (1024 * 1024));
+  const handleFiles = useCallback((files: FileList) => {
+    const validFiles = Array.from(files).filter(validateFile);
+
+    if (validFiles.length === 0) return;
+
+    setImages(currentImages => {
+      if (currentImages.length + validFiles.length > maxImages) {
         toast({
-          title: "File troppo grande",
-          description: `${file.name} supera il limite di ${maxSizeMB}MB`,
-          variant: "destructive",
+          title: '❌ Troppi file',
+          description: `Puoi caricare massimo ${maxImages} immagini.`,
+          variant: 'destructive'
         });
-        return;
+        return currentImages;
       }
-    }
 
-    await uploadFiles(filesArray);
-  };
+      const newImages = validFiles.map(file => ({
+        id: `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        url: URL.createObjectURL(file),
+        filename: file.name,
+        file
+      }));
 
-  const uploadFiles = async (files: File[]) => {
-    setIsUploading(true);
-    setUploadError(null);
-    setUploadProgress({});
-    
-    console.log(`Starting upload for ${files.length} file(s)`);
-    
+      return [...currentImages, ...newImages];
+    });
+  }, [validateFile, maxImages, toast]);
+
+  const removeImage = useCallback((id: string) => {
+    setImages(currentImages => {
+      const imageToRemove = currentImages.find(img => img.id === id);
+      if (imageToRemove?.url.startsWith('blob:')) {
+        URL.revokeObjectURL(imageToRemove.url);
+      }
+      return currentImages.filter(img => img.id !== id);
+    });
+  }, []);
+
+  const uploadImages = useCallback(async () => {
+    if (images.length === 0 || uploading) return;
+
+    setUploading(true);
+    const uploadedImages: Array<{ id: string; url: string; filename: string }> = [];
+
     try {
-      const uploadedUrls: string[] = [];
-      
-      // Upload each file
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileId = `${file.name}-${i}`;
-        
-        // Update progress for this file
-        setUploadProgress(prev => ({ ...prev, [fileId]: 0 }));
-        
-        // Generate unique filename
-        const fileExt = file.name.split('.').pop();
-        const timestamp = Date.now();
-        const randomString = Math.random().toString(36).substring(2, 15);
-        const fileName = `${timestamp}-${randomString}-${i}.${fileExt}`;
-        const filePath = folderPath ? `${folderPath}/${fileName}` : fileName;
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_ANON_KEY
+      );
 
-        console.log(`Uploading file ${i + 1}/${files.length}:`, filePath);
+      for (const image of images) {
+        if (image.file) {
+          // Generate unique filename
+          const fileExt = image.filename.split('.').pop();
+          const uniqueFileName = `${crypto.randomUUID()}.${fileExt}`;
+          
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabase
+            .storage
+            .from('gallery')
+            .upload(uniqueFileName, image.file, {
+              cacheControl: '3600',
+              upsert: false
+            });
 
-        // Check if bucket exists (only on first file)
-        if (i === 0) {
-          const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
-          if (!bucketsError && buckets) {
-            const targetBucket = buckets.find(b => b.name === bucketName);
-            if (!targetBucket) {
-              console.log(`Bucket ${bucketName} not found. Creating...`);
-              const { error: createError } = await supabase.storage.createBucket(bucketName, {
-                public: true,
-                fileSizeLimit: 52428800, // 50MB
-              });
-              if (createError) {
-                console.warn('Could not create bucket:', createError);
-              }
-            }
+          if (uploadError) {
+            console.error('Upload error:', uploadError);
+            toast({
+              title: '❌ Errore',
+              description: `Errore caricando ${image.filename}: ${uploadError.message}`,
+              variant: 'destructive'
+            });
+            continue;
           }
-        }
 
-        // Update progress to 50% (uploading)
-        setUploadProgress(prev => ({ ...prev, [fileId]: 50 }));
+          // Get public URL
+          const { data: { publicUrl } } = supabase
+            .storage
+            .from('gallery')
+            .getPublicUrl(uniqueFileName);
 
-        // Direct Supabase upload
-        const { data, error } = await supabase.storage
-          .from(bucketName)
-          .upload(filePath, file, {
-            contentType: file.type,
-            cacheControl: '3600',
-            upsert: true
+          // Save to database
+          const imageId = crypto.randomUUID();
+          const { error: dbError } = await supabase
+            .from('gallery_images')
+            .insert({
+              id: imageId,
+              title: image.filename.split('.')[0] || 'Gallery Image',
+              description: '',
+              image_url: publicUrl,
+              category: 'main',
+              sort_order: 999,
+              is_active: true,
+              is_featured: false
+            });
+
+          if (dbError) {
+            console.error('Database error:', dbError);
+            toast({
+              title: '⚠️ Avviso',
+              description: `Immagine caricata ma non salvata nel database`,
+              variant: 'destructive'
+            });
+            continue;
+          }
+
+          uploadedImages.push({
+            id: imageId,
+            url: publicUrl,
+            filename: image.filename
           });
-
-        if (error) {
-          console.error(`Upload error for file ${file.name}:`, error);
-          throw new Error(`Impossibile caricare ${file.name}: ${error.message}`);
-        }
-
-        if (!data) {
-          throw new Error(`Nessun dato restituito dal caricamento per ${file.name}`);
-        }
-
-        // Get the public URL
-        const { data: urlData } = supabase.storage
-          .from(bucketName)
-          .getPublicUrl(filePath);
-
-        const fileUrl = urlData.publicUrl;
-        uploadedUrls.push(fileUrl);
-        
-        // Update progress to 100%
-        setUploadProgress(prev => ({ ...prev, [fileId]: 100 }));
-        
-        console.log(`File ${i + 1}/${files.length} uploaded successfully:`, fileUrl);
-      }
-      
-      // Update preview and notify parent
-      if (enableLabels) {
-        const newImagesWithLabels = [
-          ...previewImagesWithLabels,
-          ...uploadedUrls.map(url => ({ url, label: '' }))
-        ];
-        setPreviewImagesWithLabels(newImagesWithLabels);
-        if (onImagesWithLabelsSelected) {
-          onImagesWithLabelsSelected(newImagesWithLabels);
-        }
-      } else {
-        const newImages = [...previewImages, ...uploadedUrls];
-        setPreviewImages(newImages);
-        if (onImagesSelected) {
-          onImagesSelected(newImages);
         }
       }
+
+      if (uploadedImages.length > 0) {
+        toast({
+          title: '✅ Upload completato',
+          description: `${uploadedImages.length} immagini caricate con successo.`
+        });
+
+        // Clean up blob URLs
+        images.forEach(img => {
+          if (img.url.startsWith('blob:')) {
+            URL.revokeObjectURL(img.url);
+          }
+        });
+
+        onImagesUploaded?.(uploadedImages);
+        setImages([]);
+        
+        // Trigger reload event
+        window.dispatchEvent(new CustomEvent('galleryImagesUpdated', { 
+          detail: { timestamp: Date.now() } 
+        }));
+        
+        // Reload page to show new images
+        setTimeout(() => window.location.reload(), 500);
+      }
       
+    } catch (error) {
+      console.error('Upload error:', error);
       toast({
-        title: `${files.length} immagine${files.length > 1 ? '' : ''} caricata${files.length > 1 ? 'e' : ''}`,
-        description: `Caricate con successo ${files.length} immagine${files.length > 1 ? '' : ''}`,
-      });
-    } catch (error: any) {
-      console.error("Error uploading files:", error);
-      setUploadError(error.message || "Caricamento fallito");
-      toast({
-        title: "Caricamento fallito",
-        description: error.message || "C'è stato un errore nel caricare i tuoi file. Riprova.",
-        variant: "destructive",
+        title: '❌ Errore upload',
+        description: 'Si è verificato un errore durante il caricamento.',
+        variant: 'destructive'
       });
     } finally {
-      setIsUploading(false);
-      setUploadProgress({});
+      setUploading(false);
     }
-  };
+  }, [images, uploading, onImagesUploaded, toast]);
 
-  const removeImage = (index: number) => {
-    if (enableLabels) {
-      const newImages = previewImagesWithLabels.filter((_, i) => i !== index);
-      setPreviewImagesWithLabels(newImages);
-      if (onImagesWithLabelsSelected) {
-        onImagesWithLabelsSelected(newImages);
-      }
-    } else {
-      const newImages = previewImages.filter((_, i) => i !== index);
-      setPreviewImages(newImages);
-      if (onImagesSelected) {
-        onImagesSelected(newImages);
-      }
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFiles(e.dataTransfer.files);
     }
-  };
+  }, [handleFiles]);
 
-  const updateImageLabel = (index: number, label: string) => {
-    if (!enableLabels) return;
-
-    const newImages = [...previewImagesWithLabels];
-    newImages[index] = { ...newImages[index], label };
-    setPreviewImagesWithLabels(newImages);
-
-    if (onImagesWithLabelsSelected) {
-      onImagesWithLabelsSelected(newImages);
+  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFiles(e.target.files);
     }
-  };
+    // Reset input value to allow selecting the same files again
+    e.target.value = '';
+  }, [handleFiles]);
 
-  const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  const openFileDialog = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
 
   return (
-    <div className={`space-y-4 ${className || ''}`}>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={acceptedFileTypes}
-        onChange={handleFileChange}
-        multiple
-        className="hidden"
-      />
-      
-      {/* Upload Button */}
-      <Button
-        type="button"
-        onClick={handleUploadClick}
-        disabled={isUploading || (enableLabels ? previewImagesWithLabels.length : previewImages.length) >= maxFiles}
-        className="w-full"
-        variant="outline"
+    <div className="space-y-6">
+      {/* Upload Area */}
+      <div
+        className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${
+          dragActive 
+            ? 'border-blue-500 bg-blue-50 scale-105' 
+            : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+        }`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
-        {isUploading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Caricamento...
-          </>
-        ) : (
-          <>
-            <Plus className="mr-2 h-4 w-4" />
-            {buttonLabel} ({enableLabels ? previewImagesWithLabels.length : previewImages.length}/{maxFiles})
-          </>
-        )}
-      </Button>
-
-      {/* Upload Progress */}
-      {isUploading && Object.keys(uploadProgress).length > 0 && (
-        <div className="space-y-2">
-          {Object.entries(uploadProgress).map(([fileId, progress]) => (
-            <div key={fileId} className="flex items-center space-x-2">
-              <div className="flex-1 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <span className="text-xs text-gray-500">{progress}%</span>
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept={acceptedTypes.join(',')}
+          onChange={handleFileInput}
+          className="hidden"
+        />
+        
+        <div className="space-y-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+            <Upload className="w-8 h-8 text-blue-600" />
+          </div>
+          
+          <div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Carica le tue immagini
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Trascina le immagini qui o{' '}
+              <button
+                type="button"
+                onClick={openFileDialog}
+                className="text-blue-600 hover:text-blue-700 font-semibold underline"
+              >
+                seleziona i file
+              </button>
+            </p>
+            <div className="text-sm text-gray-500 space-y-1">
+              <p>• Massimo {maxImages} immagini</p>
+              <p>• Dimensione massima: {maxFileSize}MB per file</p>
+              <p>• Formati supportati: JPG, PNG, WebP</p>
             </div>
-          ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Image Preview Grid */}
+      {images.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-lg font-semibold text-gray-900">
+              Immagini selezionate ({images.length})
+            </h4>
+            <Button
+              onClick={uploadImages}
+              disabled={uploading}
+              className="flex items-center gap-2"
+            >
+              {uploading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Caricamento...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4" />
+                  Carica {images.length} {images.length === 1 ? 'immagine' : 'immagini'}
+                </>
+              )}
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {images.map((image) => (
+              <div key={image.id} className="relative group">
+                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-gray-300 transition-colors">
+                  <img
+                    src={image.url}
+                    alt={image.filename}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={() => removeImage(image.id)}
+                  className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                  title="Rimuovi immagine"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                
+                <div className="mt-2">
+                  <p className="text-xs text-gray-600 truncate" title={image.filename}>
+                    {image.filename}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Error Display */}
-      {uploadError && (
-        <p className="text-center text-xs text-red-500">{uploadError}</p>
-      )}
-
-      {/* Image Previews */}
-      {(enableLabels ? previewImagesWithLabels.length > 0 : previewImages.length > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {enableLabels ? (
-            previewImagesWithLabels.map((image, index) => (
-              <div key={index} className="relative group border rounded-lg p-3">
-                <div className="relative mb-2">
-                  <img
-                    src={image.url}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-24 object-cover rounded-md border"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/placeholder.svg';
-                    }}
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 hover:bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                    size="icon"
-                  >
-                    <X size={12} />
-                  </Button>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Tag size={14} className="text-gray-500" />
-                    <span className="text-sm font-medium text-gray-700">Etichetta:</span>
-                  </div>
-                  <Input
-                    type="text"
-                    placeholder="Inserisci etichetta immagine..."
-                    value={image.label}
-                    onChange={(e) => updateImageLabel(index, e.target.value)}
-                    className="text-sm"
-                  />
-                </div>
-              </div>
-            ))
-          ) : (
-            previewImages.map((imageUrl, index) => (
-              <div key={index} className="relative group">
-                <img
-                  src={imageUrl}
-                  alt={`Preview ${index + 1}`}
-                  className="w-full h-24 object-cover rounded-md border"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = '/placeholder.svg';
-                  }}
-                />
-                <Button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 hover:bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                  size="icon"
-                >
-                  <X size={12} />
-                </Button>
-              </div>
-            ))
-          )}
+      {/* Upload Progress */}
+      {uploading && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div>
+              <p className="text-blue-800 font-medium">Caricamento in corso...</p>
+              <p className="text-blue-600 text-sm">Attendere il completamento dell'upload</p>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -363,4 +362,3 @@ const MultipleImageUploader: React.FC<MultipleImageUploaderProps> = ({
 };
 
 export default MultipleImageUploader;
-export type { ImageWithLabel };

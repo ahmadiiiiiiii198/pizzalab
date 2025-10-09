@@ -184,11 +184,11 @@ export const testFailingUrls = async (): Promise<{
   };
 }> => {
   const failingUrls = [
-    'https://foymsziaullphulzhmxy.supabase.co/storage/v1/object/public/uploads/section-backgrounds/section-bg-1756641301658-jfrk6fns3tk.jpg',
-    'https://foymsziaullphulzhmxy.supabase.co/storage/v1/object/public/uploads/section-backgrounds/section-bg-1756641566092-y042s1dozaq.jpg'
+    'https://jncuwwavffepnajxvjxq.supabase.co/storage/v1/object/public/uploads/section-backgrounds/section-bg-1756641301658-jfrk6fns3tk.jpg',
+    'https://jncuwwavffepnajxvjxq.supabase.co/storage/v1/object/public/uploads/section-backgrounds/section-bg-1756641566092-y042s1dozaq.jpg'
   ];
 
-  const workingUrl = 'https://foymsziaullphulzhmxy.supabase.co/storage/v1/object/public/uploads/hero-backgrounds/1756344220582-hkku862dx1d.jpg';
+  const workingUrl = 'https://jncuwwavffepnajxvjxq.supabase.co/storage/v1/object/public/uploads/hero-backgrounds/1756344220582-hkku862dx1d.jpg';
   
   // Add working URL for comparison
   const testUrls = [...failingUrls, workingUrl];

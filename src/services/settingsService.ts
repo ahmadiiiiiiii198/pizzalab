@@ -144,13 +144,13 @@ class SettingsService {
             key: 'logoSettings',
             value: {
               logoUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png",
-              altText: "PizzaLab Pizzeria Logo"
+              altText: "Ruràl Pizza Logo"
             }
           },
           {
             key: 'receiptSettings',
             value: {
-              footerMessage: "Grazie per aver scelto PizzaLab!",
+              footerMessage: "Grazie per aver scelto Ruràl Pizza!",
               showTimestamp: true,
               customMessage: ""
             }

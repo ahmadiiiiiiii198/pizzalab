@@ -1,8 +1,8 @@
 // Service Worker for Order Dashboard
 // Handles background notifications and keeps the app running even when screen is off
 
-const APP_VERSION = '2025.10.5.1759701447557';
-const CACHE_NAME = 'pizzalab-v2025.10.5.1759701447557';
+const APP_VERSION = '2025.10.7.1759840224827';
+const CACHE_NAME = 'pizzalab-v2025.10.7.1759840224827';
 const urlsToCache = [
   '/',
   '/orders',

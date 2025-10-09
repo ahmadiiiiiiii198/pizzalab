@@ -67,7 +67,7 @@ const NavbarLogoEditor = () => {
   const resetToDefault = async () => {
     const defaultSettings = {
       logoUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f355.png",
-      altText: "PIZZALAB - Laboratorio di Pizza Italiana Logo",
+      altText: "Ruràl Pizza - Laboratorio di Pizza Italiana Logo",
       showLogo: true,
       logoSize: "medium" as "small" | "medium" | "large",
     };

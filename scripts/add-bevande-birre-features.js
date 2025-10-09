@@ -132,7 +132,7 @@ COMMENT ON COLUMN categories.birre_enabled IS 'Enable/disable beer (birre) featu
       console.log(sql);
       console.log('='.repeat(60));
       console.log('\n🎯 Instructions:');
-      console.log('1. Go to: https://supabase.com/dashboard/project/foymsziaullphulzhmxy/sql');
+      console.log('1. Go to: https://supabase.com/dashboard/project/jncuwwavffepnajxvjxq/sql');
       console.log('2. Copy and paste the SQL above');
       console.log('3. Click "Run" to execute');
       

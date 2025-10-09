@@ -19,48 +19,48 @@ interface SectionConfig {
 const SECTIONS: SectionConfig[] = [
   {
     key: 'heroContent',
-    name: 'Hero Section',
+    name: '🏠 Hero Section',
     description: 'Main banner/hero section background'
   },
   {
-    key: 'aboutContent',
-    name: 'About Section (Main)',
-    description: 'Main about section background'
-  },
-  {
-    key: 'chiSiamoContent',
-    name: 'Chi Siamo Section',
-    description: 'About us (Chi Siamo) section background'
-  },
-  {
-    key: 'weOfferContent',
-    name: 'We Offer Section',
-    description: 'Services and offerings section background'
-  },
-  {
     key: 'whyChooseUsContent',
-    name: 'Why Choose Us Section',
+    name: '⭐ Why Choose Us Section',
     description: 'Why choose us section background'
   },
   {
+    key: 'flegreaPizzaContent',
+    name: '🍕 Flegrea Pizza Section',
+    description: 'Flegrea pizza specialty section background'
+  },
+  {
     key: 'productsContent',
-    name: 'Products Section',
+    name: '📋 Products/Menu Section',
     description: 'Menu/products listing section background'
   },
   {
+    key: 'aboutContent',
+    name: '📖 About Section',
+    description: 'About us (Chi Siamo) section background'
+  },
+  {
     key: 'galleryContent',
-    name: 'Gallery Section',
+    name: '📸 Gallery Section',
     description: 'Image gallery section background'
   },
   {
+    key: 'servicesContent',
+    name: '🛎️ Services Section',
+    description: 'Services and offerings section background'
+  },
+  {
     key: 'contactContent',
-    name: 'Contact Section',
-    description: 'Contact information section background'
+    name: '📞 Contact Section & Footer',
+    description: 'Contact section and footer background (shared)'
   },
   {
     key: 'youtubeSectionContent',
-    name: 'YouTube Section',
-    description: 'YouTube videos section background'
+    name: '🎥 YouTube Section',
+    description: 'YouTube videos section background (if enabled)'
   }
 ];
 

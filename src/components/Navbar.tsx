@@ -142,6 +142,13 @@ const Navbar = () => {
             {t('contact')}
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-efes-gold transition-all duration-300 group-hover:w-full"></span>
           </a>
+          <Link
+            to="/prenota"
+            className="text-orange-600 hover:text-orange-700 transition-colors font-semibold relative group bg-orange-50 hover:bg-orange-100 px-3 py-2 rounded-lg"
+          >
+            🍕 Prenota
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
+          </Link>
         </div>
 
         {/* Right side - Actions */}
@@ -202,6 +209,13 @@ const Navbar = () => {
             >
               {t('contact')}
             </a>
+            <Link
+              to="/prenota"
+              className="text-orange-600 hover:text-orange-700 transition-colors font-semibold py-2 border-b border-gray-100 bg-orange-50 hover:bg-orange-100 px-3 rounded-lg"
+              onClick={toggleMenu}
+            >
+              🍕 Prenota Tavolo
+            </Link>
             <Button
               className="bg-gradient-to-r from-efes-gold to-efes-dark-gold text-white hover:shadow-lg hover:scale-105 w-full flex items-center justify-center gap-2 font-semibold transition-all duration-300 mt-4"
               onClick={(e) => scrollToSection('contact', e)}

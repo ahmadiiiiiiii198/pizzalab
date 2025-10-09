@@ -59,8 +59,8 @@ const Hero = () => {
   if (isLoading) {
     return (
       <section className="relative h-[70vh] overflow-x-hidden hero-container-mobile">
-        {/* Background with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-pizza-red/20 via-pizza-orange/10 to-pizza-cheese/20"></div>
+        {/* Wheat Field Background */}
+        <div className="absolute inset-0 wheat-field-pattern opacity-20"></div>
 
         {/* Loading skeleton */}
         <div className="relative z-10 container mx-auto px-4 py-16 lg:py-24">
@@ -123,7 +123,7 @@ const Hero = () => {
   }
 
   return (
-    <section className="relative h-[70vh] overflow-hidden hero-container-mobile timeout-bg-primary">
+    <section className="relative h-[70vh] overflow-hidden hero-container-mobile countryside-gradient wheat-field-background">
       {/* Pizza background video - Mobile Optimized - Full Screen Frame */}
       <div className="fixed inset-0 w-screen h-screen overflow-hidden -z-10" style={{ height: '70vh', position: 'absolute' }}>
         {!videoError && !(heroContent.backgroundImage && heroContent.backgroundImage.includes('supabase.co')) ? (
@@ -191,22 +191,7 @@ const Hero = () => {
         {/* Overlay removed - clean background image */}
       </div>
 
-      {/* Pizza-themed decorative elements - reduced opacity to not interfere with background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-16 h-16 bg-gradient-to-br from-pizza-tomato to-pizza-red rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-20 h-20 bg-gradient-to-br from-pizza-cheese to-pizza-orange rounded-full blur-xl animate-pulse animation-delay-2000"></div>
-      </div>
-
-      {/* Floating pizza icons */}
-      <div className="absolute top-10 right-20 text-pizza-orange/30 animate-float">
-        <Pizza size={60} />
-      </div>
-      <div className="absolute bottom-10 left-20 text-pizza-red/30 animate-float animation-delay-2000">
-        <Pizza size={40} />
-      </div>
-      <div className="absolute top-1/3 right-1/4 text-pizza-green/30 animate-float animation-delay-4000">
-        <ChefHat size={50} />
-      </div>
+      {/* Decorative elements removed for clean look */}
 
       <div className="container mx-auto px-4 pt-20 relative z-10" style={{ paddingBottom: 0, marginBottom: 0 }}>
         <div className="grid grid-cols-1 gap-8 items-center min-h-[50vh] hero-main-grid">
@@ -221,8 +206,8 @@ const Hero = () => {
             <div
               className="relative animate-fade-in-right animate-stagger-1 hero-image-column"
               style={{
-                display: 'block !important',
-                visibility: 'visible !important',
+                display: 'block',
+                visibility: 'visible',
                 opacity: 1,
                 position: 'relative',
                 zIndex: 25
@@ -231,8 +216,8 @@ const Hero = () => {
               <div
                 className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-white via-red-50 to-orange-50 p-8 hover-lift"
                 style={{
-                  display: 'block !important',
-                  visibility: 'visible !important',
+                  display: 'block',
+                  visibility: 'visible',
                   minHeight: '550px'
                 }}
               >
@@ -252,8 +237,8 @@ const Hero = () => {
                     heroImageLoaded ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{
-                    display: 'block !important',
-                    visibility: 'visible !important',
+                    display: 'block',
+                    visibility: 'visible',
                     position: 'relative',
                     zIndex: 10,
                     height: '500px', // Much bigger height for desktop
@@ -289,34 +274,28 @@ const Hero = () => {
           <div className="space-y-8">
             {/* Welcome Message - Dynamic from Admin */}
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold timeout-text-primary tracking-wide leading-none transform hover:scale-105 transition-all duration-500 timeout-heading uppercase">
-                <span className="relative inline-block">
-                  {heroContent.welcomeMessage || 'BENVENUTI DA PIZZALAB'}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-timeout-orange/20 to-timeout-orange-hover/20 rounded-xl blur-lg opacity-50"></div>
-                </span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl italian-heading tracking-tight leading-none wheat-sway" style={{color: 'var(--country-dark)'}}>
+                {heroContent.welcomeMessage || 'BENVENUTI DA RURÀL PIZZA'}
               </h1>
             </div>
 
             {/* Pizza Type - Dynamic Elegant Script Typography */}
-            <div className="relative mb-6">
-              <h2 className="text-5xl md:text-7xl lg:text-8xl timeout-heading italic text-transparent bg-gradient-to-r from-timeout-orange via-timeout-orange-light to-timeout-orange-hover bg-clip-text font-bold tracking-wide drop-shadow-2xl">
+            <div className="mb-6">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl italian-script wheat-glow" style={{ color: 'var(--wheat-harvest)' }}>
                 {heroContent.pizzaType || 'la Pizza Napoletana'}
               </h2>
-              <div className="absolute inset-0 text-5xl md:text-7xl lg:text-8xl timeout-heading italic text-timeout-orange/20 blur-sm">
-                {heroContent.pizzaType || 'la Pizza Napoletana'}
-              </div>
             </div>
 
             {/* Subtitle - Dynamic */}
-            <h3 className="text-2xl md:text-3xl lg:text-4xl timeout-text-secondary font-light tracking-wide mb-6 drop-shadow-lg">
+            <h3 className="text-xl md:text-2xl lg:text-3xl italian-subheading font-normal tracking-wide mb-8" style={{color: 'var(--country-brown)'}}>
               {heroContent.subtitle || 'ad Alta Digeribilità, anche Gluten Free!'}
             </h3>
 
-            {/* Opening Hours - Dynamic Modern Card Design */}
+            {/* Opening Hours */}
             <div className="mb-10">
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-black/50 to-black/30 backdrop-blur-xl rounded-2xl px-8 py-4 border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
-                <div className="text-2xl animate-pulse">🕐</div>
-                <p className="text-white text-lg md:text-xl font-medium tracking-wide">
+              <div className="inline-flex items-center gap-3 rounded-xl px-6 py-3 border wheat-texture" style={{ backgroundColor: 'var(--wheat-light)', borderColor: 'var(--wheat-amber)' }}>
+                <div className="text-2xl">🕐</div>
+                <p className="text-lg md:text-xl font-medium">
                   {heroContent.openingHours || 'APERTO 7 SU 7 DALLE 19'}
                 </p>
               </div>
@@ -338,10 +317,9 @@ const Hero = () => {
                     productsSection.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="group relative timeout-btn-primary px-12 py-5 rounded-2xl font-bold text-xl transform hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-3xl border-2 border-timeout-orange-light/60 hover:border-timeout-orange-light overflow-hidden"
+                className="group relative wheat-btn-primary"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                <span className="relative flex items-center justify-center gap-4 z-10">
+                <span className="relative flex items-center justify-center gap-3 z-10">
                   <Pizza className="group-hover:animate-spin" size={32} />
                   <span className="tracking-wide">{heroContent.buttonText || 'ORDINA LA TUA PIZZA'}</span>
                 </span>
@@ -352,7 +330,7 @@ const Hero = () => {
                 onClick={() => {
                   window.open('tel:+393713707741', '_self');
                 }}
-                className="group relative bg-gradient-to-r from-green-600 to-emerald-600 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:from-green-500 hover:to-emerald-500 transform hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-3xl border-2 border-green-300/60 hover:border-green-200 overflow-hidden"
+                className="group relative wheat-btn-secondary px-12 py-5 text-xl font-bold"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <span className="relative flex items-center justify-center gap-4 z-10">
@@ -375,7 +353,7 @@ const Hero = () => {
                     // Handle error silently
                   }
                 }}
-                className="group relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-12 py-5 rounded-2xl font-bold text-xl hover:from-purple-500 hover:to-indigo-500 transform hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-3xl border-2 border-purple-300/60 hover:border-purple-200 overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                className="group relative wheat-btn-secondary px-12 py-5 text-xl font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2"
                 aria-label={t('goToGallery')}
                 title={t('goToGallery')}
               >

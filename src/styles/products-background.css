@@ -1,0 +1,79 @@
+/* Products Section with Wheat Graphics */
+
+/* Products section styling */
+section#products {
+  position: relative !important;
+  background: linear-gradient(135deg, #FFF8E1 0%, #F5E6A3 50%, #E8D5B7 100%) !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Wheat decorative elements - removed */
+section#products::before {
+  content: none !important;
+}
+
+/* Additional wheat pattern - removed */
+section#products::after {
+  content: none !important;
+}
+
+/* Ensure content is above wheat graphics */
+#products .container {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Semi-transparent overlays for readability */
+#products .products-category-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+#products .products-search-bar {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+#products .product-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+  #products .products-category-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+  
+  #products .products-search-bar {
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+  
+  #products .product-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+}
+
+/* Ensure text remains readable */
+#products h1,
+#products h2,
+#products h3,
+#products p,
+#products span {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Debug styles - remove after testing */
+#products.debug-bg {
+  border: 5px solid red !important;
+}
+
+#products.debug-bg::before {
+  border: 3px solid blue !important;
+  background-color: rgba(255, 0, 0, 0.3) !important;
+}

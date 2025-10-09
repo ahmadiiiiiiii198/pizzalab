@@ -249,7 +249,7 @@ export function useNavbarLogoSettings() {
 
 // Default content constants to avoid hoisting issues
 const DEFAULT_HERO_CONTENT: HeroContent = {
-  welcomeMessage: "BENVENUTI PIZZLAB",
+  welcomeMessage: "BENVENUTI DA RURÀL PIZZA",
   pizzaType: "la Pizza Italiana",
   subtitle: "ad Alta Digeribilità, anche Gluten Free!",
   openingHours: "APERTO 17:30 SU 7 DALLE 23:30",
@@ -257,7 +257,7 @@ const DEFAULT_HERO_CONTENT: HeroContent = {
   welcomeMessageFont: "montserrat",
   pizzaTypeFont: "pacifico",
   subtitleFont: "inter",
-  heading: "PIZZALAB - Laboratorio di Pizza Italiana",
+  heading: "Ruràl Pizza - Laboratorio di Pizza Italiana",
   subheading: "Autentica pizza italiana nel cuore di Torino",
   backgroundImage: "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
   heroImage: "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
@@ -323,18 +323,54 @@ preloadHeroContent();
 export function useHeroContent(): [HeroContent, (value: HeroContent) => Promise<boolean>, boolean] {
   const [content, updateContent, isLoading] = useSetting<HeroContent>('heroContent', DEFAULT_HERO_CONTENT);
 
-  // Use cached content if available to reduce loading time
+  // Wrapper function that clears cache when updating
+  const updateContentWithCacheClear = async (value: HeroContent): Promise<boolean> => {
+    console.log('[useHeroContent] Updating content and clearing cache');
+    
+    // Clear the cache
+    heroContentCache = null;
+    heroContentPromise = null;
+    try {
+      localStorage.removeItem(HERO_CACHE_KEY);
+      localStorage.removeItem(HERO_CACHE_TIMESTAMP_KEY);
+      console.log('[useHeroContent] Cache cleared successfully');
+    } catch (error) {
+      console.warn('[useHeroContent] Failed to clear cache:', error);
+    }
+    
+    // Update the content in database
+    const success = await updateContent(value);
+    
+    if (success) {
+      // Update the cache with new value
+      heroContentCache = value;
+      try {
+        localStorage.setItem(HERO_CACHE_KEY, JSON.stringify(value));
+        localStorage.setItem(HERO_CACHE_TIMESTAMP_KEY, Date.now().toString());
+      } catch (error) {
+        console.warn('[useHeroContent] Failed to update cache:', error);
+      }
+    }
+    
+    return success;
+  };
+
+  // Always prefer fresh database content over cache
   useEffect(() => {
-    if (heroContentCache && !isLoading) {
-      // Only update if the cached content is different
-      if (JSON.stringify(content) !== JSON.stringify(heroContentCache)) {
-        // Don't call updateContent here to avoid infinite loops
-        // The useSetting hook will handle the update
+    if (!isLoading && content) {
+      // Update cache with fresh database content
+      heroContentCache = content;
+      try {
+        localStorage.setItem(HERO_CACHE_KEY, JSON.stringify(content));
+        localStorage.setItem(HERO_CACHE_TIMESTAMP_KEY, Date.now().toString());
+      } catch (error) {
+        console.warn('[useHeroContent] Failed to update cache:', error);
       }
     }
   }, [content, isLoading]);
 
-  return [heroContentCache || content, updateContent, isLoading] as const;
+  // Return database content, not cache (cache is only for initial load)
+  return [content, updateContentWithCacheClear, isLoading] as const;
 }
 
 const DEFAULT_ABOUT_CONTENT = {
@@ -368,7 +404,7 @@ export function useRestaurantSettings() {
 
 // Receipt settings
 const DEFAULT_RECEIPT_SETTINGS = {
-  footerMessage: "Grazie per aver scelto PizzaLab!",
+  footerMessage: "Grazie per aver scelto Ruràl Pizza!",
   showTimestamp: true,
   customMessage: ""
 };

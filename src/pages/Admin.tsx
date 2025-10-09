@@ -5,7 +5,7 @@ import AuthenticatedAdminWrapper from '@/components/admin/AuthenticatedAdminWrap
 
 const Admin = () => {
   return (
-    <AuthenticatedAdminWrapper title="PIZZALAB - Laboratorio di Pizza Italiana - Admin Panel" showLogout={true}>
+    <AuthenticatedAdminWrapper title="Ruràl Pizza - Laboratorio di Pizza Italiana - Admin Panel" showLogout={true}>
       <AdminErrorBoundary componentName="Admin Panel">
         <PizzeriaAdminPanel />
       </AdminErrorBoundary>

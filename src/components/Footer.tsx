@@ -37,10 +37,11 @@ const Footer = () => {
           .eq('key', 'contactContent')
           .single();
 
-        if (data?.value) {
+        if (data?.value && typeof data.value === 'object') {
+          const value = data.value as Partial<ContactContent>;
           setContactContent(prev => ({
             ...prev,
-            ...data.value
+            ...value
           }));
         }
       } catch (error) {
@@ -62,10 +63,11 @@ const Footer = () => {
         filter: 'key=eq.contactContent'
       }, async (payload) => {
         console.log('🔔 [Footer] Real-time contact content update received from admin');
-        if (payload.new?.value) {
+        if (payload.new?.value && typeof payload.new.value === 'object') {
+          const value = payload.new.value as Partial<ContactContent>;
           setContactContent(prev => ({
             ...prev,
-            ...payload.new.value
+            ...value
           }));
           console.log('✅ [Footer] Contact content updated from real-time change');
         }
@@ -77,84 +79,82 @@ const Footer = () => {
     };
   }, []);
 
+  // Create footer style with background image if available
+  const footerStyle = contactContent.backgroundImage
+    ? {
+        backgroundImage: `linear-gradient(rgba(254, 247, 205, 0.95), rgba(254, 247, 205, 0.95)), url(${contactContent.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        borderColor: 'var(--wheat-golden)'
+      }
+    : {
+        backgroundColor: 'var(--wheat-cream)',
+        borderColor: 'var(--wheat-golden)'
+      };
+
   return (
-    <footer className="section-light-warm text-gray-800 py-16 relative overflow-hidden border-t border-gray-200">
-      {/* Light theme decorations */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-br from-orange-300 to-orange-400 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-gradient-to-br from-amber-300 to-yellow-400 rounded-full blur-xl animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-gradient-to-br from-orange-200/30 to-amber-200/30 rounded-full blur-2xl animate-pulse animation-delay-4000"></div>
-      </div>
-
-      {/* Floating pizza icons */}
-      <div className="absolute top-20 right-20 text-pizza-orange/20 animate-float">
-        <Pizza size={50} />
-      </div>
-      <div className="absolute bottom-20 left-20 text-pizza-red/20 animate-float animation-delay-2000">
-        <ChefHat size={40} />
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
+    <footer className="py-16 border-t-2 wheat-texture" style={footerStyle}>
+      <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-3 rounded-full">
-                <Pizza className="h-8 w-8 text-white" />
+              <div className="p-3 rounded-full border-2 wheat-glow" style={{ borderColor: 'var(--wheat-amber)', backgroundColor: 'var(--wheat-light)' }}>
+                <Pizza className="h-8 w-8" />
               </div>
               <div>
-                <h3 className="font-fredoka font-bold text-xl text-gray-800">PIZZALAB</h3>
-                <p className="font-pacifico text-orange-600">Laboratorio di Pizza Italiana</p>
+                <h3 className="italian-heading font-bold text-xl" style={{ color: 'var(--country-dark)' }}>RURÀL PIZZA</h3>
+                <p className="italian-script" style={{ color: 'var(--wheat-harvest)' }}>Laboratorio di Pizza Italiana</p>
               </div>
             </div>
-            <p className="text-gray-600 mb-6 max-w-md font-roboto">
+            <p className="italian-body mb-6 max-w-md" style={{ color: 'var(--country-brown)' }}>
               Laboratorio di pizza italiana innovativa nel cuore di Torino.
               Tradizione, innovazione e passione in ogni pizza.
             </p>
-            <div className="space-y-2 text-sm text-gray-500">
+            <div className="space-y-2 text-sm italian-body">
               <div className="flex items-center space-x-2">
-                <MapPin size={16} className="text-pizza-orange" />
+                <MapPin size={16} className="" />
                 <p>{contactContent.address}</p>
               </div>
               <div className="flex items-center space-x-2">
-                <Phone size={16} className="text-pizza-orange" />
+                <Phone size={16} className="" />
                 <p>Tel: {contactContent.phone}</p>
               </div>
               <div className="flex items-center space-x-2">
-                <Mail size={16} className="text-pizza-orange" />
+                <Mail size={16} className="" />
                 <p>Email: {contactContent.email}</p>
               </div>
             </div>
           </div>
           
           <div>
-            <h3 className="font-semibold mb-4">Menu</h3>
-            <ul className="space-y-2 text-gray-300">
-              <li><a href="#home" className="hover:text-pizza-orange transition-colors">Home</a></li>
-              <li><a href="#products" className="hover:text-pizza-orange transition-colors">Le Nostre Pizze</a></li>
-              <li><a href="#categories" className="hover:text-pizza-orange transition-colors">Categorie</a></li>
-              <li><a href="#about" className="hover:text-pizza-orange transition-colors">Chi Siamo</a></li>
-              <li><a href="#contact" className="hover:text-pizza-orange transition-colors">Contatti</a></li>
+            <h3 className="italian-subheading font-semibold mb-4" style={{ color: 'var(--country-dark)' }}>Menu</h3>
+            <ul className="space-y-2 italian-body">
+              <li><a href="#home" className="transition-colors" style={{ color: 'var(--country-brown)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--wheat-harvest)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--country-brown)'}>Home</a></li>
+              <li><a href="#products" className="transition-colors" style={{ color: 'var(--country-brown)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--wheat-harvest)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--country-brown)'}>Le Nostre Pizze</a></li>
+              <li><a href="#categories" className="transition-colors" style={{ color: 'var(--country-brown)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--wheat-harvest)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--country-brown)'}>Categorie</a></li>
+              <li><a href="#about" className="transition-colors" style={{ color: 'var(--country-brown)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--wheat-harvest)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--country-brown)'}>Chi Siamo</a></li>
+              <li><a href="#contact" className="transition-colors" style={{ color: 'var(--country-brown)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--wheat-harvest)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--country-brown)'}>Contatti</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">{t('ourServices')}</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>🚚 {t('homeDelivery')}</li>
-              <li>🛍️ {t('takeAway')}</li>
+            <h3 className="italian-subheading font-semibold mb-4" style={{ color: 'var(--country-dark)' }}>{t('ourServices')}</h3>
+            <ul className="space-y-2 italian-body">
+              <li>{t('homeDelivery')}</li>
+              <li>{t('takeAway')}</li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">{t('openingHours')}</h3>
-            <div className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+            <h3 className="italian-subheading font-semibold mb-4" style={{ color: 'var(--country-dark)' }}>{t('openingHours')}</h3>
+            <div className="italian-body text-sm leading-relaxed whitespace-pre-line">
               {contactContent.hours || allHours || formattedHours || t('defaultHours')}
             </div>
           </div>
         </div>
-
-        <div className="border-t border-gray-300 mt-8 pt-8 text-center text-gray-500">
-          <p>&copy; 2024 PIZZALAB - Laboratorio di Pizza Italiana. Tutti i diritti riservati.</p>
+        <div className="border-t-2 mt-8 pt-8 text-center italian-body" style={{ borderColor: 'var(--wheat-amber)' }}>
+          <p style={{ color: 'var(--country-brown)' }}>&copy; 2024 Ruràl Pizza - Laboratorio di Pizza Italiana. Tutti i diritti riservati.</p>
         </div>
       </div>
     </footer>

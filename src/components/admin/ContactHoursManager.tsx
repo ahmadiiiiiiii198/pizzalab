@@ -167,7 +167,7 @@ const ContactHoursManager = () => {
       const testContactInfo = {
         ...contactInfo,
         address: "TEST ADDRESS - " + timestamp,
-        email: "test@pizzalab.it",
+        email: "test@ruralpizza.it",
         hours: "TEST HOURS - " + timestamp
       };
 
@@ -236,7 +236,7 @@ const ContactHoursManager = () => {
     try {
       const testData = {
         ...contactInfo,
-        email: `test-debug-${Date.now()}@pizzalab.it`
+        email: `test-debug-${Date.now()}@ruralpizza.it`
       };
 
       addDebugResult('💾 Testing save operation...');
@@ -723,7 +723,7 @@ const ContactHoursManager = () => {
                     type="email"
                     value={contactInfo.email}
                     onChange={(e) => updateContactInfo('email', e.target.value)}
-                    placeholder="info@pizzalab.it"
+                    placeholder="info@ruralpizza.it"
                   />
                 </div>
 

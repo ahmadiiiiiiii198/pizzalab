@@ -29,7 +29,9 @@ import {
   FileText,
   Upload,
   QrCode,
-  Receipt
+  Receipt,
+  Calendar,
+  Printer
 } from 'lucide-react';
 
 // Import UnifiedNotificationSystem for admin panel notifications
@@ -47,6 +49,7 @@ const GalleryManager = lazy(() => import('./GalleryManager').catch(() => ({ defa
 const FlegreaSectionManager = lazy(() => import('./FlegreaSectionManager').catch(() => ({ default: () => <div>Error loading FlegreaSectionManager</div> })));
 const PopupManager = lazy(() => import('./PopupManager').catch(() => ({ default: () => <div>Error loading PopupManager</div> })));
 const SatisPayQRManager = lazy(() => import('./SatisPayQRManager').catch(() => ({ default: () => <div>Error loading SatisPayQRManager</div> })));
+const ReservationsAdmin = lazy(() => import('./ReservationsAdmin').catch(() => ({ default: () => <div>Error loading ReservationsAdmin</div> })));
 const SatisPayMigration = lazy(() => import('./SatisPayMigration').catch(() => ({ default: () => <div>Error loading SatisPayMigration</div> })));
 const SettingsManager = lazy(() => import('./SettingsManager').catch(() => ({ default: () => <div>Error loading SettingsManager</div> })));
 const AnalyticsDashboard = lazy(() => import('./AnalyticsDashboard').catch(() => ({ default: () => <div>Error loading AnalyticsDashboard</div> })));
@@ -55,6 +58,7 @@ const WhyChooseUsManager = lazy(() => import('./WhyChooseUsManager').catch(() =>
 const ChiSiamoImageManager = lazy(() => import('./ChiSiamoImageManager').catch(() => ({ default: () => <div>Error loading ChiSiamoImageManager</div> })));
 const ChiSiamoContentManager = lazy(() => import('./ChiSiamoContentManager').catch(() => ({ default: () => <div>Error loading ChiSiamoContentManager</div> })));
 const SectionBackgroundManager = lazy(() => import('./SectionBackgroundManager').catch(() => ({ default: () => <div>Error loading SectionBackgroundManager</div> })));
+const BackgroundTester = lazy(() => import('./BackgroundTester').catch(() => ({ default: () => <div>Error loading BackgroundTester</div> })));
 const SystemTest = lazy(() => import('./SystemTest').catch(() => ({ default: () => <div>Error loading SystemTest</div> })));
 const DatabaseTest = lazy(() => import('./DatabaseTest').catch(() => ({ default: () => <div>Error loading DatabaseTest</div> })));
 const FileDebugInfo = lazy(() => import('./FileDebugInfo').catch(() => ({ default: () => <div>Error loading FileDebugInfo</div> })));
@@ -69,6 +73,7 @@ const IOSAudioTest = lazy(() => import('../IOSAudioTest').catch(() => ({ default
 const NotificationSettings = lazy(() => import('./NotificationSettings').catch(() => ({ default: () => <div>Error loading NotificationSettings</div> })));
 const DatabaseSchemaUpdater = lazy(() => import('./DatabaseSchemaUpdater').catch(() => ({ default: () => <div>Error loading DatabaseSchemaUpdater</div> })));
 const ReceiptSettingsManager = lazy(() => import('./ReceiptSettingsManager').catch(() => ({ default: () => <div>Error loading ReceiptSettingsManager</div> })));
+const PrinterSettings = lazy(() => import('./PrinterSettings').catch(() => ({ default: () => <div>Error loading PrinterSettings</div> })));
 const ProductsDebugger = lazy(() => import('../ProductsDebugger').catch(() => ({ default: () => <div>Error loading ProductsDebugger</div> })));
 const MenuProductsConnectionTest = lazy(() => import('../MenuProductsConnectionTest').catch(() => ({ default: () => <div>Error loading MenuProductsConnectionTest</div> })));
 const ProductsSchemaFixer = lazy(() => import('../ProductsSchemaFixer').catch(() => ({ default: () => <div>Error loading ProductsSchemaFixer</div> })));
@@ -111,9 +116,9 @@ const PizzeriaAdminPanel = () => {
 
   // Add initialization logging with delay
   useEffect(() => {
-    console.log('🚀 [AdminPanel] Initializing PizzeriaAdminPanel...');
-    console.log('🚀 [AdminPanel] Active tab:', activeTab);
-    console.log('🚀 [AdminPanel] Environment check:', {
+    console.log('ðŸš€ [AdminPanel] Initializing PizzeriaAdminPanel...');
+    console.log('ðŸš€ [AdminPanel] Active tab:', activeTab);
+    console.log('ðŸš€ [AdminPanel] Environment check:', {
       supabaseUrl: import.meta.env.VITE_SUPABASE_URL ? 'configured' : 'missing',
       supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY ? 'configured' : 'missing'
     });
@@ -121,15 +126,15 @@ const PizzeriaAdminPanel = () => {
     // Add a small delay to ensure all components are ready
     const timer = setTimeout(() => {
       setIsReady(true);
-      console.log('🚀 [AdminPanel] Component fully initialized and ready');
-      console.log('🚀 [AdminPanel] Notification system available only in separate ordini section');
+      console.log('ðŸš€ [AdminPanel] Component fully initialized and ready');
+      console.log('ðŸš€ [AdminPanel] Notification system available only in separate ordini section');
     }, 200); // Increased delay slightly
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    console.log('🔄 [AdminPanel] Active tab changed to:', activeTab);
+    console.log('ðŸ”„ [AdminPanel] Active tab changed to:', activeTab);
   }, [activeTab]);
 
   // Show loading state during initialization
@@ -166,14 +171,21 @@ const PizzeriaAdminPanel = () => {
       id: 'categories',
       label: 'Categorie',
       icon: MenuIcon,
-      description: 'Gestione categorie e funzionalità (Impasto, Aggiunti, Bevande)',
+      description: 'Gestione categorie e funzionalitÃ  (Impasto, Aggiunti, Bevande)',
       category: 'core'
     },
     {
       id: 'stock',
       label: 'Stock',
       icon: Package,
-      description: 'Gestione stock e disponibilità prodotti',
+      description: 'Gestione stock e disponibilitÃ  prodotti',
+      category: 'core'
+    },
+    {
+      id: 'reservations',
+      label: 'Prenotazioni',
+      icon: Calendar,
+      description: 'Gestione prenotazioni tavoli e conferme',
       category: 'core'
     },
     {
@@ -250,6 +262,13 @@ const PizzeriaAdminPanel = () => {
       description: 'Personalizza messaggi e footer degli scontrini',
       category: 'business'
     },
+    {
+      id: 'printer-settings',
+      label: '🖨️ Stampante',
+      icon: Printer,
+      description: 'Configura stampante termica per ordini automatici',
+      category: 'business'
+    },
 
     // === NOTIFICATIONS & POPUPS ===
     {
@@ -309,7 +328,7 @@ const PizzeriaAdminPanel = () => {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent">
                   Pannello Admin
                 </h1>
-                <p className="text-base sm:text-lg lg:text-xl text-gray-600 font-semibold">PIZZALAB - Laboratorio di Pizza Italiana</p>
+                <p className="text-base sm:text-lg lg:text-xl text-gray-600 font-semibold">Ruràl Pizza - Laboratorio di Pizza Italiana</p>
                 <p className="text-xs sm:text-sm text-gray-500 flex items-center mt-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                   Sistema attivo e funzionante
@@ -391,7 +410,7 @@ const PizzeriaAdminPanel = () => {
             <div className="mb-10">
               <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide mb-6 flex items-center bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-xl border border-red-200">
                 <div className="w-3 h-3 bg-gradient-to-r from-red-500 to-red-600 rounded-full mr-3 animate-pulse"></div>
-                🏪 Gestione Principale
+                ðŸª Gestione Principale
               </h3>
               <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 bg-transparent h-auto">
                 {adminSections.filter(s => s.category === 'core').map((section) => (
@@ -416,7 +435,7 @@ const PizzeriaAdminPanel = () => {
             <div className="mb-10">
               <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide mb-6 flex items-center bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
                 <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mr-3 animate-pulse"></div>
-                📝 Gestione Contenuti
+                ðŸ“ Gestione Contenuti
               </h3>
               <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 bg-transparent h-auto">
                 {adminSections.filter(s => s.category === 'content').map((section) => (
@@ -441,7 +460,7 @@ const PizzeriaAdminPanel = () => {
             <div className="mb-10">
               <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide mb-6 flex items-center bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
                 <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full mr-3 animate-pulse"></div>
-                ⚙️ Impostazioni Business
+                âš™ï¸ Impostazioni Business
               </h3>
               <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 bg-transparent h-auto">
                 {adminSections.filter(s => s.category === 'business').map((section) => (
@@ -466,7 +485,7 @@ const PizzeriaAdminPanel = () => {
             <div className="mb-10">
               <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide mb-6 flex items-center bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
                 <div className="w-3 h-3 bg-gradient-to-r from-green-500 to-green-600 rounded-full mr-3 animate-pulse"></div>
-                🔔 Notifiche & Popup
+                ðŸ”” Notifiche & Popup
               </h3>
               <TabsList className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-transparent h-auto">
                 {adminSections.filter(s => s.category === 'notifications').map((section) => (
@@ -491,7 +510,7 @@ const PizzeriaAdminPanel = () => {
             <div className="mb-10">
               <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide mb-6 flex items-center bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-xl border border-yellow-200">
                 <div className="w-3 h-3 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full mr-3 animate-pulse"></div>
-                💳 Sistemi di Pagamento
+                ðŸ’³ Sistemi di Pagamento
               </h3>
               <TabsList className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-transparent h-auto">
                 {adminSections.filter(s => s.category === 'payment').map((section) => (
@@ -520,7 +539,7 @@ const PizzeriaAdminPanel = () => {
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full mr-3 animate-pulse"></div>
                   <h3 className="text-base font-bold text-gray-700 uppercase tracking-wide">
-                    🔧 Strumenti Sviluppatori
+                    ðŸ”§ Strumenti Sviluppatori
                   </h3>
                 </div>
                 <div className="text-sm text-orange-600 group-open:hidden font-medium">Solo per sviluppatori</div>
@@ -577,7 +596,7 @@ const PizzeriaAdminPanel = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold text-green-900">€245.50</div>
+                    <div className="text-3xl font-bold text-green-900">â‚¬245.50</div>
                     <p className="text-sm text-green-600 flex items-center mt-2">
                       <span className="text-green-600 font-medium">+15%</span>
                       <span className="ml-1">da ieri</span>
@@ -652,12 +671,34 @@ const PizzeriaAdminPanel = () => {
                     Gestione Stock Prodotti
                   </CardTitle>
                   <CardDescription className="text-green-700">
-                    Gestisci la disponibilità e le quantità di stock per tutti i prodotti
+                    Gestisci la disponibilitÃ  e le quantitÃ  di stock per tutti i prodotti
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                   <Suspense fallback={<LoadingSpinner />}>
                     <BulkStockManager />
+                  </Suspense>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Reservations Management */}
+            <TabsContent value="reservations" id="admin-section-reservations">
+              <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+                <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-100 rounded-t-2xl border-b border-amber-200">
+                  <CardTitle className="flex items-center text-amber-800">
+                    <div className="bg-amber-500 p-2 rounded-lg mr-3">
+                      <Calendar className="h-6 w-6 text-white" />
+                    </div>
+                    Gestione Prenotazioni Tavoli
+                  </CardTitle>
+                  <CardDescription className="text-amber-700">
+                    Visualizza, conferma e gestisci le prenotazioni dei tavoli. Crea nuove prenotazioni per i clienti.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <ReservationsAdmin />
                   </Suspense>
                 </CardContent>
               </Card>
@@ -718,7 +759,7 @@ const PizzeriaAdminPanel = () => {
                     Gestione Categorie
                   </CardTitle>
                   <CardDescription className="text-green-600">
-                    Gestisci le categorie e le funzionalità (Impasto, Aggiunti, Bevande) per ogni categoria
+                    Gestisci le categorie e le funzionalitÃ  (Impasto, Aggiunti, Bevande) per ogni categoria
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
@@ -801,10 +842,10 @@ const PizzeriaAdminPanel = () => {
                       <div className="bg-yellow-500 p-2 rounded-lg mr-3">
                         <Users className="h-6 w-6 text-white" />
                       </div>
-                      Gestione "Perché Sceglierci"
+                      Gestione "PerchÃ© Sceglierci"
                     </CardTitle>
                     <CardDescription className="text-yellow-600">
-                      Personalizza la sezione che spiega perché i clienti dovrebbero scegliere il tuo ristorante
+                      Personalizza la sezione che spiega perchÃ© i clienti dovrebbero scegliere il tuo ristorante
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="p-6">
@@ -878,24 +919,47 @@ const PizzeriaAdminPanel = () => {
 
             {/* Section Backgrounds Management */}
             <TabsContent value="backgrounds" id="admin-section-backgrounds">
-              <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
-                <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-t-2xl border-b border-purple-200">
-                  <CardTitle className="flex items-center text-purple-800">
-                    <div className="bg-purple-500 p-2 rounded-lg mr-3">
-                      <Image className="h-6 w-6 text-white" />
-                    </div>
-                    Gestione Sfondi Sezioni
-                  </CardTitle>
-                  <CardDescription className="text-purple-600">
-                    Gestisci le immagini di sfondo per tutte le sezioni del sito web
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <Suspense fallback={<LoadingSpinner />}>
-                    <SectionBackgroundManager />
-                  </Suspense>
-                </CardContent>
-              </Card>
+              <div className="space-y-6">
+                {/* Background Tester */}
+                <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+                  <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-t-2xl border-b border-blue-200">
+                    <CardTitle className="flex items-center text-blue-800">
+                      <div className="bg-blue-500 p-2 rounded-lg mr-3">
+                        <Wrench className="h-6 w-6 text-white" />
+                      </div>
+                      Diagnostica Sfondi
+                    </CardTitle>
+                    <CardDescription className="text-blue-600">
+                      Testa e risolvi problemi con le immagini di sfondo
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <BackgroundTester />
+                    </Suspense>
+                  </CardContent>
+                </Card>
+
+                {/* Background Manager */}
+                <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+                  <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-t-2xl border-b border-purple-200">
+                    <CardTitle className="flex items-center text-purple-800">
+                      <div className="bg-purple-500 p-2 rounded-lg mr-3">
+                        <Image className="h-6 w-6 text-white" />
+                      </div>
+                      Gestione Sfondi Sezioni
+                    </CardTitle>
+                    <CardDescription className="text-purple-600">
+                      Gestisci le immagini di sfondo per tutte le sezioni del sito web
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <Suspense fallback={<LoadingSpinner />}>
+                      <SectionBackgroundManager />
+                    </Suspense>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
 
             {/* Contact and Hours Management */}
@@ -1098,6 +1162,28 @@ const PizzeriaAdminPanel = () => {
               </Card>
             </TabsContent>
 
+            {/* Printer Settings */}
+            <TabsContent value="printer-settings" id="admin-section-printer-settings">
+              <Card className="bg-white rounded-2xl shadow-xl border border-gray-200">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-t-2xl border-b border-blue-200">
+                  <CardTitle className="flex items-center text-blue-800">
+                    <div className="bg-blue-500 p-2 rounded-lg mr-3">
+                      <Receipt className="h-6 w-6 text-white" />
+                    </div>
+                    🖨️ Impostazioni Stampante
+                  </CardTitle>
+                  <CardDescription className="text-blue-600">
+                    Configura la stampante termica per la stampa automatica degli ordini
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <PrinterSettings />
+                  </Suspense>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             {/* Database Test */}
             <TabsContent value="database-test" id="admin-section-database-test">
               <Card>
@@ -1127,7 +1213,7 @@ const PizzeriaAdminPanel = () => {
                     System Connection Test
                   </CardTitle>
                   <CardDescription>
-                    Test complete system: Products ↔ Admin, Content Management, Real-time Updates
+                    Test complete system: Products â†” Admin, Content Management, Real-time Updates
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -1167,7 +1253,7 @@ const PizzeriaAdminPanel = () => {
                     Upload System Tester
                   </CardTitle>
                   <CardDescription>
-                    Test complete upload flow: storage → database → frontend display
+                    Test complete upload flow: storage â†’ database â†’ frontend display
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -1337,3 +1423,4 @@ const PizzeriaAdminPanel = () => {
 };
 
 export default PizzeriaAdminPanel;
+

@@ -126,7 +126,7 @@ const translations: Record<Language, Record<string, string>> = {
     "cancelled": "Annullato",
 
     // Hero section
-    "pizzeriaName": "PIZZALAB",
+    "pizzeriaName": "RURÀL PIZZA",
     "pizzeriaLocation": "Torino",
     "heroSubtitle": "Pizza Innovativa Italiana",
     "heroDescription": "Laboratorio di pizza italiana innovativa con ingredienti freschi e tecniche moderne nel cuore di Torino",
@@ -269,7 +269,7 @@ const translations: Record<Language, Record<string, string>> = {
     "cancelled": "Cancelled",
 
     // Hero section
-    "pizzeriaName": "PIZZALAB",
+    "pizzeriaName": "RURÀL PIZZA",
     "pizzeriaLocation": "Turin",
     "heroSubtitle": "Innovative Italian Pizza",
     "heroDescription": "Italian pizza innovation lab with fresh ingredients and modern techniques in the heart of Turin",

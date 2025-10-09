@@ -45,7 +45,7 @@ const HeroNew = () => {
   // Show loading skeleton while data is being fetched
   if (isLoading) {
     return (
-      <section className="relative w-full overflow-hidden" style={{ margin: 0, padding: 0, marginTop: '100px', minHeight: 'calc(100vh - 100px)' }}>
+      <section className="relative w-full overflow-hidden" style={{ marginTop: '100px', marginRight: 0, marginBottom: 0, marginLeft: 0, padding: 0, minHeight: 'calc(100vh - 100px)' }}>
 
         
         {/* Loading skeleton */}
@@ -68,7 +68,7 @@ const HeroNew = () => {
         paddingTop: '130px',
         minHeight: '100vh',
         backgroundImage: heroContent.backgroundImage ?
-          `linear-gradient(rgba(255, 107, 53, 0.1), rgba(255, 138, 101, 0.1)), url('${heroContent.backgroundImage}')` :
+          `url('${heroContent.backgroundImage}')` :
           'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 50%, #FED7AA 100%)',
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
@@ -89,14 +89,14 @@ const HeroNew = () => {
             <div className="space-y-8 max-w-4xl mx-auto">
               {/* Welcome Message */}
               <div className="flex justify-center">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 tracking-wide leading-tight font-montserrat drop-shadow-lg text-center">
-                  {heroContent.welcomeMessage || 'BENVENUTI PIZZLAB'}
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wide leading-tight font-montserrat text-center" style={{ textShadow: '3px 3px 10px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.7), -1px -1px 0 rgba(0,0,0,0.5), 1px -1px 0 rgba(0,0,0,0.5), -1px 1px 0 rgba(0,0,0,0.5), 1px 1px 0 rgba(0,0,0,0.5)' }}>
+                  {heroContent.welcomeMessage || 'BENVENUTI DA RURÀL PIZZA'}
                 </h1>
               </div>
 
               {/* Subtitle */}
               <div className="flex justify-center">
-                <p className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-2xl leading-relaxed font-inter drop-shadow-sm text-center">
+                <p className="text-lg md:text-xl lg:text-2xl text-white max-w-2xl leading-relaxed font-inter text-center" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.7), -1px -1px 0 rgba(0,0,0,0.5), 1px -1px 0 rgba(0,0,0,0.5), -1px 1px 0 rgba(0,0,0,0.5), 1px 1px 0 rgba(0,0,0,0.5)' }}>
                   Laboratorio di pizza italiana innovativa nel cuore di Torino
                 </p>
               </div>
@@ -116,7 +116,8 @@ const HeroNew = () => {
                       productsSection.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-12 py-5 rounded-xl font-bold text-xl shadow-xl hover:from-orange-600 hover:to-red-600 hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-orange-400"
+                  className="bg-white text-gray-800 px-12 py-5 rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 border-4 border-amber-400 hover:border-amber-500 hover:bg-amber-50"
+                  style={{ boxShadow: '0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(251,191,36,0.5)' }}
                 >
                   🍕 ORDINA ORA
                 </button>
@@ -124,7 +125,8 @@ const HeroNew = () => {
                   onClick={() => {
                     window.open('tel:+393713707741', '_self');
                   }}
-                  className="border-3 border-yellow-500 text-yellow-500 bg-white/10 backdrop-blur-sm px-10 py-4 rounded-xl font-bold text-lg hover:bg-yellow-500 hover:text-white hover:scale-105 transition-all duration-300 shadow-lg"
+                  className="bg-amber-500 text-white px-10 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 shadow-2xl hover:bg-amber-600 border-4 border-white"
+                  style={{ boxShadow: '0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(251,191,36,0.5)' }}
                 >
                   📞 Chiama Ora
                 </button>

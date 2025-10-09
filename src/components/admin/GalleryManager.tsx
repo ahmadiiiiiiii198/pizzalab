@@ -59,14 +59,15 @@ const GalleryManager: React.FC = () => {
     });
   };
 
-  const handleUpload = (image: GalleryImage) => {
-    addImage(image);
-    setHasChanges(true);
+  const handleUpload = async (image: GalleryImage) => {
+    console.log('[GalleryManager] Image uploaded:', image);
+    
+    // The image is already saved to database by GalleryUploadDialog
+    // We just need to reload the images from database
     setIsDialogOpen(false);
-    toast({
-      title: "Immagine aggiunta",
-      description: "L'immagine è stata aggiunta alla galleria",
-    });
+    
+    // Force reload from database
+    window.location.reload();
   };
 
   const handleMultipleUpload = (imageUrls: string[]) => {

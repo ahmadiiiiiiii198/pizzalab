@@ -1,0 +1,80 @@
+[
+  {
+    "name": "€14",
+    "price": 1.5,
+    "category": "Bevande",
+    "description": "Delizioso €14"
+  },
+  {
+    "name": "BIRRE IN BOTTIGLIA",
+    "price": 3.5,
+    "category": "Bevande",
+    "description": "Delizioso birre in bottiglia"
+  },
+  {
+    "name": "Baladin 4.8 – 4.8% alc. vol —",
+    "price": 4.5,
+    "category": "Bevande",
+    "description": "Delizioso baladin 4.8 – 4.8% alc. vol —"
+  },
+  {
+    "name": "panache. Birra, con Sprite —",
+    "price": 4.5,
+    "category": "Bevande",
+    "description": "Delizioso panache. birra, con sprite —"
+  },
+  {
+    "name": "Sud di Baladin – 4.5% alc. vol —",
+    "price": 4.5,
+    "category": "Bevande",
+    "description": "Delizioso sud di baladin – 4.5% alc. vol —"
+  },
+  {
+    "name": "8% alc. vol —",
+    "price": 4.5,
+    "category": "Bevande",
+    "description": "Delizioso 8% alc. vol —"
+  },
+  {
+    "name": "CAFFETTERIA",
+    "price": 1.5,
+    "category": "Enzo — Pomodoro, Mozzarella Di Bufala, Melanzane Fritte, Grana 20 Mesi, Salsicciapizze Rosse Al Tegamino",
+    "description": "Delizioso caffetteria"
+  },
+  {
+    "name": "Baladin 4.8 – 4.8% alc. vol —",
+    "price": 4.5,
+    "category": "Birre Alla Spina",
+    "description": "Delizioso baladin 4.8 – 4.8% alc. vol —"
+  },
+  {
+    "name": "panache. Birra, con Sprite —",
+    "price": 4.5,
+    "category": "Birre Alla Spina",
+    "description": "Delizioso panache. birra, con sprite —"
+  },
+  {
+    "name": "Sud di Baladin – 4.5% alc. vol —",
+    "price": 4.5,
+    "category": "Birre Alla Spina",
+    "description": "Delizioso sud di baladin – 4.5% alc. vol —"
+  },
+  {
+    "name": "8% alc. vol —",
+    "price": 4.5,
+    "category": "Birre Alla Spina",
+    "description": "Delizioso 8% alc. vol —"
+  },
+  {
+    "name": "Limonata",
+    "price": 1.5,
+    "category": "Enzo — Pomodoro, Mozzarella Di Bufala, Melanzane Fritte, Grana 20 Mesi, Salsicciapizze Rosse Al Tegamino",
+    "description": "Delizioso limonata"
+  },
+  {
+    "name": "BURGERS ( 160 g )PANUOZZI",
+    "price": 8.5,
+    "category": "Tagliata Di Fassona Con Rucola E Pomodoripizze Rosse",
+    "description": "Delizioso burgers ( 160 g )panuozzi"
+  }
+]

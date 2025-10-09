@@ -37,7 +37,7 @@ interface WhyChooseUsData {
 
 const WhyChooseUsManager = () => {
   const [data, setData] = useState<WhyChooseUsData>({
-    title: "Perché scegliere PIZZALAB?",
+    title: "Perché scegliere Ruràl Pizza?",
     subtitle: "Il laboratorio della pizza italiana innovativa nel cuore di Torino",
     centralImage: "/placeholder-pizza-lab.jpg",
     features: [
