@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Normalizzazione Indirizzi Torino</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-row {
+            display: flex;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #475569;
+            min-width: 120px;
+        }
+        
+        .result-value {
+            color: #1e293b;
+            flex: 1;
+        }
+        
+        .success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+        }
+        
+        .examples {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .example-card {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #dc2626;
+        }
+        
+        .example-input {
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 5px;
+        }
+        
+        .example-output {
+            color: #10b981;
+            font-size: 14px;
+        }
+        
+        .arrow {
+            color: #64748b;
+            margin: 5px 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇮🇹 Test Normalizzazione Indirizzi Torino</h1>
+            <p>Verifica come gli indirizzi vengono automaticamente normalizzati</p>
+        </div>
+        
+        <div class="content">
+            <!-- Status Section -->
+            <div class="test-section">
+                <div class="test-title">📊 Stato Sistema</div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="font-weight: 600;">Patch Torino:</span>
+                    <span id="patchStatus" class="status-badge">Caricamento...</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: 600;">Città Predefinita:</span>
+                    <span style="color: #dc2626; font-weight: 600;">Torino, Italy</span>
+                </div>
+            </div>
+            
+            <!-- Live Test Section -->
+            <div class="test-section">
+                <div class="test-title">🧪 Test in Tempo Reale</div>
+                <div class="input-group">
+                    <label for="testAddress">Inserisci un indirizzo da testare:</label>
+                    <input 
+                        type="text" 
+                        id="testAddress" 
+                        placeholder="es. Via Garibaldi 15"
+                    >
+                </div>
+                <button class="btn" onclick="testNormalization()">
+                    🔍 Normalizza Indirizzo
+                </button>
+                <div id="testResult" class="result"></div>
+            </div>
+            
+            <!-- Examples Section -->
+            <div class="test-section">
+                <div class="test-title">📝 Esempi di Normalizzazione</div>
+                <div class="examples">
+                    <div class="example-card">
+                        <div class="example-input">Input: Via Garibaldi 15</div>
+                        <div class="arrow">↓</div>
+                        <div class="example-output">Output: Via Garibaldi 15, Torino, Italy</div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-input">Input: Corso Francia 230</div>
+                        <div class="arrow">↓</div>
+                        <div class="example-output">Output: Corso Francia 230, Torino, Italy</div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-input">Input: Piazza Castello, Torino</div>
+                        <div class="arrow">↓</div>
+                        <div class="example-output">Output: Piazza Castello, Torino, Italy</div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-input">Input: Via Po 18, 10123</div>
+                        <div class="arrow">↓</div>
+                        <div class="example-output">Output: Via Po 18, 10123, Torino, Italy</div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-input">Input: Via Nizza 230, Torino, Italia</div>
+                        <div class="arrow">↓</div>
+                        <div class="example-output">Output: Via Nizza 230, Torino, Italia (nessuna modifica)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- How It Works -->
+            <div class="test-section">
+                <div class="test-title">⚙️ Come Funziona</div>
+                <div style="font-size: 14px; line-height: 1.8; color: #475569;">
+                    <p style="margin-bottom: 10px;">
+                        Il sistema <strong>address-torino-patch.js</strong> intercetta automaticamente 
+                        tutti gli indirizzi inseriti dai clienti e:
+                    </p>
+                    <ul style="margin-left: 20px; margin-bottom: 15px;">
+                        <li>✅ Aggiunge ", Torino, Italy" agli indirizzi senza città</li>
+                        <li>✅ Aggiunge ", Italy" agli indirizzi con Torino ma senza paese</li>
+                        <li>✅ Lascia invariati gli indirizzi già completi</li>
+                        <li>✅ Funziona con Google Maps Geocoding API</li>
+                        <li>✅ Funziona con Google Maps Distance Matrix API</li>
+                    </ul>
+                    <p style="margin-bottom: 10px;">
+                        <strong>Vantaggi per i clienti:</strong>
+                    </p>
+                    <ul style="margin-left: 20px;">
+                        <li>🚀 Checkout più veloce (basta via e numero)</li>
+                        <li>✨ Meno errori di digitazione</li>
+                        <li>🎯 Localizzazione automatica corretta</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the Torino patch script -->
+    <script src="/address-torino-patch.js"></script>
+    
+    <script>
+        // Check if patch is loaded
+        setTimeout(() => {
+            const statusBadge = document.getElementById('patchStatus');
+            if (typeof window.normalizeAddressForTorino === 'function') {
+                statusBadge.textContent = 'Attivo ✓';
+                statusBadge.style.background = '#d1fae5';
+                statusBadge.style.color = '#065f46';
+            } else {
+                statusBadge.textContent = 'Non Attivo ✗';
+                statusBadge.style.background = '#fee2e2';
+                statusBadge.style.color = '#991b1b';
+            }
+        }, 500);
+        
+        function testNormalization() {
+            const input = document.getElementById('testAddress').value;
+            const resultDiv = document.getElementById('testResult');
+            
+            if (!input.trim()) {
+                resultDiv.innerHTML = '<div style="color: #ef4444;">⚠️ Inserisci un indirizzo da testare</div>';
+                resultDiv.className = 'result show';
+                return;
+            }
+            
+            if (typeof window.normalizeAddressForTorino !== 'function') {
+                resultDiv.innerHTML = '<div style="color: #ef4444;">❌ Patch non caricata. Ricarica la pagina.</div>';
+                resultDiv.className = 'result show';
+                return;
+            }
+            
+            const normalized = window.normalizeAddressForTorino(input);
+            
+            resultDiv.innerHTML = `
+                <div class="result-row">
+                    <span class="result-label">📥 Input:</span>
+                    <span class="result-value">${input}</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">📤 Output:</span>
+                    <span class="result-value"><strong>${normalized}</strong></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">✅ Stato:</span>
+                    <span class="result-value" style="color: #10b981; font-weight: 600;">
+                        ${input === normalized ? 'Nessuna modifica necessaria' : 'Normalizzato con successo'}
+                    </span>
+                </div>
+            `;
+            resultDiv.className = 'result success show';
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('testAddress').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testNormalization();
+            }
+        });
+    </script>
+</body>
+</html>

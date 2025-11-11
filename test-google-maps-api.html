@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Maps API Distance Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #357ae8;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Google Maps API Distance Calculator Test</h1>
+        <p><strong>API Key:</strong> AIzaSyBkHCjFa0GKD7lJThAyFnSaeCXFDsBtJhs</p>
+        
+        <div class="input-group">
+            <label for="origin">Origin Address:</label>
+            <input type="text" id="origin" placeholder="e.g., New York, NY" value="New York, NY">
+        </div>
+        
+        <div class="input-group">
+            <label for="destination">Destination Address:</label>
+            <input type="text" id="destination" placeholder="e.g., Los Angeles, CA" value="Los Angeles, CA">
+        </div>
+        
+        <button onclick="calculateDistance()">Calculate Distance</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyBkHCjFa0GKD7lJThAyFnSaeCXFDsBtJhs';
+        
+        async function calculateDistance() {
+            const origin = document.getElementById('origin').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!origin || !destination) {
+                showResult('Please enter both origin and destination addresses.', 'error');
+                return;
+            }
+            
+            showResult('⏳ Calculating distance...', 'info');
+            
+            try {
+                // Using Distance Matrix API
+                const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&key=${API_KEY}`;
+                
+                // Note: Direct fetch will fail due to CORS. We'll use a proxy or show the alternative method
+                // Let's try with the Directions API instead which can work client-side
+                
+                const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&key=${API_KEY}`;
+                
+                // Since CORS will block direct API calls, let's use the JavaScript API instead
+                loadGoogleMapsAPI();
+                
+            } catch (error) {
+                showResult(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function loadGoogleMapsAPI() {
+            const resultDiv = document.getElementById('result');
+            showResult('⏳ Loading Google Maps API...', 'info');
+            
+            // Load the Google Maps JavaScript API
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=geometry`;
+            script.async = true;
+            script.defer = true;
+            
+            script.onload = () => {
+                showResult('✅ Google Maps API loaded successfully!', 'success');
+                calculateDistanceWithAPI();
+            };
+            
+            script.onerror = () => {
+                showResult('❌ Failed to load Google Maps API. The API key may be invalid, restricted, or the API is not enabled.', 'error');
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        function calculateDistanceWithAPI() {
+            const origin = document.getElementById('origin').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            
+            const service = new google.maps.DistanceMatrixService();
+            
+            service.getDistanceMatrix(
+                {
+                    origins: [origin],
+                    destinations: [destination],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                },
+                (response, status) => {
+                    if (status === 'OK') {
+                        const results = response.rows[0].elements[0];
+                        
+                        if (results.status === 'OK') {
+                            const distance = results.distance.text;
+                            const duration = results.duration.text;
+                            
+                            showResult(
+                                `✅ <strong>API Key is VALID and Working!</strong><br><br>` +
+                                `<strong>Origin:</strong> ${response.originAddresses[0]}<br>` +
+                                `<strong>Destination:</strong> ${response.destinationAddresses[0]}<br>` +
+                                `<strong>Distance:</strong> ${distance}<br>` +
+                                `<strong>Duration:</strong> ${duration}<br><br>` +
+                                `<pre>${JSON.stringify(response, null, 2)}</pre>`,
+                                'success'
+                            );
+                        } else {
+                            showResult(`❌ Route calculation failed: ${results.status}`, 'error');
+                        }
+                    } else {
+                        let errorMessage = `❌ API Request failed with status: ${status}<br><br>`;
+                        
+                        switch(status) {
+                            case 'REQUEST_DENIED':
+                                errorMessage += 'The API key is invalid or the API is not enabled for this key.';
+                                break;
+                            case 'OVER_QUERY_LIMIT':
+                                errorMessage += 'The API key has exceeded its quota.';
+                                break;
+                            case 'INVALID_REQUEST':
+                                errorMessage += 'The request was invalid.';
+                                break;
+                            default:
+                                errorMessage += 'Please check the API key and ensure Distance Matrix API is enabled.';
+                        }
+                        
+                        showResult(errorMessage, 'error');
+                    }
+                }
+            );
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = type;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
